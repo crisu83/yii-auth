@@ -1,0 +1,23 @@
+span.disabled {
+    color: #888;
+}
+
+.title-row .btn-group {
+    margin-top: 12px;
+}
+
+.description-column {
+    width: 580px;
+}
+
+.assignment-type-column {
+    width: 200px;
+}
+
+.type-column {
+    width: 100px;
+}
+
+.actions-column {
+    width: 30px;
+}
