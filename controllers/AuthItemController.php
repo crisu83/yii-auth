@@ -114,7 +114,12 @@ class AuthItemController extends AuthController
 
         $item = $am->loadAuthItem($name);
 
-        $dpConfig = array('pagination' => false);
+        $dpConfig = array(
+			'pagination' => false,
+			'sort' => array(
+				'defaultOrder' => 'depth asc',
+			),
+		);
 
         $ancestors = $am->getAncestors($name);
         $ancestorDp = new PermissionDataProvider(array_values($ancestors), $dpConfig);

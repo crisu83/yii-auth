@@ -3,6 +3,14 @@
   font-size: 200%;
 }
 
+#page .list-view {
+  padding-top: 0;
+}
+
+#footer {
+  margin: 20px 0;
+}
+
 div.view {
   padding: 10px;
   margin: 10px 0;
@@ -22,10 +30,20 @@ div.breadcrumbs span {
   margin-bottom: 20px;
 }
 
+.portlet {
+    margin-bottom: 20px;
+}
+
 .portlet-title {
+  background-color: #F5F5F5;
+  border-left: 5px solid #CCCCCC;
   font-size: 20px;
   font-weight: bold;
-  margin: 10px 0;
+  padding: 10px 15px;
+}
+
+.portlet-content {
+  padding: 10px 15px;
 }
 
 .portlet-content ul {
@@ -44,6 +62,10 @@ div.breadcrumbs span {
   margin: 0 0 20px;
 }
 
+.post:last-child {
+  margin-bottom: 0;
+}
+
 .post .title a {
   color: #555;
   text-decoration: none;
@@ -55,7 +77,8 @@ div.breadcrumbs span {
 }
 
 .post .nav {
-  padding: 5px 10px;
+  margin-bottom: 0;
+  padding: 10px;
   background: #F5F5F5;
 }
 
