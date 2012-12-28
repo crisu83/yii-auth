@@ -2,18 +2,29 @@
 
 class AuthAssignmentItemsColumn extends AuthAssignmentColumn
 {
-	public $type;
+    /**
+     * Initializes the column.
+     */
+    public function init()
+    {
+        if (isset($this->htmlOptions['class']))
+            $this->htmlOptions['class'] .= ' assignment-items-column';
+        else
+            $this->htmlOptions['class'] = 'assignment-items-column';
+    }
 
-	protected function renderDataCellContent($row, $data)
-	{
-		/* @var $am CAuthManager|AuthBehavior */
-		$am = Yii::app()->getAuthManager();
-		$assignments = $am->loadAuthAssignments($data->id);
-		$items = $am->getAuthItemsByNames(array_keys($assignments));
-		foreach ($items as $itemName => $item)
-		{
-			if ($item->getType() === $this->type)
-				echo $item->description.'<br />';
-		}
-	}
+    /**
+     * Renders the data cell content.
+     * @param integer $row the row number (zero-based)
+     * @param mixed $data the data associated with the row
+     */
+    protected function renderDataCellContent($row, $data)
+    {
+        /* @var $am CAuthManager|AuthBehavior */
+        $am = Yii::app()->getAuthManager();
+        $assignments = $am->loadAuthAssignments($data->id);
+        $permissions = $am->getItemsPermissions(array_keys($assignments));
+        foreach ($permissions as $itemPermission)
+            echo $itemPermission['item']->getDescription() . '<br />';
+    }
 }

@@ -5,240 +5,289 @@
  */
 class AuthBehavior extends CBehavior
 {
-	const CACHE_KEY_PREFIX = 'AuthModule.PermissionBehavior.';
+    const CACHE_KEY_PREFIX = 'AuthModule.AuthBehavior.';
 
-	public $cachingDuration = 0;
-	public $cacheID = 'cache';
+    public $cachingDuration = 0;
+    public $cacheID = 'cache';
 
-	/**
-	 * @param string $itemName
-	 * @param string $childName
-	 * @return boolean
-	 */
-	public function hasPermission($itemName, $childName)
-	{
-		$itemPermissions = $this->getDescendants($itemName);
-		return isset($itemPermissions[$childName]);
-	}
+    /**
+     * @param string $itemName
+     * @param string $childName
+     * @return boolean
+     */
+    public function hasPermission($itemName, $childName)
+    {
+        $descendants = $this->getDescendants($itemName);
+        return isset($descendants[$childName]);
+    }
 
-	/**
-	 * @param string $itemName
-	 * @param array|null $items
-	 * @return array
-	 */
-	public function getAncestors($itemName, $items = null)
-	{
-		$ancestors = array();
+    /**
+     * @param string $itemName
+     * @param string $parentName
+     * @return boolean
+     */
+    public function hasParent($itemName, $parentName)
+    {
+        $parentPermissions = $this->getItemPermissions($parentName);
+        return isset($parentPermissions[$itemName]);
+    }
 
-		if ($items === null)
-			$items = $this->getPermissions();
+    /**
+     * @param string $itemName
+     * @param string $childName
+     * @return boolean
+     */
+    public function hasChild($itemName, $childName)
+    {
+        $itemPermissions = $this->getItemPermissions($itemName);
+        return isset($itemPermissions[$childName]);
+    }
 
-		foreach ($items as $childName => $childPermissions)
-		{
-			if (isset($childPermissions[$itemName]))
-				$ancestors[$childName] = $childName;
+    /**
+     * @param string $itemName
+     * @param array|null $permissions
+     * @return array
+     */
+    public function getAncestors($itemName, $permissions = null)
+    {
+        $ancestors = array();
 
-			$childAncestors = $this->getAncestors($itemName, $childPermissions);
-			if (!empty($childAncestors))
-				$ancestors = array_merge($ancestors, $childAncestors);
-		}
+        if ($permissions === null)
+            $permissions = $this->getPermissions();
 
-		return array_unique($ancestors);
-	}
+        foreach ($permissions as $childName => $child)
+        {
+            if ($this->hasPermission($childName, $itemName))
+                $ancestors[$childName] = $child;
 
-	/**
-	 * @param string $itemName
-	 * @return array
-	 */
-	public function getDescendants($itemName)
-	{
-		$itemPermissions = $this->getItemPermissions($itemName);
-		return $this->flattenTree($itemPermissions);
-	}
+            $ancestors = array_merge($ancestors, $this->getAncestors($itemName, $child['children']));
+        }
 
-	/**
-	 * @param string $itemName
-	 * @return array
-	 */
-	public function getRelatives($itemName)
-	{
-		$ancestors = $this->getAncestors($itemName);
-		$descendants = $this->getDescendants($itemName);
-		return array_merge($ancestors, $descendants);
-	}
+        return $ancestors;
+    }
 
-	/**
-	 * @param boolean $allowCaching
-	 * @return array
-	 */
-	public function getPermissions($allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'permissions';
+    /**
+     * @param string $itemName
+     * @return array
+     */
+    public function getDescendants($itemName)
+    {
+        $itemPermissions = $this->getItemPermissions($itemName);
 
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-				&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
+        return $this->flattenPermissions($itemPermissions);
+    }
 
-		$permissions = $this->buildPermissions();
+    /**
+     * @param boolean $allowCaching
+     * @return array
+     */
+    public function getPermissions($allowCaching = true)
+    {
+        $key = self::CACHE_KEY_PREFIX . 'permissions';
 
-		if (isset($cache))
-			$cache->set($key, serialize($permissions), $this->cachingDuration);
+        /* @var $cache CCache */
+        if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
+                && ($cache = Yii::app()->getComponent($this->cacheID)) !== null
+        )
+        {
+            if (($data = $cache->get($key)) !== false)
+                return unserialize($data);
+        }
 
-		return $permissions;
-	}
+        $permissions = $this->buildPermissions();
 
-	/**
-	 * @return array
-	 */
-	private function buildPermissions()
-	{
-		$permissions = array();
-		foreach ($this->loadAuthItems(CAuthItem::TYPE_ROLE) as $roleName => $role)
-			$permissions[$roleName] = $this->getItemPermissions($roleName);
-		return $permissions;
-	}
+        if (isset($cache))
+            $cache->set($key, serialize($permissions), $this->cachingDuration);
 
-	/**
-	 * @param string $itemName
-	 * @param boolean $allowCaching
-	 * @return array
-	 */
-	public function getItemPermissions($itemName, $allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'itemPermissions.' . $itemName;
+        return $permissions;
+    }
 
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-				&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
+    /**
+     * @param array|null $items
+     * @param integer $depth
+     * @param array $processed
+     * @return array
+     */
+    private function buildPermissions($items = null, $depth = 0, &$processed = array())
+    {
+        $permissions = array();
 
-		$permissions = $this->buildItemPermissions($itemName);
+        if ($items === null)
+            $items = $this->loadAuthItems();
 
-		if (isset($cache))
-			$cache->set($key, serialize($permissions), $this->cachingDuration);
+        foreach ($items as $itemName => $item)
+        {
+            if (!isset($processed[$itemName]))
+            {
+                $permissions[$itemName] = array(
+                    'name' => $itemName,
+                    'item' => $item,
+                    'children' => $this->buildPermissions($item->getChildren(), $depth + 1, $processed),
+                    'depth' => $depth,
+                );
+                $processed[$itemName] = $itemName;
+            }
+        }
 
-		return $permissions;
-	}
+        return $permissions;
+    }
 
-	/**
-	 * @param string $itemName
-	 * @return array
-	 */
-	private function buildItemPermissions($itemName)
-	{
-		$permissions = array();
-		$item = $this->owner->getAuthItem($itemName);
-		if ($item instanceof CAuthItem)
-		{
-			foreach ($item->getChildren() as $childName => $child)
-				$permissions[$childName] = $this->getItemPermissions($childName);
-		}
-		return $permissions;
-	}
+    /**
+     * @param string $itemName
+     * @param boolean $allowCaching
+     * @return array
+     */
+    public function getItemPermissions($itemName, $allowCaching = true)
+    {
+        $key = self::CACHE_KEY_PREFIX . 'itemPermissions.' . $itemName;
 
-	/**
-	 * @param array $tree
-	 * @return array
-	 */
-	public function flattenTree($tree)
-	{
-		$flatTree = array();
-		foreach ($tree as $branchName => $branch)
-		{
-			$flatTree[$branchName] = $branchName;
-			$leaves = $this->flattenTree($branch);
-			foreach ($leaves as $leafName => $leaf)
-				$flatTree[$leafName] = $leafName;
-		}
-		return $flatTree;
-	}
+        /* @var $cache CCache */
+        if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
+                && ($cache = Yii::app()->getComponent($this->cacheID)) !== null
+        )
+        {
+            if (($data = $cache->get($key)) !== false)
+                return unserialize($data);
+        }
 
-	/**
-	 * @param $names
-	 * @return CAuthItem[]
-	 */
-	public function getAuthItemsByNames($names)
-	{
-		$authItems = array();
-		foreach ($this->loadAuthItems() as $itemName => $item)
-		{
-			if (in_array($itemName, $names))
-				$authItems[$itemName] = $item;
-		}
-		return $authItems;
-	}
+        $permissions = $this->buildItemPermissions($itemName);
 
-	/**
-	 * @param string $name
-	 * @return CAuthItem|null
-	 */
-	public function loadAuthItem($name)
-	{
-		$authItems = $this->loadAuthItems();
-		return isset($authItems[$name]) ? $authItems[$name] : null;
-	}
+        if (isset($cache))
+            $cache->set($key, serialize($permissions), $this->cachingDuration);
 
-	/**
-	 * @param integer $type
-	 * @param integer $userId
-	 * @param boolean $allowCaching
-	 * @return CAuthItem[]
-	 */
-	public function loadAuthItems($type = null, $userId = null, $allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'authItems';
+        return $permissions;
+    }
 
-		if ($type !== null)
-			$key .= '.type.' . $type;
+    /**
+     * @param string $itemName
+     * @param integer $depth
+     * @return array
+     */
+    private function buildItemPermissions($itemName, $depth = 0)
+    {
+        $permissions = array();
+        $item = $this->loadAuthItem($itemName);
+        if ($item instanceof CAuthItem)
+        {
+            foreach ($item->getChildren() as $childName => $childItem)
+            {
+                $permissions[$childName] = array(
+                    'name' => $childName,
+                    'item' => $childItem,
+                    'children' => $this->buildItemPermissions($childName, $depth + 1),
+                    'depth' => $depth,
+                );
+            }
+        }
 
-		if ($userId !== null)
-			$key .= '.userId.' . $userId;
+        return $permissions;
+    }
 
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-				&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
+    /**
+     * @param string[] $names
+     * @return array()
+     */
+    public function getItemsPermissions($names)
+    {
+        $permissions = array();
 
-		$authItems = $this->owner->getAuthItems($type, $userId);
+        $items = $this->getPermissions();
+        $flat = $this->flattenPermissions($items);
 
-		if (isset($cache))
-			$cache->set($key, serialize($authItems), $this->cachingDuration);
+        foreach ($flat as $itemName => $item)
+        {
+            if (in_array($itemName, $names))
+                $permissions[$itemName] = $item;
+        }
 
-		return $authItems;
-	}
+        return $permissions;
+    }
 
-	/**
-	 * @param integer $userId
-	 * @param boolean $allowCaching
-	 * @return CAuthAssignment[]
-	 */
-	public function loadAuthAssignments($userId, $allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'authAssignments.userId.' . $userId;
+    /**
+     * @param array $permissions
+     * @return array
+     */
+    public function flattenPermissions($permissions)
+    {
+        $flattened = array();
+        foreach ($permissions as $itemName => $itemPermissions)
+        {
+            $children = $itemPermissions['children'];
+            unset($itemPermissions['children']); // not needed in a flat tree
+            $flattened[$itemName] = $itemPermissions;
+            $flattened = array_merge($flattened, $this->flattenPermissions($children));
+        }
 
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-				&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
+        return $flattened;
+    }
 
-		$assignments = $this->owner->getAuthAssignments($userId);
+    /**
+     * @param string $name
+     * @param boolean $allowCaching
+     * @return CAuthItem|null
+     */
+    public function loadAuthItem($name, $allowCaching = true)
+    {
+        $authItems = $this->loadAuthItems(null, null, $allowCaching);
+        return isset($authItems[$name]) ? $authItems[$name] : null;
+    }
 
-		if (isset($cache))
-			$cache->set($key, serialize($assignments), $this->cachingDuration);
+    /**
+     * @param integer $type
+     * @param integer $userId
+     * @param boolean $allowCaching
+     * @return CAuthItem[]
+     */
+    public function loadAuthItems($type = null, $userId = null, $allowCaching = true)
+    {
+        $key = self::CACHE_KEY_PREFIX . 'authItems';
 
-		return $assignments;
-	}
+        if ($type !== null)
+            $key .= '.type.' . $type;
+
+        if ($userId !== null)
+            $key .= '.userId.' . $userId;
+
+        /* @var $cache CCache */
+        if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
+            && ($cache = Yii::app()->getComponent($this->cacheID)) !== null
+        )
+        {
+            if (($data = $cache->get($key)) !== false)
+                return unserialize($data);
+        }
+
+        $authItems = $this->owner->getAuthItems($type, $userId);
+
+        if (isset($cache))
+            $cache->set($key, serialize($authItems), $this->cachingDuration);
+
+        return $authItems;
+    }
+
+    /**
+     * @param integer $userId
+     * @param boolean $allowCaching
+     * @return CAuthAssignment[]
+     */
+    public function loadAuthAssignments($userId, $allowCaching = true)
+    {
+        $key = self::CACHE_KEY_PREFIX . 'authAssignments.userId.' . $userId;
+
+        /* @var $cache CCache */
+        if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
+                && ($cache = Yii::app()->getComponent($this->cacheID)) !== null
+        )
+        {
+            if (($data = $cache->get($key)) !== false)
+                return unserialize($data);
+        }
+
+        $assignments = $this->owner->getAuthAssignments($userId);
+
+        if (isset($cache))
+            $cache->set($key, serialize($assignments), $this->cachingDuration);
+
+        return $assignments;
+    }
 }

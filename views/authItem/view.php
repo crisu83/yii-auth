@@ -18,7 +18,7 @@ $this->breadcrumbs = array(
 <div class="title-row clearfix">
 
 	<h1 class="pull-left">
-		<?php echo $item->description; ?>
+		<?php echo CHtml::encode($item->description); ?>
 		<small><?php echo $this->getItemTypeText($item->type, false); ?></small>
 	</h1>
 
@@ -42,22 +42,22 @@ $this->breadcrumbs = array(
 </div>
 
 <?php $this->widget('bootstrap.widgets.TbDetailView', array(
-	'data'=>$item,
-	'nullDisplay'=>'',
-	'attributes'=>array(
-		array(
-			'label'=>Yii::t('AuthModule.main', 'System name'),
-			'name'=>'name',
-		),
-		'description',
-		/*
-		array(
-			'label'=>Yii::t('AuthModule.main', 'Business rule'),
-			'name'=>'bizrule',
-		),
-		'data',
-		*/
-	),
+    'data' => $item,
+    'nullDisplay' => '',
+    'attributes' => array(
+        array(
+            'label' => Yii::t('AuthModule.main', 'System name'),
+            'name' => 'name',
+        ),
+        'description',
+        /*
+        array(
+            'label'=>Yii::t('AuthModule.main', 'Business rule'),
+            'name'=>'bizrule',
+        ),
+        'data',
+        */
+    ),
 )); ?>
 
 <hr />
@@ -79,18 +79,16 @@ $this->breadcrumbs = array(
 			'hideHeader'=>true,
 			'columns'=>array(
 				array(
-					'class'=>'AuthItemParentDescriptionColumn',
-					'itemName'=>$item->name,
-					'authItems'=>$ancestors,
-				),
-				array(
-					'class'=>'AuthItemParentTypeColumn',
+					'class'=>'AuthItemDescriptionColumn',
 					'itemName'=>$item->name,
 				),
 				array(
-					'class'=>'RemoveAuthItemParentColumn',
+					'class'=>'AuthItemTypeColumn',
 					'itemName'=>$item->name,
-					'authItems'=>$ancestors,
+				),
+				array(
+					'class'=>'AuthItemRemoveColumn',
+					'itemName'=>$item->name,
 				),
 			),
 		)); ?>
@@ -112,18 +110,16 @@ $this->breadcrumbs = array(
 			'template'=>"{items}",
 			'columns'=>array(
 				array(
-					'class'=>'AuthItemChildDescriptionColumn',
-					'itemName'=>$item->name,
-					'authItems'=>$descendants,
-				),
-				array(
-					'class'=>'AuthItemChildTypeColumn',
+					'class'=>'AuthItemDescriptionColumn',
 					'itemName'=>$item->name,
 				),
 				array(
-					'class'=>'RemoveAuthItemChildColumn',
+					'class'=>'AuthItemTypeColumn',
 					'itemName'=>$item->name,
-					'authItems'=>$descendants,
+				),
+				array(
+					'class'=>'AuthItemRemoveColumn',
+					'itemName'=>$item->name,
 				),
 			),
 		)); ?>

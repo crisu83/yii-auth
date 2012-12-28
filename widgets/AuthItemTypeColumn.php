@@ -2,28 +2,38 @@
 
 Yii::import('zii.widgets.grid.CGridColumn');
 
-class AuthItemTypeColumn extends AuthItemRelativeColumn
+class AuthItemTypeColumn extends AuthItemColumn
 {
-	public function init()
-	{
-		if (isset($this->htmlOptions['class']))
-			$this->htmlOptions['class'] .= ' type-column';
-		else
-			$this->htmlOptions['class'] = 'type-column';
-	}
+    /**
+     * Initializes the column.
+     */
+    public function init()
+    {
+        if (isset($this->htmlOptions['class']))
+            $this->htmlOptions['class'] .= ' auth-item-type-column';
+        else
+            $this->htmlOptions['class'] = 'auth-item-type-column';
+    }
 
-	public function getLabelCssClass($itemName, $childName)
-	{
-		return Yii::app()->authManager->hasItemChild($itemName, $childName) ? 'info' : '';
-	}
+    /**
+     * Renders the data cell content.
+     * @param integer $row the row number (zero-based)
+     * @param mixed $data the data associated with the row
+     */
+    protected function renderDataCellContent($row, $data)
+    {
+        /* @var $am CAuthManager|AuthBehavior */
+        $am = Yii::app()->getAuthManager();
 
-	protected function renderDataCellContent($row, $data)
-	{
-		/* @var $controller AuthItemController */
-		$controller = $this->grid->getOwner();
-		$controller->widget('bootstrap.widgets.TbLabel', array(
-			'type'=>'info',
-			'label'=>$controller->getItemTypeText($data->type, false),
-		));
-	}
+        $labelType = $this->active || $am->hasParent($this->itemName, $data['name']) || $am->hasChild($this->itemName, $data['name'])
+            ? 'info'
+            : '';
+
+        /* @var $controller AuthItemController */
+        $controller = $this->grid->getOwner();
+        $controller->widget('bootstrap.widgets.TbLabel', array(
+            'type' => $labelType,
+            'label' => $controller->getItemTypeText($data['item']->type, false),
+        ));
+    }
 }

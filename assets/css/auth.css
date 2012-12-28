@@ -1,23 +1,23 @@
-span.disabled {
-    color: #888;
-}
-
 .title-row .btn-group {
     margin-top: 12px;
 }
 
-.description-column {
+.disabled {
+    color: #888;
+}
+
+.auth-item-description-column {
     width: 580px;
 }
 
-.assignment-type-column {
-    width: 200px;
+.auth-item-type-column {
+    width: 120px;
 }
 
-.type-column {
-    width: 100px;
-}
-
-.actions-column {
+.auth-actions-column {
     width: 30px;
+}
+
+.assignment-items-column {
+    width: 580px;
 }
