@@ -74,7 +74,7 @@ $this->breadcrumbs = array(
 		<?php $this->widget('bootstrap.widgets.TbGridView', array(
 			'type' => 'striped condensed hover',
 			'dataProvider'=>$ancestorDp,
-			'emptyText'=>Yii::t('AuthModule.main', 'This is item does not have any ancestors.'),
+			'emptyText'=>Yii::t('AuthModule.main', 'This item does not have any ancestors.'),
 			'template'=>"{items}",
 			'hideHeader'=>true,
 			'columns'=>array(
