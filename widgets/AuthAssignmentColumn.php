@@ -14,8 +14,8 @@ Yii::import('zii.widgets.grid.CGridColumn');
  */
 class AuthAssignmentColumn extends CGridColumn
 {
-    /**
-     * @var integer the user id.
-     */
-    public $userId;
+	/**
+	 * @var integer the user id.
+	 */
+	public $userId;
 }

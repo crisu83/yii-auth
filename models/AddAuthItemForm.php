@@ -21,21 +21,21 @@ class AddAuthItemForm extends CFormModel
 	 * Returns the attribute labels.
 	 * @return array attribute labels (name=>label)
 	 */
-    public function attributeLabels()
-    {
-        return array(
-            'items' => Yii::t('AuthModule.main', 'Items'),
-        );
-    }
+	public function attributeLabels()
+	{
+		return array(
+			'items' => Yii::t('AuthModule.main', 'Items'),
+		);
+	}
 
 	/**
 	 * Returns the validation rules for attributes.
 	 * @return array validation rules.
 	 */
-    public function rules()
-    {
-        return array(
-            array('items', 'required'),
-        );
-    }
+	public function rules()
+	{
+		return array(
+			array('items', 'required'),
+		);
+	}
 }
