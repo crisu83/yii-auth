@@ -47,7 +47,7 @@ class AssignmentController extends AuthController
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
 
-		$assignments = $am->loadAuthAssignments($id);
+		$assignments = $am->loadAuthAssignments($id, false);
 		$authItems = $am->getItemsPermissions(array_keys($assignments));
 		$authItemDp = new AuthItemDataProvider();
 		$authItemDp->setAuthItems($authItems);
@@ -94,7 +94,7 @@ class AssignmentController extends AuthController
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->authManager;
 
-		$assignments = $am->loadAuthAssignments($userId);
+		$assignments = $am->loadAuthAssignments($userId, false);
 		$assignedItems = array_keys($assignments);
 		$authItems = $am->loadAuthItems();
 		foreach ($authItems as $itemName => $item)

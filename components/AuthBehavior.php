@@ -75,7 +75,7 @@ class AuthBehavior extends CBehavior
 		$ancestors = array();
 
 		if ($permissions === null)
-			$permissions = $this->getPermissions();
+			$permissions = $this->getPermissions(false/* do not allow caching */);
 
 		foreach ($permissions as $childName => $child)
 		{
@@ -95,7 +95,7 @@ class AuthBehavior extends CBehavior
 	 */
 	public function getDescendants($itemName)
 	{
-		$itemPermissions = $this->getItemPermissions($itemName);
+		$itemPermissions = $this->getItemPermissions($itemName, false/* do not allow caching */);
 		return $this->flattenPermissions($itemPermissions);
 	}
 
@@ -136,7 +136,7 @@ class AuthBehavior extends CBehavior
 		$permissions = array();
 
 		if ($items === null)
-			$items = $this->loadAuthItems();
+			$items = $this->loadAuthItems(null, null, false);
 
 		foreach ($items as $itemName => $item)
 		{
@@ -186,7 +186,7 @@ class AuthBehavior extends CBehavior
 	private function buildItemPermissions($itemName)
 	{
 		$item = $this->loadAuthItem($itemName);
-		return $this->buildPermissions($item->getChildren());
+		return $item instanceof CAuthItem ? $this->buildPermissions($item->getChildren()) : array();
 	}
 
 	/**

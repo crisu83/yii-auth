@@ -36,10 +36,18 @@ return array(
 			'itemTable'=>'tbl_auth_item',
 			'itemChildTable'=>'tbl_auth_item_child',
 			'assignmentTable'=>'tbl_auth_assignment',
-			'behaviors'=>array('auth.components.AuthBehavior'),
+			'behaviors'=>array(
+				'auth'=>array(
+					'class'=>'auth.components.AuthBehavior',
+					'cachingDuration'=>500,
+				),
+			),
 		),
 		'bootstrap'=>array(
 			'class'=>'ext.bootstrap.components.Bootstrap',
+		),
+		'cache'=>array(
+			'class'=>'CFileCache',
 		),
 		'db'=>array(
 			'connectionString' => 'mysql:host=localhost;dbname=yii_auth',
@@ -71,14 +79,12 @@ return array(
 			'routes'=>array(
 				array(
 					'class'=>'CFileLogRoute',
-					'levels'=>'error, warning',
+					'levels'=>'debug, info, error, warning',
 				),
 				// uncomment the following to show log messages on web pages
-				/*
 				array(
 					'class'=>'CWebLogRoute',
 				),
-				*/
 			),
 		),
 	),

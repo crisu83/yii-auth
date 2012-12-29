@@ -36,7 +36,7 @@ class AuthItemDataProvider extends CDataProvider
 	{
 		if (empty($this->_items) && $this->type !== null)
 		{
-			$authItems = Yii::app()->authManager->loadAuthItems($this->type);
+			$authItems = Yii::app()->authManager->loadAuthItems($this->type, null, false/* do not allow caching */);
 			$this->setAuthItems($authItems);
 		}
 

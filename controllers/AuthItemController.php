@@ -128,13 +128,11 @@ class AuthItemController extends AuthController
 				$am->addItemChild($name, $formModel->items);
 		}
 
-		$item = $am->loadAuthItem($name);
+		$item = $am->loadAuthItem($name, false);
 
 		$dpConfig = array(
 			'pagination' => false,
-			'sort' => array(
-				'defaultOrder' => 'depth asc',
-			),
+			'sort' => array('defaultOrder' => 'depth asc'),
 		);
 
 		$ancestors = $am->getAncestors($name);
@@ -219,16 +217,19 @@ class AuthItemController extends AuthController
 		$options = array();
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
-		$item = $am->loadAuthItem($itemName);
-		$type = $item->getType();
-		$exclude = $am->getAncestors($itemName);
-		$exclude = array_merge($exclude, $item->getChildren());
-		$authItems = $am->loadAuthItems();
-		foreach ($authItems as $name => $item)
+		$item = $am->loadAuthItem($itemName, false/* do not allow caching */);
+		if ($item instanceof CAuthItem)
 		{
-			$validChildTypes = $this->getValidChildTypes($type);
-			if (in_array($item->type, $validChildTypes) && !isset($exclude[$name]) && $name !== $itemName)
-				$options[ucfirst($this->getItemTypeText($item->getType()))][$name] = $item->getDescription();
+			$type = $item->getType();
+			$exclude = $am->getAncestors($itemName);
+			$exclude = array_merge($exclude, $item->getChildren());
+			$authItems = $am->loadAuthItems();
+			foreach ($authItems as $name => $item)
+			{
+				$validChildTypes = $this->getValidChildTypes($type);
+				if (in_array($item->type, $validChildTypes) && !isset($exclude[$name]) && $name !== $itemName)
+					$options[ucfirst($this->getItemTypeText($item->getType()))][$name] = $item->getDescription();
+			}
 		}
 
 		return $options;
