@@ -10,7 +10,7 @@
 /**
  * Auth module behavior for the authorization manager.
  *
- * @property CAuthManager $owner
+ * @property CAuthManager $owner The authorization manager.
  */
 class AuthBehavior extends CBehavior
 {

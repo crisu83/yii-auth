@@ -7,11 +7,7 @@
 }
 
 .auth-item-description-column {
-    width: 580px;
-}
-
-.auth-item-type-column {
-    width: 120px;
+    width: 65%;
 }
 
 .auth-actions-column {

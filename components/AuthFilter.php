@@ -8,7 +8,7 @@
  */
 
 /**
- * Auth module filter for automatic access checking for the current controller action.
+ * Filter that automatically checks if the user has access to the current controller action.
  */
 class AuthFilter extends CFilter
 {
