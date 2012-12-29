@@ -1,8 +1,21 @@
 <?php
+/**
+ * AssignmentController class file.
+ * @author Christoffer Niska <ChristofferNiska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2012-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package auth.controllers
+ */
 
+/**
+ * Controller for authorization assignment related actions.
+ */
 class AssignmentController extends AuthController
 {
-    public function actionIndex()
+	/**
+	 * Displays the a list of all the assignments.
+	 */
+	public function actionIndex()
     {
         $userDp = new CActiveDataProvider($this->module->userClass);
 
@@ -12,18 +25,19 @@ class AssignmentController extends AuthController
     }
 
     /**
-     * @param string $id
+	 * Displays the assignments for the user with the given id.
+     * @param string $id the user id.
      */
     public function actionView($id)
     {
-        $formModel = new AuthItemsForm();
+        $formModel = new AddAuthItemForm();
 
         /* @var $am CAuthManager|AuthBehavior */
         $am = Yii::app()->authManager;
 
-        if (isset($_POST['AuthItemsForm']))
+        if (isset($_POST['AddAuthItemForm']))
         {
-            $formModel->attributes = $_POST['AuthItemsForm'];
+            $formModel->attributes = $_POST['AddAuthItemForm'];
             if ($formModel->validate())
                 $am->assign($formModel->items, $id);
         }
@@ -51,7 +65,8 @@ class AssignmentController extends AuthController
     }
 
     /**
-     * @throws CHttpException
+	 * Revokes an assignment from the given user.
+     * @throws CHttpException if the request is invalid.
      */
     public function actionRevoke()
     {
@@ -68,8 +83,9 @@ class AssignmentController extends AuthController
     }
 
     /**
-     * @param string $userId
-     * @return array
+	 * Returns a list of possible assignments for the user with the given id.
+     * @param string $userId the user id.
+     * @return array the assignment options.
      */
     protected function getAssignmentOptions($userId)
     {

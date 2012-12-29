@@ -5,7 +5,7 @@
 /* @var $ancestorDp AuthItemDataProvider */
 /* @var $descendants CAuthItem[] */
 /* @var $descendantDp AuthItemDataProvider */
-/* @var $formModel AuthItemsForm */
+/* @var $formModel AddAuthItemForm */
 /* @var $form TbActiveForm */
 /* @var $childOptions array */
 

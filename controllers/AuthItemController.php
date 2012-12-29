@@ -1,9 +1,20 @@
 <?php
+/**
+ * AuthItemController class file.
+ * @author Christoffer Niska <ChristofferNiska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2012-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package auth.components
+ */
 
+/**
+ * Controller for authorization item related actions.
+ */
 class AuthItemController extends AuthController
 {
     /**
-     * @return array
+     * Returns the filter configurations.
+	 * @return array a list of filter configurations.
      */
     public function filters()
     {
@@ -13,7 +24,8 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param CFilterChain $filterChain
+	 * Filter method for validating the item type.
+     * @param CFilterChain $filterChain the filter chain that the filter is on.
      */
     public function filterValidateType($filterChain)
     {
@@ -23,7 +35,8 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param string $type
+	 * Displays a list of items of the given type.
+     * @param string $type the item type (0=operation, 1=task, 2=role).
      */
     public function actionIndex($type)
     {
@@ -36,9 +49,10 @@ class AuthItemController extends AuthController
         ));
     }
 
-    /**
-     * @param string $type
-     */
+	/**
+	 * Displays a form for creating a new item of the given type.
+	 * @param string $type the item type (0=operation, 1=task, 2=role).
+	 */
     public function actionCreate($type)
     {
         $model = new AuthItemForm('create');
@@ -62,7 +76,8 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param string $name
+	 * Displays a form for updating the item with the given name.
+     * @param string $name name of the item.
      */
     public function actionUpdate($name)
     {
@@ -96,18 +111,19 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param string $name
+	 * Displays the item with the given name.
+     * @param string $name name of the item.
      */
     public function actionView($name)
     {
-        $formModel = new AuthItemsForm();
+        $formModel = new AddAuthItemForm();
 
         /* @var $am CAuthManager|AuthBehavior */
         $am = Yii::app()->getAuthManager();
 
-        if (isset($_POST['AuthItemsForm']))
+        if (isset($_POST['AddAuthItemForm']))
         {
-            $formModel->attributes = $_POST['AuthItemsForm'];
+            $formModel->attributes = $_POST['AddAuthItemForm'];
             if ($formModel->validate())
                 $am->addItemChild($name, $formModel->items);
         }
@@ -143,7 +159,8 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @throws CHttpException
+	 * Deletes the item with the given name.
+     * @throws CHttpException if the item does not exist or if the request is invalid.
      */
     public function actionDelete()
     {
@@ -171,8 +188,9 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param string $itemName
-     * @param string $parentName
+	 * Removes the parent from the item with the given name.
+     * @param string $itemName name of the item.
+     * @param string $parentName name of the parent.
      */
     public function actionRemoveParent($itemName, $parentName)
     {
@@ -181,8 +199,9 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param string $itemName
-     * @param string $childName
+	 * Removes the child from the item with the given name.
+     * @param string $itemName name of the item.
+     * @param string $childName name of the child.
      */
     public function actionRemoveChild($itemName, $childName)
     {
@@ -191,8 +210,9 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param string $itemName
-     * @return array
+	 * Returns a list of possible children for the item with the given name.
+     * @param string $itemName name of the item.
+     * @return array the child options.
      */
     protected function getItemChildOptions($itemName)
     {
@@ -215,8 +235,9 @@ class AuthItemController extends AuthController
     }
 
     /**
-     * @param string $type
-     * @return string
+	 * Returns a list of the valid child types for the given type.
+     * @param string $type the item type (0=operation, 1=task, 2=role).
+     * @return array the valid types.
      */
     protected function getValidChildTypes($type)
     {

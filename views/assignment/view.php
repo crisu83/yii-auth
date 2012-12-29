@@ -2,7 +2,7 @@
 /* @var $this AssignmentController */
 /* @var $model User */
 /* @var $authItemDp AuthItemDataProvider */
-/* @var $formModel AuthItemsForm */
+/* @var $formModel AddAuthItemForm */
 /* @var $form TbActiveForm */
 /* @var $assignmentOptions array */
 

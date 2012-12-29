@@ -1,13 +1,27 @@
 <?php
+/**
+ * AuthItemDataProvider class file.
+ * @author Christoffer Niska <ChristofferNiska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2012-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package auth.components
+ */
 
+/**
+ * Data provider for listing authorization items.
+ */
 class AuthItemDataProvider extends CDataProvider
 {
-    public $type;
+	/**
+	 * @var string the item type (0=operation, 1=task, 2=role).
+	 */
+	public $type;
 
     private $_items = array();
 
     /**
-     * @param CAuthItem[] $authItems
+	 * Sets the authorization items.
+     * @param CAuthItem[] $authItems the items.
      */
     public function setAuthItems($authItems)
     {

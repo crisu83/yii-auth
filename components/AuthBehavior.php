@@ -1,19 +1,38 @@
 <?php
+/**
+ * AuthBehavior class file.
+ * @author Christoffer Niska <ChristofferNiska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2012-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package auth.components
+ */
 
 /**
+ * Auth module behavior for the authorization manager.
+ *
  * @property CAuthManager $owner
  */
 class AuthBehavior extends CBehavior
 {
     const CACHE_KEY_PREFIX = 'AuthModule.AuthBehavior.';
 
-    public $cachingDuration = 0;
-    public $cacheID = 'cache';
+	/**
+	 * @var integer the time in seconds that the messages can remain valid in cache.
+	 * Defaults to 0, meaning the caching is disabled.
+	 */
+	public $cachingDuration = 0;
+	/**
+	 * @var string the ID of the cache application component that is used to cache the messages.
+	 * Defaults to 'cache' which refers to the primary cache application component.
+	 * Set this property to false if you want to disable caching the permissions.
+	 */
+	public $cacheID = 'cache';
 
     /**
-     * @param string $itemName
-     * @param string $childName
-     * @return boolean
+	 * Returns whether the given item has a specific permission.
+     * @param string $itemName name of the item.
+     * @param string $childName name of the permission.
+     * @return boolean the result.
      */
     public function hasPermission($itemName, $childName)
     {
@@ -22,9 +41,10 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param string $itemName
-     * @param string $parentName
-     * @return boolean
+	 * Returns whether the given item has a specific parent.
+     * @param string $itemName name of the item.
+     * @param string $parentName name of the parent.
+     * @return boolean the result.
      */
     public function hasParent($itemName, $parentName)
     {
@@ -33,9 +53,10 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param string $itemName
-     * @param string $childName
-     * @return boolean
+	 * Returns whether the given item has a specific child.
+     * @param string $itemName name of the item.
+     * @param string $childName name of the child.
+     * @return boolean the result.
      */
     public function hasChild($itemName, $childName)
     {
@@ -44,9 +65,10 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param string $itemName
-     * @param array|null $permissions
-     * @return array
+	 * Returns all ancestors for the given item recursively.
+     * @param string $itemName name of the item.
+     * @param array|null $permissions permissions to process.
+     * @return array the ancestors.
      */
     public function getAncestors($itemName, $permissions = null)
     {
@@ -67,19 +89,20 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param string $itemName
-     * @return array
+	 * Returns all the descendants for the given item recursively.
+     * @param string $itemName name of the item.
+     * @return array the descendants.
      */
     public function getDescendants($itemName)
     {
         $itemPermissions = $this->getItemPermissions($itemName);
-
         return $this->flattenPermissions($itemPermissions);
     }
 
     /**
-     * @param boolean $allowCaching
-     * @return array
+	 * Returns the complete permissions tree.
+     * @param boolean $allowCaching whether to allow caching the result of access check.
+     * @return array the permissions.
      */
     public function getPermissions($allowCaching = true)
     {
@@ -103,12 +126,12 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param array|null $items
-     * @param integer $depth
-     * @param array $processed
-     * @return array
+	 * Builds the permission tree to the given items.
+     * @param array|null $items items to process. If omitted the complete tree will be built.
+     * @param integer $depth current depth.
+     * @return array the permissions.
      */
-    private function buildPermissions($items = null, $depth = 0, &$processed = array())
+    private function buildPermissions($items = null, $depth = 0)
     {
         $permissions = array();
 
@@ -117,25 +140,22 @@ class AuthBehavior extends CBehavior
 
         foreach ($items as $itemName => $item)
         {
-            if (!isset($processed[$itemName]))
-            {
-                $permissions[$itemName] = array(
-                    'name' => $itemName,
-                    'item' => $item,
-                    'children' => $this->buildPermissions($item->getChildren(), $depth + 1, $processed),
-                    'depth' => $depth,
-                );
-                $processed[$itemName] = $itemName;
-            }
+			$permissions[$itemName] = array(
+				'name' => $itemName,
+				'item' => $item,
+				'children' => $this->buildPermissions($item->getChildren(), $depth + 1),
+				'depth' => $depth,
+			);
         }
 
         return $permissions;
     }
 
     /**
-     * @param string $itemName
-     * @param boolean $allowCaching
-     * @return array
+	 * Returns the permissions for the given item.
+     * @param string $itemName name of the item.
+     * @param boolean $allowCaching whether to allow caching the result of access check.
+     * @return array the permissions.
      */
     public function getItemPermissions($itemName, $allowCaching = true)
     {
@@ -159,33 +179,20 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param string $itemName
-     * @param integer $depth
-     * @return array
+	 * Builds the permissions for the given item.
+     * @param string $itemName name of the item.
+     * @return array the permissions.
      */
-    private function buildItemPermissions($itemName, $depth = 0)
+    private function buildItemPermissions($itemName)
     {
-        $permissions = array();
         $item = $this->loadAuthItem($itemName);
-        if ($item instanceof CAuthItem)
-        {
-            foreach ($item->getChildren() as $childName => $childItem)
-            {
-                $permissions[$childName] = array(
-                    'name' => $childName,
-                    'item' => $childItem,
-                    'children' => $this->buildItemPermissions($childName, $depth + 1),
-                    'depth' => $depth,
-                );
-            }
-        }
-
-        return $permissions;
+		return $this->buildPermissions($item->getChildren());
     }
 
     /**
-     * @param string[] $names
-     * @return array()
+	 * Returns the permissions for the items with the given names.
+     * @param string[] $names list of item names.
+     * @return array the permissions.
      */
     public function getItemsPermissions($names)
     {
@@ -204,8 +211,9 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param array $permissions
-     * @return array
+	 * Flattens the given permission tree.
+     * @param array $permissions the permissions tree.
+     * @return array the permissions.
      */
     public function flattenPermissions($permissions)
     {
@@ -222,9 +230,10 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param string $name
-     * @param boolean $allowCaching
-     * @return CAuthItem|null
+	 * Returns the auth item with the given name.
+     * @param string $name name of the item.
+     * @param boolean $allowCaching whether to allow caching the result of access check.
+     * @return CAuthItem the authorization item.
      */
     public function loadAuthItem($name, $allowCaching = true)
     {
@@ -233,10 +242,11 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param integer $type
-     * @param integer $userId
-     * @param boolean $allowCaching
-     * @return CAuthItem[]
+	 * Returns all the authorization items of a given type or for a given user.
+     * @param integer $type type of item.
+     * @param integer $userId the user id.
+     * @param boolean $allowCaching whether to allow caching the result of access check.
+     * @return CAuthItem[] the authorization items.
      */
     public function loadAuthItems($type = null, $userId = null, $allowCaching = true)
     {
@@ -266,9 +276,10 @@ class AuthBehavior extends CBehavior
     }
 
     /**
-     * @param integer $userId
-     * @param boolean $allowCaching
-     * @return CAuthAssignment[]
+	 * Returns all the authorization assignments for the given user.
+     * @param integer $userId the user id.
+     * @param boolean $allowCaching whether to allow caching the result of access check.
+     * @return CAuthAssignment[] the authorization assignments.
      */
     public function loadAuthAssignments($userId, $allowCaching = true)
     {

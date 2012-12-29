@@ -1,9 +1,19 @@
 <?php
+/**
+ * AuthAssignmentViewColumn class file.
+ * @author Christoffer Niska <ChristofferNiska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2012-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package auth.widgets
+ */
 
+/**
+ * Grid column for displaying the view link for an assignment row.
+ */
 class AuthAssignmentViewColumn extends AuthAssignmentColumn
 {
     /**
-     * @var string
+     * @var string name of the id column.
      */
     public $idColumn;
 
@@ -20,8 +30,8 @@ class AuthAssignmentViewColumn extends AuthAssignmentColumn
 
     /**
      * Renders the data cell content.
-     * @param integer $row the row number (zero-based)
-     * @param mixed $data the data associated with the row
+     * @param integer $row the row number (zero-based).
+     * @param mixed $data the data associated with the row.
      */
     protected function renderDataCellContent($row, $data)
     {

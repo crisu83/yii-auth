@@ -1,11 +1,22 @@
 <?php
+/**
+ * AuthFilter class file.
+ * @author Christoffer Niska <ChristofferNiska@gmail.com>
+ * @copyright Copyright &copy; Christoffer Niska 2012-
+ * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
+ * @package auth.components
+ */
 
+/**
+ * Auth module filter for automatic access checking for the current controller action.
+ */
 class AuthFilter extends CFilter
 {
     /**
-     * @param CFilterChain $filterChain
-     * @return boolean
-     * @throws CHttpException
+	 * Performs the pre-action filtering.
+     * @param CFilterChain $filterChain the filter chain that the filter is on.
+     * @return boolean whether the filtering process should continue and the action should be executed.
+     * @throws CHttpException if the user is denied access.
      */
     protected function preFilter($filterChain)
     {
