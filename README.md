@@ -10,18 +10,17 @@ To achieve its goals it was built using my popular [Twitter Bootstrap extension]
 Auth is written according to Yii's conventions and it follows the [separation of concerns](http://en.wikipedia.org/wiki/Separation_of_concerns) priciple and therefore it doesn't require you to extend from its classes.
 Instead it provides additional functionality for the authorization manager through a single behavior.
 
-Demo
-====
+### Demo
 
 You can try out the live demo [here](http://www.cniska.net/yii-auth/).
 
-Requirements
-============
+### Requirements
 
 * [Twitter Bootstrap extension for Yii](http://www.yiiframework.com/extension/bootstrap) version 2.0.0 or above
 
-Usage
-=====
+## Usage
+
+### Setup
 
 Download the latest release from [Yii extensions](http://www.yiiframework.com/extension/auth).
 
@@ -35,6 +34,8 @@ return array(
 );
 ```
 ***protected/config/main.php***
+
+### Configuration
 
 Configure the module to suit your needs. Here's a list of the available configurations (with default values).
 
@@ -50,9 +51,33 @@ Configure the module to suit your needs. Here's a list of the available configur
 ),
 ```
 
-Changes
-=======
+### Checking access
 
-#### Soon - version 1.0.0
+When you wish to check if the current user has a certain permission you can use the ***CWebUser::checkAccess()*** method which can be access from anywhere in your application through ***Yii::app()*** like so:
 
-* Initial release
+```php
+if (Yii::app()->user->checkAccess('itemName')) // itemName = name of the operation
+{
+  // access is allowed.
+}
+```
+
+In order to keep your permissions dynamic you should never check for a specific role or task, instead you should always check for an operation. 
+For more information on Yii's authorization manager refer to the framework documentation on [Authentication and Authorization](http://www.yiiframework.com/doc/guide/1.1/en/topics.auth#role-based-access-control).
+
+#### Checking access using a filter
+
+You can also use a filter to automatically check access before controller actions are called.
+Operations used with this filter has to be named as follows ***(moduleId.)controllerId.actionId***, where ***moduleId*** is optional. 
+You can also use a wildcard ***controllerId.**** instead of the actionId to cover all actions in the controller. 
+
+```php
+public function filters()
+{
+  return array(
+    'auth.components.AuthFilter',
+  ),
+}
+```
+
+For more information on how filters work refer to the framework documentation on [Controllers](http://www.yiiframework.com/doc/guide/1.1/en/basics.controller#filter).
