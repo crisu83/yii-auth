@@ -27,10 +27,11 @@ class AuthController extends CController
 	public $breadcrumbs = array();
 
 	/**
-	 * @param string $type
-	 * @param boolean $plural
-	 * @return string
-	 * @throws CException
+	 * Returns the authorization item type as a string.
+	 * @param string $type the item type (0=operation, 1=task, 2=role).
+	 * @param boolean $plural whether to return the name in plural.
+	 * @return string the text.
+	 * @throws CException if the item type is invalid.
 	 */
 	public function getItemTypeText($type, $plural = true)
 	{
