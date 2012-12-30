@@ -19,7 +19,7 @@ class SiteController extends Controller
 	{
 		/* @var $db CDbConnection */
 		$db = Yii::app()->getComponent('db');
-		$filename = __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'schema.sql';
+		$filename = dirname(__FILE__) . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'schema.sql';
 		if (file_exists($filename))
 		{
 			$schema = file_get_contents($filename);
