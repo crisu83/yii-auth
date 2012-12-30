@@ -1,6 +1,6 @@
 <?php
 /* @var $this AssignmentController */
-/* @var $userDp CActiveDataProvider */
+/* @var $dataProvider CActiveDataProvider */
 
 $this->breadcrumbs = array(
     Yii::t('AuthModule.main', 'Assignments'),
@@ -11,15 +11,18 @@ $this->breadcrumbs = array(
 
 <?php $this->widget('bootstrap.widgets.TbGridView', array(
     'type' => 'striped hover',
-    'dataProvider' => $userDp,
+    'dataProvider' => $dataProvider,
+	'emptyText' => Yii::t('AuthModule.main', 'No assignments found.'),
+	'template'=>"{items}\n{pager}",
     'columns' => array(
         array(
             'header' => Yii::t('AuthModule.main', 'User'),
             'class' => 'AuthAssignmentNameColumn',
+            'idColumn' => $this->module->userIdColumn,
             'nameColumn' => $this->module->userNameColumn,
         ),
         array(
-            'header' => Yii::t('AuthModule.main', 'Items'),
+            'header' => Yii::t('AuthModule.main', 'Assigned items'),
             'class' => 'AuthAssignmentItemsColumn',
         ),
         array(

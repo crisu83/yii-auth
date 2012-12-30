@@ -20,11 +20,16 @@ $this->breadcrumbs = array(
     'type' => 'striped hover',
     'dataProvider' => $dataProvider,
     'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', array('{type}'=>$this->getItemTypeText($type))),
+	'template'=>"{items}\n{pager}",
     'columns' => array(
 		array(
 			'name' => 'name',
+			'type'=>'raw',
 			'header' => Yii::t('AuthModule.main', 'System name'),
 			'htmlOptions' => array('class'=>'auth-item-name-column'),
+			'value' => function($data) {
+				return CHtml::link($data->name, array('view', 'name'=>$data->name));
+			},
 		),
 		array(
 			'name' => 'description',

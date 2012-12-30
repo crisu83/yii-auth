@@ -1,19 +1,35 @@
-.title-row .btn-group {
-    margin-top: 12px;
+.auth-module h1 {
+    margin: 0 0 30px;
 }
 
-.disabled {
+.auth-module h3 {
+    line-height: 100%;
+}
+
+.auth-module small {
     color: #888;
 }
 
-.auth-item-description-column {
+.auth-module .title-row .btn-group {
+    margin-bottom: 12px;
+}
+
+.auth-module .detail-view .null {
+    color: #888;
+}
+
+.auth-module .disabled {
+    color: #888;
+}
+
+.auth-module .auth-item-description-column {
     width: 65%;
 }
 
-.auth-actions-column {
+.auth-module .auth-actions-column {
     width: 30px;
 }
 
-.assignment-items-column {
+.auth-module .assignment-items-column {
     width: 580px;
 }

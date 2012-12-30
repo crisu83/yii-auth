@@ -85,7 +85,7 @@ class AuthItemController extends AuthController
 		$item = Yii::app()->authManager->getAuthItem($name);
 
 		if ($item === null)
-			throw new CHttpException(404, 'Page not found.');
+			throw new CHttpException(404, Yii::t('AuthModule.main', 'Page not found.'));
 
 		$model = new AuthItemForm('update');
 		$model->name = $name;
@@ -147,9 +147,7 @@ class AuthItemController extends AuthController
 
 		$this->render('view', array(
 			'item' => $item,
-			'ancestors' => $ancestors,
 			'ancestorDp' => $ancestorDp,
-			'descendants' => $descendants,
 			'descendantDp' => $descendantDp,
 			'formModel' => $formModel,
 			'childOptions' => $childOptions,

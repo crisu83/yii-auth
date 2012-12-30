@@ -11,7 +11,10 @@ $this->breadcrumbs = array(
 );
 ?>
 
-<h1><?php echo CHtml::encode($item->description); ?></h1>
+<h1>
+	<?php echo CHtml::encode($item->description); ?>
+	<small><?php echo $this->getItemTypeText($item->type, false); ?></small>
+</h1>
 
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'type'=>'horizontal',
@@ -33,7 +36,7 @@ $this->breadcrumbs = array(
 	<?php $this->widget('bootstrap.widgets.TbButton', array(
 		'type' => 'link',
 		'label' => Yii::t('AuthModule.main', 'Cancel'),
-		'url' => array('index', 'type' => $item->type),
+		'url' => array('view', 'name' => $item->name),
 	)); ?>
 </div>
 

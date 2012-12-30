@@ -32,9 +32,12 @@ class AuthAssignmentItemsColumn extends AuthAssignmentColumn
 	{
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
-		$assignments = $am->loadAuthAssignments($data->id);
+		$assignments = $am->loadAuthAssignments($data->id, false);
 		$permissions = $am->getItemsPermissions(array_keys($assignments));
 		foreach ($permissions as $itemPermission)
-			echo $itemPermission['item']->getDescription() . '<br />';
+		{
+			echo $itemPermission['item']->description;
+			echo ' <small>'.$this->grid->owner->getItemTypeText($itemPermission['item']->type, false).'</small><br />';
+		}
 	}
 }

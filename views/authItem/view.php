@@ -1,9 +1,7 @@
 <?php
 /* @var $this AuthItemController */
 /* @var $item CAuthItem */
-/* @var $ancestors CAuthItem[] */
 /* @var $ancestorDp AuthItemDataProvider */
-/* @var $descendants CAuthItem[] */
 /* @var $descendantDp AuthItemDataProvider */
 /* @var $formModel AddAuthItemForm */
 /* @var $form TbActiveForm */
@@ -43,20 +41,26 @@ $this->breadcrumbs = array(
 
 <?php $this->widget('bootstrap.widgets.TbDetailView', array(
     'data' => $item,
-    'nullDisplay' => '',
+    //'nullDisplay' => '',
     'attributes' => array(
         array(
-            'label' => Yii::t('AuthModule.main', 'System name'),
             'name' => 'name',
-        ),
-        'description',
-        /*
+			'label' => Yii::t('AuthModule.main', 'System name'),
+		),
+		array(
+			'name' => 'description',
+			'label' => Yii::t('AuthModule.main', 'Description'),
+		),
+		/*
         array(
-            'label'=>Yii::t('AuthModule.main', 'Business rule'),
-            'name'=>'bizrule',
-        ),
-        'data',
-        */
+			'name' => 'bizrule',
+			'label' => Yii::t('AuthModule.main', 'Business rule'),
+		),
+		array(
+			'name' => 'data',
+			'label' => Yii::t('AuthModule.main', 'Data'),
+		),
+		*/
     ),
 )); ?>
 

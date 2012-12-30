@@ -17,10 +17,10 @@ class AssignmentController extends AuthController
 	 */
 	public function actionIndex()
 	{
-		$userDp = new CActiveDataProvider($this->module->userClass);
+		$dataProvider = new CActiveDataProvider($this->module->userClass);
 
 		$this->render('index', array(
-			'userDp' => $userDp
+			'dataProvider' => $dataProvider
 		));
 	}
 
@@ -79,7 +79,7 @@ class AssignmentController extends AuthController
 				$this->redirect(array('view', 'id' => $userId));
 		}
 		else
-			throw new CHttpException(400, 'Invalid request. Please do not repeat this request again.');
+			throw new CHttpException(400, Yii::t('AuthModule.main', 'Invalid request.'));
 	}
 
 	/**

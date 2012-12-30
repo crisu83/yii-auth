@@ -48,7 +48,7 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasParent($itemName, $parentName)
 	{
-		$parentPermissions = $this->getItemPermissions($parentName);
+		$parentPermissions = $this->getItemPermissions($parentName, false/* do not allow caching */);
 		return isset($parentPermissions[$itemName]);
 	}
 
@@ -60,7 +60,7 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasChild($itemName, $childName)
 	{
-		$itemPermissions = $this->getItemPermissions($itemName);
+		$itemPermissions = $this->getItemPermissions($itemName, false/* do not allow caching */);
 		return isset($itemPermissions[$childName]);
 	}
 
