@@ -31,6 +31,14 @@ return array(
   'modules' => array(
     'auth',
   ),
+  'components' => array(
+    'authManager' => array(
+      .....
+      'behaviors' => array(
+        'auth.components.AuthBehavior',
+      ),
+    ),
+  ),
 );
 ```
 ***protected/config/main.php***
@@ -48,6 +56,21 @@ Configure the module to suit your needs. Here's a list of the available configur
   'userNameColumn' => 'name', // the name of the user name column.
   'appLayout' => 'application.views.layouts.main', // the layout used by the module.
   'viewDir' => null, // the path to view files to use with this module.
+),
+```
+
+#### Enabling caching
+
+You can also enable caching to increase performance by configuring the authorization manager behavior. 
+Here's an example configuration:
+
+```php
+'behaviors'=>array(
+  'auth' => array(
+    'class' => 'auth.components.AuthBehavior',
+    'cachingDuration' => 0, // the cache lifetime in seconds, when set to zero caching is disabled.
+    'cacheID' => 'cache', // name of the caching component to use.
+  ),
 ),
 ```
 
