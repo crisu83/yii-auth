@@ -68,7 +68,7 @@ Here's an example configuration:
 'behaviors'=>array(
   'auth' => array(
     'class' => 'auth.components.AuthBehavior',
-    'cachingDuration' => 500, // the cache lifetime in seconds, when set to zero caching is disabled.
+    'cachingDuration' => 3600, // the cache lifetime in seconds, when set to zero caching is disabled.
     'cacheID' => 'cache', // name of the caching component to use.
   ),
 ),
