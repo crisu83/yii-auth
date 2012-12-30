@@ -22,11 +22,9 @@
 			'class'=>'bootstrap.widgets.TbMenu',
 			'htmlOptions'=>array('class'=>'pull-right'),
 			'items'=>array(
-				array('label'=>'Home', 'url'=>array('/post/index')),
-				array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),
-				array('label'=>'Contact', 'url'=>array('/site/contact')),
-				array('label'=>'Login', 'url'=>array('/site/login'), 'visible'=>Yii::app()->user->isGuest),
-				array('label'=>'Logout ('.Yii::app()->user->name.')', 'url'=>array('/site/logout'), 'visible'=>!Yii::app()->user->isGuest)
+				array('label'=>'Download', 'url'=>'http://www.yiiframework.com/extension/auth/'),
+				array('label'=>'Fork on GitHub', 'url'=>'https://github.com/Crisu83/yii-auth/'),
+				array('label'=>'Reset demo', 'url'=>array('/site/reset'), 'linkOptions'=>array('confirm'=>'Are you sure you want to reset the database?')),
 			),
 		),
 	),
@@ -34,10 +32,12 @@
 
 <div class="container" id="page">
 
+	<?php $this->widget('bootstrap.widgets.TbAlert'); ?>
+
 	<?php if(isset($this->breadcrumbs)):?>
 		<?php $this->widget('bootstrap.widgets.TbBreadcrumbs', array(
 			'links'=>$this->breadcrumbs,
-		)); ?><!-- breadcrumbs -->
+		)); ?>
 	<?php endif?>
 
 	<?php echo $content; ?>

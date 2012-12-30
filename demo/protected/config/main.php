@@ -7,9 +7,8 @@ Yii::setPathOfAlias('auth',realpath(dirname(__FILE__).'/../../..'));
 // CWebApplication properties can be configured here.
 return array(
 	'basePath'=>dirname(__FILE__).'/..',
-	'name'=>'Yii Blog Demo with Auth',
+	'name'=>'Yii-Auth Demo',
 	'theme'=>'bootstrap',
-	'defaultController'=>'post',
 
 	// preloading 'log' component
 	'preload'=>array('log'),
@@ -23,8 +22,7 @@ return array(
 	'modules'=>array(
 		'auth'=>array(
 			'class'=>'auth.AuthModule',
-			'users'=>array('demo'),
-			'userNameColumn'=>'username',
+			'users'=>array('Guest'),
 			'forceCopyAssets'=>true,
 		),
 	),
@@ -33,13 +31,10 @@ return array(
 	'components'=>array(
 		'authManager'=>array(
 			'class'=>'CDbAuthManager',
-			'itemTable'=>'tbl_auth_item',
-			'itemChildTable'=>'tbl_auth_item_child',
-			'assignmentTable'=>'tbl_auth_assignment',
 			'behaviors'=>array(
 				'auth'=>array(
 					'class'=>'auth.components.AuthBehavior',
-					'cachingDuration'=>500,
+					'cachingDuration'=>300,
 				),
 			),
 		),
@@ -55,7 +50,7 @@ return array(
 			'username' => 'root',
 			'password' => '',
 			'charset' => 'utf8',
-			'tablePrefix' => 'tbl_',
+			'tablePrefix' => '',
 		),
 		'errorHandler'=>array(
 			// use 'site/error' action to display errors

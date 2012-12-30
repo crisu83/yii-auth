@@ -37,21 +37,9 @@ class User extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('username, password, salt, email', 'required'),
-			array('username, password, salt, email', 'length', 'max'=>128),
+			array('username', 'required'),
+			array('username', 'length', 'max'=>255),
 			array('profile', 'safe'),
-		);
-	}
-
-	/**
-	 * @return array relational rules.
-	 */
-	public function relations()
-	{
-		// NOTE: you may need to adjust the relation name and the related
-		// class name for the relations automatically generated below.
-		return array(
-			'posts' => array(self::HAS_MANY, 'Post', 'author_id'),
 		);
 	}
 
@@ -63,40 +51,6 @@ class User extends CActiveRecord
 		return array(
 			'id' => 'Id',
 			'username' => 'Username',
-			'password' => 'Password',
-			'salt' => 'Salt',
-			'email' => 'Email',
-			'profile' => 'Profile',
 		);
-	}
-
-	/**
-	 * Checks if the given password is correct.
-	 * @param string the password to be validated
-	 * @return boolean whether the password is valid
-	 */
-	public function validatePassword($password)
-	{
-		return $this->hashPassword($password,$this->salt)===$this->password;
-	}
-
-	/**
-	 * Generates the password hash.
-	 * @param string password
-	 * @param string salt
-	 * @return string hash
-	 */
-	public function hashPassword($password,$salt)
-	{
-		return md5($salt.$password);
-	}
-
-	/**
-	 * Generates a salt that can be used to generate a password hash.
-	 * @return string the salt
-	 */
-	protected function generateSalt()
-	{
-		return uniqid('',true);
 	}
 }

@@ -185,7 +185,7 @@ class AuthBehavior extends CBehavior
 	 */
 	private function buildItemPermissions($itemName)
 	{
-		$item = $this->loadAuthItem($itemName);
+		$item = $this->loadAuthItem($itemName, false/* do not allow caching */);
 		return $item instanceof CAuthItem ? $this->buildPermissions($item->getChildren()) : array();
 	}
 
@@ -198,7 +198,7 @@ class AuthBehavior extends CBehavior
 	{
 		$permissions = array();
 
-		$items = $this->getPermissions();
+		$items = $this->getPermissions(false/* do not allow caching */);
 		$flat = $this->flattenPermissions($items);
 
 		foreach ($flat as $itemName => $item)

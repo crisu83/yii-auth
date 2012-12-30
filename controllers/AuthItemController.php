@@ -170,7 +170,7 @@ class AuthItemController extends AuthController
 			$item = $am->loadAuthItem($name);
 			if ($item instanceof CAuthItem)
 			{
-				$type = $item->getType();
+				$type = $item->type;
 				$am->removeAuthItem($name);
 
 				if (!isset($_POST['ajax']))
@@ -218,15 +218,16 @@ class AuthItemController extends AuthController
 		$item = $am->loadAuthItem($itemName, false/* do not allow caching */);
 		if ($item instanceof CAuthItem)
 		{
-			$type = $item->getType();
+			$type = $item->type;
 			$exclude = $am->getAncestors($itemName);
+			$exclude[$itemName] = $item;
 			$exclude = array_merge($exclude, $item->getChildren());
-			$authItems = $am->loadAuthItems();
+			$authItems = $am->loadAuthItems(null, null, false/* do not allow caching */);
+			$validChildTypes = $this->getValidChildTypes($type);
 			foreach ($authItems as $name => $item)
 			{
-				$validChildTypes = $this->getValidChildTypes($type);
 				if (in_array($item->type, $validChildTypes) && !isset($exclude[$name]) && $name !== $itemName)
-					$options[ucfirst($this->getItemTypeText($item->getType()))][$name] = $item->getDescription();
+					$options[ucfirst($this->getItemTypeText($item->type))][$name] = $item->description;
 			}
 		}
 
