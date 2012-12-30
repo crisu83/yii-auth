@@ -59,21 +59,6 @@ Configure the module to suit your needs. Here's a list of the available configur
 ),
 ```
 
-#### Enabling caching
-
-You can also enable caching to increase performance by configuring the authorization manager behavior. 
-Here's an example configuration:
-
-```php
-'behaviors'=>array(
-  'auth' => array(
-    'class' => 'auth.components.AuthBehavior',
-    'cachingDuration' => 3600, // the cache lifetime in seconds, when set to zero caching is disabled.
-    'cacheID' => 'cache', // name of the caching component to use.
-  ),
-),
-```
-
 ### Checking access
 
 When you wish to check if the current user has a certain permission you can use the ***CWebUser::checkAccess()*** method which can be access from anywhere in your application through ***Yii::app()*** like so:
