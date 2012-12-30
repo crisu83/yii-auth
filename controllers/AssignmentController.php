@@ -33,19 +33,23 @@ class AssignmentController extends AuthController
 		$formModel = new AddAuthItemForm();
 
 		/* @var $am CAuthManager|AuthBehavior */
-		$am = Yii::app()->authManager;
+		$am = Yii::app()->getAuthManager();
 
 		if (isset($_POST['AddAuthItemForm']))
 		{
 			$formModel->attributes = $_POST['AddAuthItemForm'];
 			if ($formModel->validate())
-				$am->assign($formModel->items, $id);
+			{
+				if (!$am->isAssigned($formModel->items, $id))
+				{
+					$am->assign($formModel->items, $id);
+					if ($am instanceof ICachedAuthManager)
+						$am->flushAccess($formModel->items, $id);
+				}
+			}
 		}
 
 		$model = CActiveRecord::model($this->module->userClass)->findByPk($id);
-
-		/* @var $am CAuthManager|AuthBehavior */
-		$am = Yii::app()->getAuthManager();
 
 		$assignments = $am->getAuthAssignments($id);
 		$authItems = $am->getItemsPermissions(array_keys($assignments));
@@ -72,8 +76,18 @@ class AssignmentController extends AuthController
 	{
 		if (isset($_GET['itemName'], $_GET['userId']))
 		{
+			$itemName = $_GET['itemName'];
 			$userId = $_GET['userId'];
-			Yii::app()->authManager->revoke($_GET['itemName'], $userId);
+
+			/* @var $am CAuthManager|AuthBehavior */
+			$am = Yii::app()->getAuthManager();
+
+			if ($am->isAssigned($itemName, $userId))
+			{
+				$am->revoke($itemName, $userId);
+				if ($am instanceof ICachedAuthManager)
+					$am->flushAccess($itemName, $userId);
+			}
 
 			if (!isset($_POST['ajax']))
 				$this->redirect(array('view', 'id' => $userId));

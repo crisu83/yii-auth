@@ -62,7 +62,12 @@ class AuthItemController extends AuthController
 			$model->attributes = $_POST['AuthItemForm'];
 			if ($model->validate())
 			{
-				$item = Yii::app()->authManager->createAuthItem($model->name, $model->type, $model->description);
+				/* @var $am CAuthManager|AuthBehavior */
+				$am = Yii::app()->getAuthManager();
+
+				if (($item = $am->getAuthItem($model->name)) === null)
+					$item = $am->createAuthItem($model->name, $model->type, $model->description);
+
 				$this->redirect(array('view', 'name' => $item->name));
 			}
 		}
@@ -81,8 +86,10 @@ class AuthItemController extends AuthController
 	 */
 	public function actionUpdate($name)
 	{
-		/* @var $item CAuthItem */
-		$item = Yii::app()->authManager->getAuthItem($name);
+		/* @var $am CAuthManager|AuthBehavior */
+		$am = Yii::app()->getAuthManager();
+
+		$item = $am->getAuthItem($name);
 
 		if ($item === null)
 			throw new CHttpException(404, Yii::t('AuthModule.main', 'Page not found.'));
@@ -95,7 +102,7 @@ class AuthItemController extends AuthController
 			if ($model->validate())
 			{
 				$item->description = $model->description;
-				Yii::app()->authManager->saveAuthItem($item);
+				$am->saveAuthItem($item);
 				$this->redirect(array('index', 'type' => $model->type));
 			}
 		}
@@ -125,7 +132,10 @@ class AuthItemController extends AuthController
 		{
 			$formModel->attributes = $_POST['AddAuthItemForm'];
 			if ($formModel->validate())
-				$am->addItemChild($name, $formModel->items);
+			{
+				if (!$am->hasItemChild($name, $formModel->items))
+					$am->addItemChild($name, $formModel->items);
+			}
 		}
 
 		$item = $am->getAuthItem($name);
@@ -190,7 +200,12 @@ class AuthItemController extends AuthController
 	 */
 	public function actionRemoveParent($itemName, $parentName)
 	{
-		Yii::app()->authManager->removeItemChild($parentName, $itemName);
+		/* @var $am CAuthManager|AuthBehavior */
+		$am = Yii::app()->getAuthManager();
+
+		if ($am->hasItemChild($parentName, $itemName))
+			$am->removeItemChild($parentName, $itemName);
+
 		$this->redirect(array('view', 'name' => $itemName));
 	}
 
@@ -201,7 +216,12 @@ class AuthItemController extends AuthController
 	 */
 	public function actionRemoveChild($itemName, $childName)
 	{
-		Yii::app()->authManager->removeItemChild($itemName, $childName);
+		/* @var $am CAuthManager|AuthBehavior */
+		$am = Yii::app()->getAuthManager();
+
+		if ($am->hasItemChild($itemName, $childName))
+			$am->removeItemChild($itemName, $childName);
+
 		$this->redirect(array('view', 'name' => $itemName));
 	}
 
