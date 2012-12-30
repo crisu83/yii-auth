@@ -43,6 +43,8 @@ return array(
 ```
 ***protected/config/main.php***
 
+Please note that while the module doesn't require you to use a database, if you wish to use ***CDbAuthManager*** you need it's schema (it can be found in the framework under web/auth).
+
 ### Configuration
 
 Configure the module to suit your needs. Here's a list of the available configurations (with default values).
