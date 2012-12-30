@@ -5,7 +5,7 @@
 /* @var $form TbActiveForm */
 ?>
 
-<h1><?php echo Yii::t('AuthModule.main', 'New {type}', array('{type}' => $this->getItemTypeText($type, false))); ?></h1>
+<h1><?php echo Yii::t('AuthModule.main', 'New {type}', array('{type}' => $this->getItemTypeText($type))); ?></h1>
 
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'type'=>'horizontal',

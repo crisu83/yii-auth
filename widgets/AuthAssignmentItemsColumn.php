@@ -32,7 +32,8 @@ class AuthAssignmentItemsColumn extends AuthAssignmentColumn
 	{
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
-		$assignments = $am->loadAuthAssignments($data->id, false);
+		
+		$assignments = $am->getAuthAssignments($data->id);
 		$permissions = $am->getItemsPermissions(array_keys($assignments));
 		foreach ($permissions as $itemPermission)
 		{

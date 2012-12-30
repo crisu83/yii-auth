@@ -47,7 +47,7 @@ class AssignmentController extends AuthController
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
 
-		$assignments = $am->loadAuthAssignments($id, false);
+		$assignments = $am->getAuthAssignments($id);
 		$authItems = $am->getItemsPermissions(array_keys($assignments));
 		$authItemDp = new AuthItemDataProvider();
 		$authItemDp->setAuthItems($authItems);
@@ -94,13 +94,15 @@ class AssignmentController extends AuthController
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->authManager;
 
-		$assignments = $am->loadAuthAssignments($userId, false);
+		$assignments = $am->getAuthAssignments($userId);
 		$assignedItems = array_keys($assignments);
-		$authItems = $am->loadAuthItems();
+
+		/* @var $authItems CAuthItem[] */
+		$authItems = $am->getAuthItems();
 		foreach ($authItems as $itemName => $item)
 		{
 			if (!in_array($itemName, $assignedItems))
-				$options[ucfirst($this->getItemTypeText($item->getType()))][$itemName] = $item->getDescription();
+				$options[ucfirst($this->getItemTypeText($item->type, true))][$itemName] = $item->description;
 		}
 
 		return $options;

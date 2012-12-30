@@ -32,10 +32,7 @@ return array(
 		'authManager'=>array(
 			'class'=>'CDbAuthManager',
 			'behaviors'=>array(
-				'auth'=>array(
-					'class'=>'auth.components.AuthBehavior',
-					'cachingDuration'=>300,
-				),
+				'auth.components.AuthBehavior',
 			),
 		),
 		'bootstrap'=>array(

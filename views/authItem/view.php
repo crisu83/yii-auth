@@ -8,7 +8,7 @@
 /* @var $childOptions array */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getItemTypeText($item->type))=>array('index', 'type'=>$item->type),
+	ucfirst($this->getItemTypeText($item->type, true)) => array('index', 'type'=>$item->type),
 	$item->description,
 );
 ?>
@@ -17,7 +17,7 @@ $this->breadcrumbs = array(
 
 	<h1 class="pull-left">
 		<?php echo CHtml::encode($item->description); ?>
-		<small><?php echo $this->getItemTypeText($item->type, false); ?></small>
+		<small><?php echo $this->getItemTypeText($item->type); ?></small>
 	</h1>
 
 	<?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
@@ -41,7 +41,6 @@ $this->breadcrumbs = array(
 
 <?php $this->widget('bootstrap.widgets.TbDetailView', array(
     'data' => $item,
-    //'nullDisplay' => '',
     'attributes' => array(
         array(
             'name' => 'name',

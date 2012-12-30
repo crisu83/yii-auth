@@ -4,22 +4,22 @@
 /* @var $dataProvider AuthItemDataProvider */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getItemTypeText($type)),
+	ucfirst($this->getItemTypeText($type, true)),
 );
 ?>
 
-<h1><?php echo ucfirst($this->getItemTypeText($type)); ?></h1>
+<h1><?php echo ucfirst($this->getItemTypeText($type, true)); ?></h1>
 
 <?php $this->widget('bootstrap.widgets.TbButton', array(
     'type' => 'primary',
-    'label' => Yii::t('AuthModule.main', 'Add {type}', array('{type}' => $this->getItemTypeText($type, false))),
+    'label' => Yii::t('AuthModule.main', 'Add {type}', array('{type}' => $this->getItemTypeText($type))),
     'url' => array('create', 'type' => $type),
 )); ?>
 
 <?php $this->widget('bootstrap.widgets.TbGridView', array(
     'type' => 'striped hover',
     'dataProvider' => $dataProvider,
-    'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', array('{type}'=>$this->getItemTypeText($type))),
+    'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', array('{type}'=>$this->getItemTypeText($type, true))),
 	'template'=>"{items}\n{pager}",
     'columns' => array(
 		array(
@@ -27,9 +27,7 @@ $this->breadcrumbs = array(
 			'type'=>'raw',
 			'header' => Yii::t('AuthModule.main', 'System name'),
 			'htmlOptions' => array('class'=>'auth-item-name-column'),
-			'value' => function($data) {
-				return CHtml::link($data->name, array('view', 'name'=>$data->name));
-			},
+			'value' => "CHtml::link(\$data->name, array('view', 'name'=>\$data->name))",
 		),
 		array(
 			'name' => 'description',
@@ -38,15 +36,9 @@ $this->breadcrumbs = array(
 		),
 		array(
 			'class'=>'bootstrap.widgets.TbButtonColumn',
-			'viewButtonUrl' => function($data) {
-				return Yii::app()->controller->createUrl('view', array('name'=>$data->name));
-			},
-			'updateButtonUrl' => function($data) {
-				return Yii::app()->controller->createUrl('update', array('name'=>$data->name));
-			},
-			'deleteButtonUrl' => function($data) {
-				return Yii::app()->controller->createUrl('delete', array('name'=>$data->name));
-			},
+			'viewButtonUrl' => "Yii::app()->controller->createUrl('view', array('name'=>\$data->name))",
+			'updateButtonUrl' => "Yii::app()->controller->createUrl('update', array('name'=>\$data->name))",
+			'deleteButtonUrl' => "Yii::app()->controller->createUrl('delete', array('name'=>\$data->name))",
 			'deleteConfirmation' => Yii::t('AuthModule.main', 'Are you sure you want to delete this item?'),
 		),
     ),

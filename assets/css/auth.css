@@ -22,11 +22,11 @@
     color: #888;
 }
 
-.auth-module .auth-item-description-column {
+.auth-module .item-description-column {
     width: 65%;
 }
 
-.auth-module .auth-actions-column {
+.auth-module .actions-column {
     width: 30px;
 }
 

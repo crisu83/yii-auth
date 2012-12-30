@@ -18,9 +18,9 @@ class AuthItemDescriptionColumn extends AuthItemColumn
 	public function init()
 	{
 		if (isset($this->htmlOptions['class']))
-			$this->htmlOptions['class'] .= ' auth-item-description-column';
+			$this->htmlOptions['class'] .= ' item-description-column';
 		else
-			$this->htmlOptions['class'] = 'auth-item-description-column';
+			$this->htmlOptions['class'] = 'item-description-column';
 	}
 
 	/**

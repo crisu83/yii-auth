@@ -88,7 +88,6 @@ class AuthItemController extends AuthController
 			throw new CHttpException(404, Yii::t('AuthModule.main', 'Page not found.'));
 
 		$model = new AuthItemForm('update');
-		$model->name = $name;
 
 		if (isset($_POST['AuthItemForm']))
 		{
@@ -101,8 +100,9 @@ class AuthItemController extends AuthController
 			}
 		}
 
-		$model->description = $item->getDescription();
-		$model->type = $item->getType();
+		$model->name = $name;
+		$model->description = $item->description;
+		$model->type = $item->type;
 
 		$this->render('update', array(
 			'item' => $item,
@@ -128,7 +128,7 @@ class AuthItemController extends AuthController
 				$am->addItemChild($name, $formModel->items);
 		}
 
-		$item = $am->loadAuthItem($name, false);
+		$item = $am->getAuthItem($name);
 
 		$dpConfig = array(
 			'pagination' => false,
@@ -167,7 +167,7 @@ class AuthItemController extends AuthController
 			/* @var $am CAuthManager|AuthBehavior */
 			$am = Yii::app()->getAuthManager();
 
-			$item = $am->loadAuthItem($name);
+			$item = $am->getAuthItem($name);
 			if ($item instanceof CAuthItem)
 			{
 				$type = $item->type;
@@ -213,21 +213,22 @@ class AuthItemController extends AuthController
 	protected function getItemChildOptions($itemName)
 	{
 		$options = array();
+
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
-		$item = $am->loadAuthItem($itemName, false/* do not allow caching */);
+		$item = $am->getAuthItem($itemName);
 		if ($item instanceof CAuthItem)
 		{
-			$type = $item->type;
 			$exclude = $am->getAncestors($itemName);
 			$exclude[$itemName] = $item;
 			$exclude = array_merge($exclude, $item->getChildren());
-			$authItems = $am->loadAuthItems(null, null, false/* do not allow caching */);
-			$validChildTypes = $this->getValidChildTypes($type);
-			foreach ($authItems as $name => $item)
+			$authItems = $am->getAuthItems();
+			$validChildTypes = $this->getValidChildTypes($item->type);
+
+			foreach ($authItems as $childName => $childItem)
 			{
-				if (in_array($item->type, $validChildTypes) && !isset($exclude[$name]) && $name !== $itemName)
-					$options[ucfirst($this->getItemTypeText($item->type))][$name] = $item->description;
+				if (in_array($childItem->type, $validChildTypes) && !isset($exclude[$childName]))
+					$options[ucfirst($this->getItemTypeText($childItem->type, true))][$childName] = $childItem->description;
 			}
 		}
 
@@ -242,6 +243,7 @@ class AuthItemController extends AuthController
 	protected function getValidChildTypes($type)
 	{
 		$validTypes = array();
+
 		switch ($type)
 		{
 			case CAuthItem::TYPE_OPERATION:
@@ -256,6 +258,7 @@ class AuthItemController extends AuthController
 				$validTypes[] = CAuthItem::TYPE_TASK;
 				break;
 		}
+
 		if (!$this->module->strictMode)
 			$validTypes[] = $type;
 

@@ -18,9 +18,9 @@ class AuthItemTypeColumn extends AuthItemColumn
 	public function init()
 	{
 		if (isset($this->htmlOptions['class']))
-			$this->htmlOptions['class'] .= ' auth-item-type-column';
+			$this->htmlOptions['class'] .= ' item-type-column';
 		else
-			$this->htmlOptions['class'] = 'auth-item-type-column';
+			$this->htmlOptions['class'] = 'item-type-column';
 	}
 
 	/**
@@ -41,7 +41,7 @@ class AuthItemTypeColumn extends AuthItemColumn
 		$controller = $this->grid->getOwner();
 		$controller->widget('bootstrap.widgets.TbLabel', array(
 			'type' => $labelType,
-			'label' => $controller->getItemTypeText($data['item']->type, false),
+			'label' => $controller->getItemTypeText($data['item']->type),
 		));
 	}
 }

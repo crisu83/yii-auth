@@ -10,36 +10,10 @@
 /**
  * Auth module behavior for the authorization manager.
  *
- * @property CAuthManager $owner The authorization manager.
+ * @property CAuthManager|IAuthManager $owner The authorization manager.
  */
 class AuthBehavior extends CBehavior
 {
-	const CACHE_KEY_PREFIX = 'AuthModule.AuthBehavior.';
-
-	/**
-	 * @var integer the time in seconds that the messages can remain valid in cache.
-	 * Defaults to 0, meaning the caching is disabled.
-	 */
-	public $cachingDuration = 0;
-	/**
-	 * @var string the ID of the cache application component that is used to cache the messages.
-	 * Defaults to 'cache' which refers to the primary cache application component.
-	 * Set this property to false if you want to disable caching the permissions.
-	 */
-	public $cacheID = 'cache';
-
-	/**
-	 * Returns whether the given item has a specific permission.
-	 * @param string $itemName name of the item.
-	 * @param string $childName name of the permission.
-	 * @return boolean the result.
-	 */
-	public function hasPermission($itemName, $childName)
-	{
-		$descendants = $this->getDescendants($itemName);
-		return isset($descendants[$childName]);
-	}
-
 	/**
 	 * Returns whether the given item has a specific parent.
 	 * @param string $itemName name of the item.
@@ -48,8 +22,8 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasParent($itemName, $parentName)
 	{
-		$parentPermissions = $this->getItemPermissions($parentName, false/* do not allow caching */);
-		return isset($parentPermissions[$itemName]);
+		$permissions = $this->getItemPermissions($parentName);
+		return isset($permissions[$itemName]);
 	}
 
 	/**
@@ -60,8 +34,32 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasChild($itemName, $childName)
 	{
-		$itemPermissions = $this->getItemPermissions($itemName, false/* do not allow caching */);
-		return isset($itemPermissions[$childName]);
+		$permissions = $this->getItemPermissions($itemName);
+		return isset($permissions[$childName]);
+	}
+
+	/**
+	 * Returns whether the given item has a specific ancestor.
+	 * @param string $itemName name of the item.
+	 * @param string $descendantName name of the ancestor.
+	 * @return boolean the result.
+	 */
+	public function hasAncestor($itemName, $ancestorName)
+	{
+		$ancestors = $this->getAncestors($itemName);
+		return isset($ancestors[$ancestorName]);
+	}
+
+	/**
+	 * Returns whether the given item has a specific descendant.
+	 * @param string $itemName name of the item.
+	 * @param string $descendantName name of the descendant.
+	 * @return boolean the result.
+	 */
+	public function hasDescendant($itemName, $descendantName)
+	{
+		$descendants = $this->getDescendants($itemName);
+		return isset($descendants[$descendantName]);
 	}
 
 	/**
@@ -75,11 +73,11 @@ class AuthBehavior extends CBehavior
 		$ancestors = array();
 
 		if ($permissions === null)
-			$permissions = $this->getPermissions(false/* do not allow caching */);
+			$permissions = $this->getPermissions();
 
 		foreach ($permissions as $childName => $child)
 		{
-			if ($this->hasPermission($childName, $itemName))
+			if ($this->hasDescendant($childName, $itemName))
 				$ancestors[$childName] = $child;
 
 			$ancestors = array_merge($ancestors, $this->getAncestors($itemName, $child['children']));
@@ -95,85 +93,32 @@ class AuthBehavior extends CBehavior
 	 */
 	public function getDescendants($itemName)
 	{
-		$itemPermissions = $this->getItemPermissions($itemName, false/* do not allow caching */);
+		$itemPermissions = $this->getItemPermissions($itemName);
 		return $this->flattenPermissions($itemPermissions);
 	}
 
 	/**
-	 * Returns the complete permissions tree.
-	 * @param boolean $allowCaching whether to allow caching the result of access check.
-	 * @return array the permissions.
-	 */
-	public function getPermissions($allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'permissions';
-
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-				&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null
-		)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
-
-		$permissions = $this->buildPermissions();
-
-		if (isset($cache))
-			$cache->set($key, serialize($permissions), $this->cachingDuration);
-
-		return $permissions;
-	}
-
-	/**
-	 * Builds the permission tree to the given items.
-	 * @param array|null $items items to process. If omitted the complete tree will be built.
+	 * Returns the permission tree for the given items.
+	 * @param CAuthItem[] $items items to process. If omitted the complete tree will be returned.
 	 * @param integer $depth current depth.
 	 * @return array the permissions.
 	 */
-	private function buildPermissions($items = null, $depth = 0)
+	private function getPermissions($items = null, $depth = 0)
 	{
 		$permissions = array();
 
 		if ($items === null)
-			$items = $this->loadAuthItems(null, null, false);
+			$items = $this->owner->getAuthItems();
 
 		foreach ($items as $itemName => $item)
 		{
 			$permissions[$itemName] = array(
 				'name' => $itemName,
 				'item' => $item,
-				'children' => $this->buildPermissions($item->getChildren(), $depth + 1),
+				'children' => $this->getPermissions($item->getChildren(), $depth + 1),
 				'depth' => $depth,
 			);
 		}
-
-		return $permissions;
-	}
-
-	/**
-	 * Returns the permissions for the given item.
-	 * @param string $itemName name of the item.
-	 * @param boolean $allowCaching whether to allow caching the result of access check.
-	 * @return array the permissions.
-	 */
-	public function getItemPermissions($itemName, $allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'itemPermissions.' . $itemName;
-
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-				&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null
-		)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
-
-		$permissions = $this->buildItemPermissions($itemName);
-
-		if (isset($cache))
-			$cache->set($key, serialize($permissions), $this->cachingDuration);
 
 		return $permissions;
 	}
@@ -183,10 +128,10 @@ class AuthBehavior extends CBehavior
 	 * @param string $itemName name of the item.
 	 * @return array the permissions.
 	 */
-	private function buildItemPermissions($itemName)
+	private function getItemPermissions($itemName)
 	{
-		$item = $this->loadAuthItem($itemName, false/* do not allow caching */);
-		return $item instanceof CAuthItem ? $this->buildPermissions($item->getChildren()) : array();
+		$item = $this->owner->getAuthItem($itemName);
+		return $item instanceof CAuthItem ? $this->getPermissions($item->getChildren()) : array();
 	}
 
 	/**
@@ -198,7 +143,7 @@ class AuthBehavior extends CBehavior
 	{
 		$permissions = array();
 
-		$items = $this->getPermissions(false/* do not allow caching */);
+		$items = $this->getPermissions();
 		$flat = $this->flattenPermissions($items);
 
 		foreach ($flat as $itemName => $item)
@@ -227,78 +172,5 @@ class AuthBehavior extends CBehavior
 		}
 
 		return $flattened;
-	}
-
-	/**
-	 * Returns the auth item with the given name.
-	 * @param string $name name of the item.
-	 * @param boolean $allowCaching whether to allow caching the result of access check.
-	 * @return CAuthItem the authorization item.
-	 */
-	public function loadAuthItem($name, $allowCaching = true)
-	{
-		$authItems = $this->loadAuthItems(null, null, $allowCaching);
-		return isset($authItems[$name]) ? $authItems[$name] : null;
-	}
-
-	/**
-	 * Returns all the authorization items of a given type or for a given user.
-	 * @param integer $type type of item.
-	 * @param integer $userId the user id.
-	 * @param boolean $allowCaching whether to allow caching the result of access check.
-	 * @return CAuthItem[] the authorization items.
-	 */
-	public function loadAuthItems($type = null, $userId = null, $allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'authItems';
-
-		if ($type !== null)
-			$key .= '.type.' . $type;
-
-		if ($userId !== null)
-			$key .= '.userId.' . $userId;
-
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-			&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null
-		)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
-
-		$authItems = $this->owner->getAuthItems($type, $userId);
-
-		if (isset($cache))
-			$cache->set($key, serialize($authItems), $this->cachingDuration);
-
-		return $authItems;
-	}
-
-	/**
-	 * Returns all the authorization assignments for the given user.
-	 * @param integer $userId the user id.
-	 * @param boolean $allowCaching whether to allow caching the result of access check.
-	 * @return CAuthAssignment[] the authorization assignments.
-	 */
-	public function loadAuthAssignments($userId, $allowCaching = true)
-	{
-		$key = self::CACHE_KEY_PREFIX . 'authAssignments.userId.' . $userId;
-
-		/* @var $cache CCache */
-		if ($allowCaching && $this->cachingDuration > 0 && $this->cacheID !== false
-				&& ($cache = Yii::app()->getComponent($this->cacheID)) !== null
-		)
-		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
-		}
-
-		$assignments = $this->owner->getAuthAssignments($userId);
-
-		if (isset($cache))
-			$cache->set($key, serialize($assignments), $this->cachingDuration);
-
-		return $assignments;
 	}
 }

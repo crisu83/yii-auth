@@ -18,9 +18,9 @@ class AuthAssignmentRevokeColumn extends AuthAssignmentColumn
 	public function init()
 	{
 		if (isset($this->htmlOptions['class']))
-			$this->htmlOptions['class'] .= ' auth-actions-column';
+			$this->htmlOptions['class'] .= ' actions-column';
 		else
-			$this->htmlOptions['class'] = 'auth-actions-column';
+			$this->htmlOptions['class'] = 'actions-column';
 	}
 
 	/**
