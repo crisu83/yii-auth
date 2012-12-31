@@ -1,5 +1,5 @@
 <?php
-/* @var $this AuthItemController */
+/* @var $this OperationController|TaskController|RoleController */
 /* @var $item CAuthItem */
 /* @var $ancestorDp AuthItemDataProvider */
 /* @var $descendantDp AuthItemDataProvider */
@@ -8,7 +8,7 @@
 /* @var $childOptions array */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getItemTypeText($item->type, true)) => array('index', 'type'=>$item->type),
+	ucfirst($this->getTypeText(true)) => array('index'),
 	$item->description,
 );
 ?>
@@ -17,7 +17,7 @@ $this->breadcrumbs = array(
 
 	<h1 class="pull-left">
 		<?php echo CHtml::encode($item->description); ?>
-		<small><?php echo $this->getItemTypeText($item->type); ?></small>
+		<small><?php echo $this->getTypeText(); ?></small>
 	</h1>
 
 	<?php $this->widget('bootstrap.widgets.TbButtonGroup', array(

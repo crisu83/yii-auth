@@ -1,11 +1,11 @@
 <?php
-/* @var $this AuthItemController */
+/* @var $this OperationController|TaskController|RoleController */
 /* @var $model AuthItemForm */
 /* @var $item CAuthItem */
 /* @var $form TbActiveForm */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getItemTypeText($item->type, true)) => array('index', 'type' => $item->type),
+	ucfirst($this->getTypeText(true)) => array('index'),
 	$item->description => array('view', 'name' => $item->name),
 	Yii::t('AuthModule.main', 'Edit'),
 );
@@ -13,7 +13,7 @@ $this->breadcrumbs = array(
 
 <h1>
 	<?php echo CHtml::encode($item->description); ?>
-	<small><?php echo $this->getItemTypeText($item->type); ?></small>
+	<small><?php echo $this->getTypeText(); ?></small>
 </h1>
 
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(

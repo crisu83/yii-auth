@@ -1,11 +1,10 @@
 <?php
-/* @var $this AuthItemController */
+/* @var $this OperationController|TaskController|RoleController */
 /* @var $model AuthItemForm */
-/* @var $type string */
 /* @var $form TbActiveForm */
 ?>
 
-<h1><?php echo Yii::t('AuthModule.main', 'New {type}', array('{type}' => $this->getItemTypeText($type))); ?></h1>
+<h1><?php echo Yii::t('AuthModule.main', 'New {type}', array('{type}' => $this->getTypeText())); ?></h1>
 
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 	'type'=>'horizontal',
@@ -24,7 +23,7 @@
 	<?php $this->widget('TbButton', array(
 		'type' => 'link',
 		'label' => Yii::t('AuthModule.main', 'Cancel'),
-		'url' => array('index', 'type' => $type),
+		'url' => array('index'),
 	)); ?>
 </div>
 

@@ -8,10 +8,10 @@
  */
 
 /**
- * Auth module controller for internal use only.
+ * Base controller for the module.
  * Note: Do NOT extend your controllers from this class!
  */
-class AuthController extends CController
+abstract class AuthController extends CController
 {
 	/**
 	 * @var string the default layout for the controller view.

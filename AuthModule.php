@@ -70,6 +70,7 @@ class AuthModule extends CWebModule
 	{
 		$this->setImport(array(
 			'auth.components.*',
+			'auth.controllers.*',
 			'auth.models.*',
 			'auth.widgets.*',
 		));

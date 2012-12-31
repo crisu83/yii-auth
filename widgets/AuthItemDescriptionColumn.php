@@ -37,8 +37,8 @@ class AuthItemDescriptionColumn extends AuthItemColumn
 			? 'active'
 			: 'disabled';
 
-		echo CHtml::link($data['item']->getDescription(),
-				array('/auth/authItem/view', 'name' => $data['name']), array( 'class' => $linkCssClass)
-		);
+		echo CHtml::link($data['item']->description,
+				array('/auth/' . $this->grid->owner->getItemTypeText($data['item']->type) . '/view', 'name' => $data['name']),
+				array( 'class' => $linkCssClass));
 	}
 }

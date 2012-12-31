@@ -8,7 +8,7 @@
  */
 
 /**
- * Controller for authorization assignment related actions.
+ * Controller for assignment related actions.
  */
 class AssignmentController extends AuthController
 {

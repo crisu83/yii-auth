@@ -4,56 +4,36 @@
  * @author Christoffer Niska <ChristofferNiska@gmail.com>
  * @copyright Copyright &copy; Christoffer Niska 2012-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
- * @package auth.components
+ * @package auth.controllers
  */
 
 /**
- * Controller for authorization item related actions.
+ * Base controller for authorization item related actions.
  */
-class AuthItemController extends AuthController
+abstract class AuthItemController extends AuthController
 {
 	/**
-	 * Returns the filter configurations.
-	 * @return array a list of filter configurations.
+	 * @var integer the item type (0=operation, 1=task, 2=role).
 	 */
-	public function filters()
-	{
-		return array(
-			'validateType + index, create',
-		);
-	}
-
-	/**
-	 * Filter method for validating the item type.
-	 * @param CFilterChain $filterChain the filter chain that the filter is on.
-	 */
-	public function filterValidateType($filterChain)
-	{
-		$validTypes = array(CAuthItem::TYPE_OPERATION, CAuthItem::TYPE_TASK, CAuthItem::TYPE_ROLE);
-		if (isset($_GET['type']) && in_array($_GET['type'], $validTypes))
-			$filterChain->run();
-	}
+	public $type;
 
 	/**
 	 * Displays a list of items of the given type.
-	 * @param string $type the item type (0=operation, 1=task, 2=role).
 	 */
-	public function actionIndex($type)
+	public function actionIndex()
 	{
 		$dataProvider = new AuthItemDataProvider();
-		$dataProvider->type = $type;
+		$dataProvider->type = $this->type;
 
 		$this->render('index', array(
 			'dataProvider' => $dataProvider,
-			'type' => $type,
 		));
 	}
 
 	/**
 	 * Displays a form for creating a new item of the given type.
-	 * @param string $type the item type (0=operation, 1=task, 2=role).
 	 */
-	public function actionCreate($type)
+	public function actionCreate()
 	{
 		$model = new AuthItemForm('create');
 
@@ -72,10 +52,9 @@ class AuthItemController extends AuthController
 			}
 		}
 
-		$model->type = $type;
+		$model->type = $this->type;
 
 		$this->render('create', array(
-			'type' => $type,
 			'model' => $model,
 		));
 	}
@@ -103,7 +82,7 @@ class AuthItemController extends AuthController
 			{
 				$item->description = $model->description;
 				$am->saveAuthItem($item);
-				$this->redirect(array('index', 'type' => $model->type));
+				$this->redirect(array('index'));
 			}
 		}
 
@@ -180,11 +159,10 @@ class AuthItemController extends AuthController
 			$item = $am->getAuthItem($name);
 			if ($item instanceof CAuthItem)
 			{
-				$type = $item->type;
 				$am->removeAuthItem($name);
 
 				if (!isset($_POST['ajax']))
-					$this->redirect(array('index', 'type' => $type));
+					$this->redirect(array('index'));
 			}
 			else
 				throw new CHttpException(404, Yii::t('AuthModule.main', 'Item does not exist.'));
@@ -236,6 +214,7 @@ class AuthItemController extends AuthController
 
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
+
 		$item = $am->getAuthItem($itemName);
 		if ($item instanceof CAuthItem)
 		{
@@ -243,7 +222,7 @@ class AuthItemController extends AuthController
 			$exclude[$itemName] = $item;
 			$exclude = array_merge($exclude, $item->getChildren());
 			$authItems = $am->getAuthItems();
-			$validChildTypes = $this->getValidChildTypes($item->type);
+			$validChildTypes = $this->getValidChildTypes();
 
 			foreach ($authItems as $childName => $childItem)
 			{
@@ -257,14 +236,13 @@ class AuthItemController extends AuthController
 
 	/**
 	 * Returns a list of the valid child types for the given type.
-	 * @param string $type the item type (0=operation, 1=task, 2=role).
 	 * @return array the valid types.
 	 */
-	protected function getValidChildTypes($type)
+	protected function getValidChildTypes()
 	{
 		$validTypes = array();
 
-		switch ($type)
+		switch ($this->type)
 		{
 			case CAuthItem::TYPE_OPERATION:
 				break;
@@ -280,8 +258,27 @@ class AuthItemController extends AuthController
 		}
 
 		if (!$this->module->strictMode)
-			$validTypes[] = $type;
+			$validTypes[] = $this->type;
 
 		return $validTypes;
+	}
+
+	/**
+	 * Returns the authorization item type as a string.
+	 * @param boolean $plural whether to return the name in plural.
+	 * @return string the text.
+	 */
+	public function getTypeText($plural = false)
+	{
+		return parent::getItemTypeText($this->type, $plural);
+	}
+
+	/**
+	 * Returns the directory containing view files for this controller.
+	 * @return string the directory containing the view files for this controller.
+	 */
+	public function getViewPath()
+	{
+		return $this->module->getViewPath() . DIRECTORY_SEPARATOR . 'authItem';
 	}
 }
