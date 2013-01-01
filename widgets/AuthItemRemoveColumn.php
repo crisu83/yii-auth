@@ -35,7 +35,7 @@ class AuthItemRemoveColumn extends AuthItemColumn
 
 		if ($am->hasParent($this->itemName, $data['name']))
 		{
-			$this->grid->owner->widget('bootstrap.widgets.TbButton', array(
+			$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
 				'type' => 'link',
 				'size' => 'mini',
 				'icon' => 'remove',
@@ -45,7 +45,7 @@ class AuthItemRemoveColumn extends AuthItemColumn
 		}
 		else if ($am->hasChild($this->itemName, $data['name']))
 		{
-			$this->grid->owner->widget('bootstrap.widgets.TbButton', array(
+			$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
 				'type' => 'link',
 				'size' => 'mini',
 				'icon' => 'remove',

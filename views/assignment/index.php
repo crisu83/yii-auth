@@ -18,8 +18,6 @@ $this->breadcrumbs = array(
         array(
             'header' => Yii::t('AuthModule.main', 'User'),
             'class' => 'AuthAssignmentNameColumn',
-            'idColumn' => $this->module->userIdColumn,
-            'nameColumn' => $this->module->userNameColumn,
         ),
         array(
             'header' => Yii::t('AuthModule.main', 'Assigned items'),
@@ -27,7 +25,6 @@ $this->breadcrumbs = array(
         ),
         array(
             'class' => 'AuthAssignmentViewColumn',
-            'idColumn' => $this->module->userIdColumn,
         ),
     ),
 )); ?>

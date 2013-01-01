@@ -13,11 +13,6 @@
 class AuthAssignmentViewColumn extends AuthAssignmentColumn
 {
 	/**
-	 * @var string name of the id column.
-	 */
-	public $idColumn;
-
-	/**
 	 * Initializes the column.
 	 */
 	public function init()
@@ -35,15 +30,12 @@ class AuthAssignmentViewColumn extends AuthAssignmentColumn
 	 */
 	protected function renderDataCellContent($row, $data)
 	{
-		if (isset($this->idColumn))
-		{
-			$this->grid->owner->widget('bootstrap.widgets.TbButton', array(
-				'type' => 'link',
-				'size' => 'mini',
-				'icon' => 'eye-open',
-				'url' => array('view', 'id' => $data->{$this->idColumn}),
-				'htmlOptions' => array('rel' => 'tooltip', 'title' => Yii::t('AuthModule.main', 'View')),
-			));
-		}
+		$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
+			'type' => 'link',
+			'size' => 'mini',
+			'icon' => 'eye-open',
+			'url' => array('view', 'id' => $data->{$this->idColumn}),
+			'htmlOptions' => array('rel' => 'tooltip', 'title' => Yii::t('AuthModule.main', 'View')),
+		));
 	}
 }

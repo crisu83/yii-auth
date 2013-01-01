@@ -32,7 +32,7 @@ class AuthAssignmentRevokeColumn extends AuthAssignmentColumn
 	{
 		if ($this->userId !== null)
 		{
-			$this->grid->owner->widget('bootstrap.widgets.TbButton', array(
+			$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
 				'type' => 'link',
 				'size' => 'mini',
 				'icon' => 'remove',
