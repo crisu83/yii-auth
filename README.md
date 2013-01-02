@@ -61,6 +61,18 @@ Configure the module to suit your needs. Here's a list of the available configur
 ),
 ```
 
+#### Enabling caching
+
+To enable caching for ***CDbAuthManager*** you can use ***CachedDbAuthManager*** that provides caching for access checks. 
+Here's an example configuration for the component:
+
+```php
+'authManager'=>array(
+  'class'=>'auth.components.CachedDbAuthManager',
+  'cachingDuration'=>3600,
+),
+```
+
 ### Checking access
 
 When you wish to check if the current user has a certain permission you can use the ***CWebUser::checkAccess()*** method which can be access from anywhere in your application through ***Yii::app()*** like so:
