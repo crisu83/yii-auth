@@ -103,3 +103,8 @@ public function filters()
 ```
 
 For more information on how filters work refer to the framework documentation on [Controllers](http://www.yiiframework.com/doc/guide/1.1/en/basics.controller#filter).
+
+### Internationalization
+
+Do you wish to provide a translation for Auth? If so, please do a pull request for it. 
+Translations should be placed in the messages folder under a folder named according to its locale (e.g. en_us).
