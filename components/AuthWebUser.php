@@ -9,6 +9,8 @@
 
 /**
  * Web user that allows for passing access checks when enlisted as an administrator.
+ *
+ * @property boolean $isAdmin whether the user is an administrator.
  */
 class AuthWebUser extends CWebUser
 {
@@ -23,7 +25,7 @@ class AuthWebUser extends CWebUser
 	public function init()
 	{
 		parent::init();
-		$this->setIsAdmin($this->checkAdmin());
+		$this->setIsAdmin(in_array($this->name, $this->admins));
 	}
 
 	/**
@@ -45,15 +47,6 @@ class AuthWebUser extends CWebUser
 	}
 
 	/**
-	 * Checks if the logged in user is an administrator.
-	 * @return boolean the result.
-	 */
-	protected function checkAdmin()
-	{
-		return in_array($this->name, $this->admins);
-	}
-
-	/**
 	 * Performs access check for this user.
 	 * @param string $operation the name of the operation that need access check.
 	 * @param array $params name-value pairs that would be passed to business rules associated
@@ -63,7 +56,7 @@ class AuthWebUser extends CWebUser
 	 */
 	public function checkAccess($operation, $params = array(), $allowCaching = true)
 	{
-		if ($this->checkAdmin())
+		if ($this->isAdmin)
 			return true;
 
 		return parent::checkAccess($operation, $params, $allowCaching);
