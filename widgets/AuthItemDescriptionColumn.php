@@ -41,7 +41,7 @@ class AuthItemDescriptionColumn extends AuthItemColumn
 		$controller = $this->grid->getController();
 
 		echo CHtml::link($data['item']->description,
-				array('/auth/' . $controller->getItemTypeController($data['item']->type) . '/view', 'name' => $data['name']),
+				array('/auth/' . $controller->getItemControllerId($data['item']->type) . '/view', 'name' => $data['name']),
 				array( 'class' => $linkCssClass));
 	}
 }
