@@ -57,4 +57,35 @@ abstract class AuthController extends CController
 
 		return $name;
 	}
+	
+	
+	/**
+	 * Returns the authorization item type controller-name as an (untranslated) string.
+	 * @param string $type the item type (0=operation, 1=task, 2=role).
+	 * @throws CException if the item type is invalid.
+	 */	
+	public function getItemTypeController($type)
+	{
+		switch ($type)
+		{
+			case CAuthItem::TYPE_OPERATION:
+				$controller = 'operation';
+				break;
+
+			case CAuthItem::TYPE_TASK:
+				$controller = 'task';
+				break;
+
+			case CAuthItem::TYPE_ROLE:
+				$controller = 'role';
+				break;
+
+			default:
+				throw new CException('Auth item type "' . $type . '" is valid.');
+		}
+
+		return $controller;
+	}		
+	
+	
 }
