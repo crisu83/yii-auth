@@ -37,38 +37,44 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 */
 	public function checkAccess($itemName, $userId, $params = array(), $allowCaching = true)
 	{
-		$key = $this->resolveCacheKey($itemName, $userId, $params);
+		$key = $this->resolveCacheKey($itemName, $userId);
 
 		/* @var $cache CCache */
-		if ($allowCaching && ($cache = $this->getCache()) !== null)
+		if ($allowCaching && ($cache = $this->getCache()) !== null && ($data = $cache->get($key)) !== false)
 		{
-			if (($data = $cache->get($key)) !== false)
-				return unserialize($data);
+			$record = unserialize($data);
+			if ($record instanceof CachedAccessRecord && $record->checkAccess($params))
+				return true;
 		}
 
-		$result = parent::checkAccess($itemName, $userId, $params);;
+		if (!isset($record))
+			$record = new CachedAccessRecord($itemName, $userId);
+
+		$allow = parent::checkAccess($itemName, $userId, $params);
+		$record->addEntry($allow, $params);
 
 		if (isset($cache))
-			$cache->set($key, serialize($result), $this->cachingDuration);
+			$cache->set($key, serialize($record), $this->cachingDuration);
 
-		return $result;
+		return $allow;
 	}
 
 	/**
 	 * Flushes the access cache for the specified user.
 	 * @param string $itemName the name of the operation that need access check.
-	 * @param mixed $userId the user id.
-	 * @param array $params name-value pairs that would be passed to biz rules associated
-	 * with the tasks and roles assigned to the user.
+	 * @param integer $userId the user id.
+	 * @return boolean whether the access was flushed.
 	 */
-	public function flushAccess($itemName, $userId, $params = array())
+	public function flushAccess($itemName, $userId)
 	{
 		/* @var $cache CCache */
 		if (($cache = $this->getCache()) !== null)
 		{
-			$key = $this->resolveCacheKey($itemName, $userId, $params);
+			$key = $this->resolveCacheKey($itemName, $userId);
 			$cache->delete($key);
+			return true;
 		}
+		return false;
 	}
 
 	/**
@@ -79,9 +85,9 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 * with the tasks and roles assigned to the user.
 	 * @return string the key.
 	 */
-	protected function resolveCacheKey($itemName, $userId, $params)
+	protected function resolveCacheKey($itemName, $userId)
 	{
-		return self::CACHE_KEY_PREFIX . '.' . $itemName . '.' . $userId . '.' . serialize($params);
+		return self::CACHE_KEY_PREFIX . '.' . $itemName . '.' . $userId;
 	}
 
 	/**
