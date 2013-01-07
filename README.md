@@ -97,7 +97,7 @@ You can also use a wildcard ***controllerId.**** instead of the actionId to cove
 public function filters()
 {
   return array(
-    'auth.components.AuthFilter',
+    array('auth.components.AuthFilter'),
   ),
 }
 ```
