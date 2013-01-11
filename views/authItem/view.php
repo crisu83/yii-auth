@@ -8,7 +8,7 @@
 /* @var $childOptions array */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getTypeText(true)) => array('index'),
+	$this->capitalize($this->getTypeText(true)) => array('index'),
 	$item->description,
 );
 ?>

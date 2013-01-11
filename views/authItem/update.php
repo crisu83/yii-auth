@@ -5,7 +5,7 @@
 /* @var $form TbActiveForm */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getTypeText(true)) => array('index'),
+	$this->capitalize($this->getTypeText(true)) => array('index'),
 	$item->description => array('view', 'name' => $item->name),
 	Yii::t('AuthModule.main', 'Edit'),
 );

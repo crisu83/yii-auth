@@ -84,5 +84,21 @@ abstract class AuthController extends CController
 				throw new CException('Auth item type "' . $type . '" is valid.');
 		}
 		return $controllerId;
-	}		
+	}
+
+	/**
+	 * Capitalizes the first word in the given string.
+	 * @param string $string the string to capitalize.
+	 * @return string the capitalized string.
+	 * @see http://stackoverflow.com/questions/2517947/ucfirst-function-for-multibyte-character-encodings
+	 */
+	public function capitalize($string)
+	{
+		if (!extension_loaded('mbstring'))
+			return ucfirst($string);
+
+		$encoding = Yii::app()->charset;
+		$firstChar = mb_strtoupper(mb_substr($string, 0, 1, $encoding), $encoding);
+		return $firstChar . mb_substr($string, 1, mb_strlen($string, $encoding) - 1, $encoding);
+	}
 }
