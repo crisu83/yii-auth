@@ -116,7 +116,7 @@ class AssignmentController extends AuthController
 		foreach ($authItems as $itemName => $item)
 		{
 			if (!in_array($itemName, $assignedItems))
-				$options[ucfirst($this->getItemTypeText($item->type, true))][$itemName] = $item->description;
+				$options[AuthUtility::ucfirst($this->getItemTypeText($item->type, true))][$itemName] = $item->description;
 		}
 
 		return $options;

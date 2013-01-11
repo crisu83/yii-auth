@@ -13,17 +13,17 @@
 				'active' => $this instanceof AssignmentController,
 			),
 			array(
-				'label' => ucfirst($this->getItemTypeText(CAuthItem::TYPE_ROLE, true)),
+				'label' => AuthUtility::ucfirst($this->getItemTypeText(CAuthItem::TYPE_ROLE, true)),
 				'url' => array('/auth/role/index'),
 				'active' => $this instanceof RoleController,
 			),
 			array(
-				'label' => ucfirst($this->getItemTypeText(CAuthItem::TYPE_TASK, true)),
+				'label' => AuthUtility::ucfirst($this->getItemTypeText(CAuthItem::TYPE_TASK, true)),
 				'url' => array('/auth/task/index'),
 				'active' => $this instanceof TaskController,
 			),
 			array(
-				'label' => ucfirst($this->getItemTypeText(CAuthItem::TYPE_OPERATION, true)),
+				'label' => AuthUtility::ucfirst($this->getItemTypeText(CAuthItem::TYPE_OPERATION, true)),
 				'url' => array('/auth/operation/index'),
 				'active' => $this instanceof OperationController,
 			),

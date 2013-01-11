@@ -73,6 +73,7 @@ class AuthModule extends CWebModule
 			'auth.controllers.*',
 			'auth.models.*',
 			'auth.widgets.*',
+			'auth.AuthUtility',
 		));
 
 		$this->registerCss();

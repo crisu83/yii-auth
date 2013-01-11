@@ -3,11 +3,11 @@
 /* @var $dataProvider AuthItemDataProvider */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getTypeText(true)),
+	AuthUtility::ucfirst($this->getTypeText(true)),
 );
 ?>
 
-<h1><?php echo ucfirst($this->getTypeText(true)); ?></h1>
+<h1><?php echo AuthUtility::ucfirst($this->getTypeText(true)); ?></h1>
 
 <?php $this->widget('bootstrap.widgets.TbButton', array(
     'type' => 'primary',
