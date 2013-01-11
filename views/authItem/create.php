@@ -2,6 +2,11 @@
 /* @var $this OperationController|TaskController|RoleController */
 /* @var $model AuthItemForm */
 /* @var $form TbActiveForm */
+
+$this->breadcrumbs = array(
+	ucfirst($this->getTypeText(true)) => array('index'),
+	Yii::t('AuthModule.main', 'New {type}', array('{type}' => $this->getTypeText())),
+);
 ?>
 
 <h1><?php echo Yii::t('AuthModule.main', 'New {type}', array('{type}' => $this->getTypeText())); ?></h1>
