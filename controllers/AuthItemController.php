@@ -46,7 +46,11 @@ abstract class AuthItemController extends AuthController
 				$am = Yii::app()->getAuthManager();
 
 				if (($item = $am->getAuthItem($model->name)) === null)
+				{
 					$item = $am->createAuthItem($model->name, $model->type, $model->description);
+					if ($am instanceof CPhpAuthManager)
+						$am->save();
+				}
 
 				$this->redirect(array('view', 'name' => $item->name));
 			}
@@ -81,7 +85,11 @@ abstract class AuthItemController extends AuthController
 			if ($model->validate())
 			{
 				$item->description = $model->description;
+				
 				$am->saveAuthItem($item);
+				if ($am instanceof CPhpAuthManager)
+					$am->save();
+
 				$this->redirect(array('index'));
 			}
 		}
@@ -102,6 +110,8 @@ abstract class AuthItemController extends AuthController
 	 */
 	public function actionView($name)
 	{
+		Yii::app()->user->checkAccess('comment.*', Yii::app()->user->id);
+
 		$formModel = new AddAuthItemForm();
 
 		/* @var $am CAuthManager|AuthBehavior */
@@ -113,7 +123,14 @@ abstract class AuthItemController extends AuthController
 			if ($formModel->validate())
 			{
 				if (!$am->hasItemChild($name, $formModel->items))
+				{
 					$am->addItemChild($name, $formModel->items);
+					if ($am instanceof CPhpAuthManager)
+						$am->save();
+
+					if ($am instanceof ICachedAuthManager)
+						$am->flushAccess($name);
+				}
 			}
 		}
 
@@ -160,6 +177,8 @@ abstract class AuthItemController extends AuthController
 			if ($item instanceof CAuthItem)
 			{
 				$am->removeAuthItem($name);
+				if ($am instanceof CPhpAuthManager)
+					$am->save();
 
 				if (!isset($_POST['ajax']))
 					$this->redirect(array('index'));
@@ -182,7 +201,14 @@ abstract class AuthItemController extends AuthController
 		$am = Yii::app()->getAuthManager();
 
 		if ($am->hasItemChild($parentName, $itemName))
+		{
 			$am->removeItemChild($parentName, $itemName);
+			if ($am instanceof CPhpAuthManager)
+				$am->save();
+
+			if ($am instanceof ICachedAuthManager)
+				$am->flushAccess($parentName);
+		}
 
 		$this->redirect(array('view', 'name' => $itemName));
 	}
@@ -198,7 +224,14 @@ abstract class AuthItemController extends AuthController
 		$am = Yii::app()->getAuthManager();
 
 		if ($am->hasItemChild($itemName, $childName))
+		{
 			$am->removeItemChild($itemName, $childName);
+			if ($am instanceof CPhpAuthManager)
+				$am->save();
+
+			if ($am instanceof ICachedAuthManager)
+				$am->flushAccess($itemName);
+		}
 
 		$this->redirect(array('view', 'name' => $itemName));
 	}

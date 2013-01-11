@@ -37,7 +37,7 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 */
 	public function checkAccess($itemName, $userId, $params = array(), $allowCaching = true)
 	{
-		$cacheKey = $this->resolveCacheKey($itemName, $userId);
+		$cacheKey = $this->resolveCacheKey($itemName);
 		$key = serialize($params);
 
 		if ($allowCaching && ($cache = $this->getCache()) !== null)
@@ -45,14 +45,17 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 			if (($data = $cache->get($cacheKey)) !== false)
 			{
 				$data = unserialize($data);
-				if (isset($data[$key]))
-					return $data[$key];
+				if (isset($data[$userId], $data[$userId][$key]))
+					return $data[$userId][$key];
 			}
 		}
 		else
 			$data = array();
 
-		$result = $data[$key] = parent::checkAccess($itemName, $userId, $params);
+		if (!isset($data[$userId]))
+			$data[$userId] = array();
+
+		$result = $data[$userId][$key] = parent::checkAccess($itemName, $userId, $params);
 
 		if (isset($cache))
 			$cache->set($cacheKey, serialize($data), $this->cachingDuration);
@@ -66,11 +69,11 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 * @param mixed $userId the user id.
 	 * @return boolean whether access was flushed.
 	 */
-	public function flushAccess($itemName, $userId)
+	public function flushAccess($itemName)
 	{
 		if (($cache = $this->getCache()) !== null)
 		{
-			$cacheKey = $this->resolveCacheKey($itemName, $userId);
+			$cacheKey = $this->resolveCacheKey($itemName);
 			return $cache->delete($cacheKey);
 		}
 		return false;
@@ -79,14 +82,13 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	/**
 	 * Returns the key to use when caching.
 	 * @param string $itemName the name of the operation that need access check.
-	 * @param integer $userId the user id.
 	 * @param array $params name-value pairs that would be passed to biz rules associated
 	 * with the tasks and roles assigned to the user.
 	 * @return string the key.
 	 */
-	protected function resolveCacheKey($itemName, $userId)
+	protected function resolveCacheKey($itemName)
 	{
-		return self::CACHE_KEY_PREFIX . '.' . $itemName . '.' . $userId;
+		return self::CACHE_KEY_PREFIX . 'checkAccess.' . $itemName;
 	}
 
 	/**
