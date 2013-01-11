@@ -37,42 +37,41 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 */
 	public function checkAccess($itemName, $userId, $params = array(), $allowCaching = true)
 	{
-		$key = $this->resolveCacheKey($itemName, $userId);
+		$cacheKey = $this->resolveCacheKey($itemName, $userId);
+		$key = serialize($params);
 
-		/* @var $cache CCache */
-		if ($allowCaching && ($cache = $this->getCache()) !== null && ($data = $cache->get($key)) !== false)
+		if ($allowCaching && ($cache = $this->getCache()) !== null)
 		{
-			$record = unserialize($data);
-			if ($record instanceof CachedAccessRecord && $record->checkAccess($params))
-				return true;
+			if (($data = $cache->get($cacheKey)) !== false)
+			{
+				$data = unserialize($data);
+				if (isset($data[$key]))
+					return $data[$key];
+			}
 		}
+		else
+			$data = array();
 
-		if (!isset($record))
-			$record = new CachedAccessRecord($itemName, $userId);
-
-		$allow = parent::checkAccess($itemName, $userId, $params);
-		$record->addEntry($allow, $params);
+		$result = $data[$key] = parent::checkAccess($itemName, $userId, $params);
 
 		if (isset($cache))
-			$cache->set($key, serialize($record), $this->cachingDuration);
+			$cache->set($cacheKey, serialize($data), $this->cachingDuration);
 
-		return $allow;
+		return $result;
 	}
 
 	/**
 	 * Flushes the access cache for the specified user.
 	 * @param string $itemName the name of the operation that need access check.
-	 * @param integer $userId the user id.
-	 * @return boolean whether the access was flushed.
+	 * @param mixed $userId the user id.
+	 * @return boolean whether access was flushed.
 	 */
 	public function flushAccess($itemName, $userId)
 	{
-		/* @var $cache CCache */
 		if (($cache = $this->getCache()) !== null)
 		{
-			$key = $this->resolveCacheKey($itemName, $userId);
-			$cache->delete($key);
-			return true;
+			$cacheKey = $this->resolveCacheKey($itemName, $userId);
+			return $cache->delete($cacheKey);
 		}
 		return false;
 	}
