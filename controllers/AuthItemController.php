@@ -227,7 +227,7 @@ abstract class AuthItemController extends AuthController
 			foreach ($authItems as $childName => $childItem)
 			{
 				if (in_array($childItem->type, $validChildTypes) && !isset($exclude[$childName]))
-					$options[ucfirst($this->getItemTypeText($childItem->type, true))][$childName] = $childItem->description;
+					$options[AuthUtility::ucfirst($this->getItemTypeText($childItem->type, true))][$childName] = $childItem->description;
 			}
 		}
 

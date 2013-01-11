@@ -8,7 +8,7 @@
 /* @var $childOptions array */
 
 $this->breadcrumbs = array(
-	ucfirst($this->getTypeText(true)) => array('index'),
+	AuthUtility::ucfirst($this->getTypeText(true)) => array('index'),
 	$item->description,
 );
 ?>
