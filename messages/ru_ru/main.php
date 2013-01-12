@@ -29,7 +29,7 @@ return array (
 	'Assign permission' => 'Назначить права',
 	'Assigned items' => 'Назначенные элементы',
 	'Assignments' => 'Соответствия',
-	'Business rule' => 'Бизнесс правило',
+	'Business rule' => 'Бизнес правило',
 	'Cancel' => 'Отменить',
 	'Create' => 'Создать',
 	'Delete' => 'Удалить',
