@@ -56,7 +56,7 @@ return array (
 	'System name cannot be changed after creation.' => 'Системное название не может быть изменено после создания',
 	'This item does not have any ancestors.' => 'Данный элемент не имеет предков',
 	'This item does not have any descendants.' => 'Данный элемент не имеет потомков',
-	'This user does not have any assignments.' => 'Данный элемент не имеет прав',
+	'This user does not have any assignments.' => 'Данный пользователь не имеет прав',
 	'Type' => 'Тип',
 	'User' => 'Пользователь',
 	'View' => 'Вид',
