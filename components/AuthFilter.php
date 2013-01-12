@@ -13,6 +13,12 @@
 class AuthFilter extends CFilter
 {
 	/**
+	 * @var array name-value pairs that would be passed to business rules associated
+	 * with the tasks and roles assigned to the user.
+	 */
+	public $params = array();
+
+	/**
 	 * Performs the pre-action filtering.
 	 * @param CFilterChain $filterChain the filter chain that the filter is on.
 	 * @return boolean whether the filtering process should continue and the action should be executed.
@@ -35,7 +41,7 @@ class AuthFilter extends CFilter
 			return true;
 
 		$itemName .= '.' . $controller->action->getId();
-		if ($user->checkAccess($itemName))
+		if ($user->checkAccess($itemName, $this->params))
 			return true;
 
 		throw new CHttpException(401, Yii::t('AuthModule.main', 'Access denied.'));

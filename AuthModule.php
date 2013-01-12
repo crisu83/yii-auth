@@ -5,7 +5,7 @@
  * @copyright Copyright &copy; Christoffer Niska 2012-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @package auth
- * @version 1.3.0
+ * @version 1.4.1
  */
 
 /**
@@ -137,5 +137,14 @@ class AuthModule extends CWebModule
 
 			return $this->_assetsUrl = $assetsUrl;
 		}
+	}
+
+	/**
+	 * Returns the module version number.
+	 * @return string the version.
+	 */
+	public function getVersion()
+	{
+		return '1.4.1';
 	}
 }
