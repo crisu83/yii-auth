@@ -53,7 +53,7 @@ return array (
 	'Save' => 'Зберегти',
 	'Select item' => 'Виберіть елемент',
 	'System name' => 'Системна назва',
-	'System name cannot be changed after creation.' => 'Системна назав не можу бути змінена після створення.',
+	'System name cannot be changed after creation.' => 'Системна назва не можу бути змінена після створення.',
 	'This item does not have any ancestors.' => 'Цей елемент не має предків.',
 	'This item does not have any descendants.' => 'Цей елемент не має нащадків.',
 	'This user does not have any assignments.' => 'Цей елемент не має призначень.',
