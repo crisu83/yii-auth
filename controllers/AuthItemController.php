@@ -85,7 +85,7 @@ abstract class AuthItemController extends AuthController
 			if ($model->validate())
 			{
 				$item->description = $model->description;
-				
+
 				$am->saveAuthItem($item);
 				if ($am instanceof CPhpAuthManager)
 					$am->save();
@@ -127,9 +127,6 @@ abstract class AuthItemController extends AuthController
 					$am->addItemChild($name, $formModel->items);
 					if ($am instanceof CPhpAuthManager)
 						$am->save();
-
-					if ($am instanceof ICachedAuthManager)
-						$am->flushAccess($name);
 				}
 			}
 		}
@@ -205,9 +202,6 @@ abstract class AuthItemController extends AuthController
 			$am->removeItemChild($parentName, $itemName);
 			if ($am instanceof CPhpAuthManager)
 				$am->save();
-
-			if ($am instanceof ICachedAuthManager)
-				$am->flushAccess($parentName);
 		}
 
 		$this->redirect(array('view', 'name' => $itemName));
@@ -228,9 +222,6 @@ abstract class AuthItemController extends AuthController
 			$am->removeItemChild($itemName, $childName);
 			if ($am instanceof CPhpAuthManager)
 				$am->save();
-
-			if ($am instanceof ICachedAuthManager)
-				$am->flushAccess($itemName);
 		}
 
 		$this->redirect(array('view', 'name' => $itemName));

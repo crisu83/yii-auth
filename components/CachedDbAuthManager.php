@@ -37,7 +37,7 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 */
 	public function checkAccess($itemName, $userId, $params = array(), $allowCaching = true)
 	{
-		$cacheKey = $this->resolveCacheKey($itemName);
+		$cacheKey = $this->resolveCacheKey($itemName, $userId);
 		$key = serialize($params);
 
 		if ($allowCaching && ($cache = $this->getCache()) !== null)
@@ -45,17 +45,14 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 			if (($data = $cache->get($cacheKey)) !== false)
 			{
 				$data = unserialize($data);
-				if (isset($data[$userId], $data[$userId][$key]))
-					return $data[$userId][$key];
+				if (isset($data[$key]))
+					return $data[$key];
 			}
 		}
 		else
 			$data = array();
 
-		if (!isset($data[$userId]))
-			$data[$userId] = array();
-
-		$result = $data[$userId][$key] = parent::checkAccess($itemName, $userId, $params);
+		$result = $data[$key] = parent::checkAccess($itemName, $userId, $params);
 
 		if (isset($cache))
 			$cache->set($cacheKey, serialize($data), $this->cachingDuration);
@@ -69,11 +66,11 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 * @param mixed $userId the user id.
 	 * @return boolean whether access was flushed.
 	 */
-	public function flushAccess($itemName)
+	public function flushAccess($itemName, $userId)
 	{
 		if (($cache = $this->getCache()) !== null)
 		{
-			$cacheKey = $this->resolveCacheKey($itemName);
+			$cacheKey = $this->resolveCacheKey($itemName, $userId);
 			return $cache->delete($cacheKey);
 		}
 		return false;
@@ -86,9 +83,9 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	 * with the tasks and roles assigned to the user.
 	 * @return string the key.
 	 */
-	protected function resolveCacheKey($itemName)
+	protected function resolveCacheKey($itemName, $userId)
 	{
-		return self::CACHE_KEY_PREFIX . 'checkAccess.' . $itemName;
+		return self::CACHE_KEY_PREFIX . 'checkAccess.' . $itemName . '.' . $userId;
 	}
 
 	/**

@@ -26,7 +26,8 @@ interface ICachedAuthManager
 	/**
 	 * Flushes the access cache for the specified user.
 	 * @param string $itemName the name of the operation that need access check.
+	 * @param integer $userId the user id.
 	 * @return boolean whether access was flushed.
 	 */
-	public function flushAccess($itemName);
+	public function flushAccess($itemName, $userId);
 }

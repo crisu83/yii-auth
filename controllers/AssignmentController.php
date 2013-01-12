@@ -43,6 +43,9 @@ class AssignmentController extends AuthController
 				if (!$am->isAssigned($formModel->items, $id))
 				{
 					$am->assign($formModel->items, $id);
+					if ($am instanceof CPhpAuthManager)
+						$am->save();
+
 					if ($am instanceof ICachedAuthManager)
 						$am->flushAccess($formModel->items, $id);
 				}
@@ -85,6 +88,9 @@ class AssignmentController extends AuthController
 			if ($am->isAssigned($itemName, $userId))
 			{
 				$am->revoke($itemName, $userId);
+				if ($am instanceof CPhpAuthManager)
+					$am->save();
+
 				if ($am instanceof ICachedAuthManager)
 					$am->flushAccess($itemName, $userId);
 			}
