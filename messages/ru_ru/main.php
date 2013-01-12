@@ -59,7 +59,7 @@ return array (
 	'This user does not have any assignments.' => 'Данный пользователь не имеет прав',
 	'Type' => 'Тип',
 	'User' => 'Пользователь',
-	'View' => 'Вид',
+	'View' => 'Просмотреть',
 	'operation|operations' => 'операция|операции',
 	'role|roles' => 'роль|роли',
 	'task|tasks' => 'задание|задания',
