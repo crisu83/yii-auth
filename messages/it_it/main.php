@@ -41,7 +41,7 @@ return array (
 	'Item does not exist.' => 'L\'elemento non esiste.',
 	'Items' => 'Elementi',
 	'Items assigned to this user' => 'Elementi associati a questo utente',
-	'New {type}' => 'Nuovo {type}',
+	'New {type}' => 'Aggiungi {type}',
 	'No assignments found.' => 'Nessun incarico trovato.',
 	'No {type} found.' => 'Impossibile trovare {type}',
 	'Page not found.' => 'Pagina non trovata.',
