@@ -12,6 +12,14 @@ class SiteController extends Controller
 		$this->redirect(array('/auth/assignment/index'));
 	}
 
+	public function actionChangeLanguage($locale)
+	{
+		if (in_array($locale, array_keys(Yii::app()->languages)))
+			Yii::app()->user->setState('__locale', $locale);
+
+		$this->redirect(array('index', 'language'=>$locale));
+	}
+
 	/**
 	 * Resets the database for the demo application.
 	 */

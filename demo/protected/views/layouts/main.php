@@ -20,12 +20,15 @@
 	'items'=>array(
 		array(
 			'class'=>'bootstrap.widgets.TbMenu',
-			'htmlOptions'=>array('class'=>'pull-right'),
 			'items'=>array(
 				array('label'=>'Download', 'url'=>'http://www.yiiframework.com/extension/auth/'),
 				array('label'=>'Fork on GitHub', 'url'=>'https://github.com/Crisu83/yii-auth/'),
 				array('label'=>'Reset demo', 'url'=>array('/site/reset'), 'linkOptions'=>array('confirm'=>'Are you sure you want to reset the database?')),
 			),
+		),
+		array(
+			'class'=>'LanguageMenu',
+			'htmlOptions'=>array('class'=>'pull-right'),
 		),
 	),
 )); ?>
