@@ -52,7 +52,6 @@ Configure the module to suit your needs. Here's a list of the available configur
 ```php
 'auth' => array(
   'strictMode' => true, // when enabled authorization items cannot be assigned children of the same type.
-  'users' => array('admin'), // a list of users who has access to the module.
   'userClass' => 'User', // the name of the user model class.
   'userIdColumn' => 'id', // the name of the user id column.
   'userNameColumn' => 'name', // the name of the user name column.

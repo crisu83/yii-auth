@@ -34,7 +34,7 @@ class AuthWebUser extends CWebUser
 	 */
 	public function getIsAdmin()
 	{
-		return $this->getState('__isAdmin');
+		return $this->getState('__isAdmin', false);
 	}
 
 	/**

@@ -9,7 +9,7 @@ class LanguageMenu extends TbMenu
 	 */
 	public function init()
 	{
-		$languages = Yii::app()->languages;
+		$languages = Yii::app()->getLanguages();
 		$activeLocale = Yii::app()->language;
 
 		$items = array(array('label'=>'Language'));
@@ -26,7 +26,7 @@ class LanguageMenu extends TbMenu
 			);
 		}
 
-		$label = isset($activeLanguage) ? $activeLanguage : Yii::t('cms', 'Unknown');
+		$label = isset($activeLanguage) ? $activeLanguage : 'Unknown';
 		$this->items = array_merge(array(array('label'=> $label, 'items'=>$items)), $this->items);
 
 		parent::init();

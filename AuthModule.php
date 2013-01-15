@@ -113,13 +113,17 @@ class AuthModule extends CWebModule
 	{
 		if (parent::beforeControllerAction($controller, $action))
 		{
-			if (!in_array(Yii::app()->user->getName(), $this->users))
-				throw new CHttpException(401, Yii::t('AuthModule.main', 'Access denied.'));
+			$user = Yii::app()->getUser();
 
-			return true;
+			if ($user instanceof AuthWebUser)
+			{
+				if ($user->isAdmin)
+					return true;
+			}
+			else
+				throw new CException('WebUser component is not an instance of AuthWebUser.');
 		}
-		else
-			return false;
+		throw new CHttpException(401, Yii::t('AuthModule.main', 'Access denied.'));
 	}
 
 	/**

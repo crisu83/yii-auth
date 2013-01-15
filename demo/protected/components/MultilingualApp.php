@@ -2,9 +2,14 @@
 
 class MultilingualApp extends CBehavior
 {
-	public $defaultLocale = 'en_us';
-
-	public $languages = array('en_us');
+	/**
+	 * @var string the default locale.
+	 */
+	public $defaultLanguage;
+	/**
+	 * @var array a list of languages enabled for the application.
+	 */
+	public $languages = array('en');
 
 	/**
 	 * @return array the behavior events.
@@ -14,6 +19,12 @@ class MultilingualApp extends CBehavior
 		return array(
 			'onBeginRequest'=>'setLanguage',
 		);
+	}
+
+	public function init()
+	{
+		if (!isset($this->defaultLanguage))
+			$this->defaultLanguage = $this->owner->sourceLanguage;
 	}
 
 	/**
@@ -29,8 +40,17 @@ class MultilingualApp extends CBehavior
 			&& isset($matches[1], $this->languages[$matches[1]]))
 			$language = $matches[1];
 		else
-			$language = $this->defaultLocale;
+			$language = $this->defaultLanguage;
 
 		$this->owner->language = $language;
+	}
+
+	/**
+	 * A list of the languages enabled for the application.
+	 * @return array list of languages.
+	 */
+	public function getLanguages()
+	{
+		return $this->languages;
 	}
 }
