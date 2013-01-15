@@ -38,6 +38,10 @@ return array(
         'auth.components.AuthBehavior',
       ),
     ),
+    'user' => array(
+      'class' => 'auth.components.AuthWebUser',
+      'admins'=>array('admin', 'foo', 'bar'), // users with full access
+    ),
   ),
 );
 ```
@@ -102,18 +106,6 @@ public function filters()
 ```
 
 For more information on how filters work refer to the framework documentation on [Controllers](http://www.yiiframework.com/doc/guide/1.1/en/basics.controller#filter).
-
-#### Granting full access for administrators
-
-If you wish to allow certain users to access all content without any restrictions you can use the ***AuthWebUser*** component.
-Here's an example configuration for the component:
-
-```php
-'user'=>array(
-  'class'=>'auth.components.AuthWebUser',
-  'admins'=>array('admin', 'foo', 'bar'),
-),
-```
 
 ### Internationalization
 
