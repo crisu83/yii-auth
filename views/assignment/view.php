@@ -8,11 +8,11 @@
 
 $this->breadcrumbs = array(
     Yii::t('AuthModule.main', 'Assignments') => array('index'),
-    $model->{$this->module->userNameColumn},
+    CHtml::value($model, $this->module->userNameColumn),
 );
 ?>
 
-<h1><?php echo CHtml::encode($model->{$this->module->userNameColumn}); ?>
+<h1><?php echo CHtml::encode(CHtml::value($model, $this->module->userNameColumn)); ?>
     <small><?php echo Yii::t('AuthModule.main', 'Assignments'); ?></small>
 </h1>
 
