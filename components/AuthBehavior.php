@@ -41,7 +41,7 @@ class AuthBehavior extends CBehavior
 	/**
 	 * Returns whether the given item has a specific ancestor.
 	 * @param string $itemName name of the item.
-	 * @param string $descendantName name of the ancestor.
+	 * @param string $ancestorName name of the ancestor.
 	 * @return boolean the result.
 	 */
 	public function hasAncestor($itemName, $ancestorName)

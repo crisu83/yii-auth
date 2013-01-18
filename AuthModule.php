@@ -106,8 +106,9 @@ class AuthModule extends CWebModule
 	 * The pre-filter for controller actions.
 	 * @param CController $controller the controller.
 	 * @param CAction $action the action.
-	 * @return boolean whether the action should be executed.
 	 * @throws CHttpException if user is denied access.
+	 * @throws CException
+	 * @return boolean whether the action should be executed.
 	 */
 	public function beforeControllerAction($controller, $action)
 	{
