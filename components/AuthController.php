@@ -16,7 +16,7 @@ abstract class AuthController extends CController
 	/**
 	 * @var string the default layout for the controller view.
 	 */
-	public $layout = 'auth.views.layouts.main';
+	public $layout = 'main';
 	/**
 	 * @var array context menu items. This property will be assigned to {@link CMenu::items}.
 	 */
