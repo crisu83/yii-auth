@@ -46,7 +46,7 @@ return array (
 	'No {type} found.' => 'Не найдено {type}',
 	'Page not found.' => 'Страница не найдена',
 	'Permissions' => 'Права',
-	'Permissions granted by this item' => 'Права предоставлены данным элементом',
+	'Permissions granted by this item' => 'Права, предоставляемые элементом',
 	'Permissions that inherit this item' => 'Права, которые наследует данный элемент',
 	'Remove' => 'Удалить',
 	'Revoke' => 'Отнять',
