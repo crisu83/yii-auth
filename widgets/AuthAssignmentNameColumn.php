@@ -30,6 +30,6 @@ class AuthAssignmentNameColumn extends AuthAssignmentColumn
 	 */
 	protected function renderDataCellContent($row, $data)
 	{
-		echo CHtml::link($data->{$this->nameColumn}, array('view', 'id'=>$data->{$this->idColumn}));
+		echo CHtml::link(CHtml::value($data, $this->nameColumn), array('view', 'id'=>$data->{$this->idColumn}));
 	}
 }
