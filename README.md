@@ -36,11 +36,11 @@ return array(
       .....
       'behaviors' => array(
         'auth.components.AuthBehavior',
+        'admins'=>array('admin', 'foo', 'bar'), // users with full access
       ),
     ),
     'user' => array(
       'class' => 'auth.components.AuthWebUser',
-      'admins'=>array('admin', 'foo', 'bar'), // users with full access
     ),
   ),
 );

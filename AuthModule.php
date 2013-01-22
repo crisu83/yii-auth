@@ -5,7 +5,7 @@
  * @copyright Copyright &copy; Christoffer Niska 2012-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @package auth
- * @version 1.4.1
+ * @version 1.5.0
  */
 
 /**
@@ -18,10 +18,6 @@ class AuthModule extends CWebModule
 	 * When enabled items cannot be assigned children of the same type.
 	 */
 	public $strictMode = true;
-	/**
-	 * @var array a list of names for users that has access to this module.
-	 */
-	public $users = array('admin');
 	/**
 	 * @var string name of the user model class.
 	 * Change this if your user model name is different than the default value.
@@ -149,6 +145,6 @@ class AuthModule extends CWebModule
 	 */
 	public function getVersion()
 	{
-		return '1.4.1';
+		return '1.5.0';
 	}
 }

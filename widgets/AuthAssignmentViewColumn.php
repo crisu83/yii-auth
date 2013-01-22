@@ -30,12 +30,15 @@ class AuthAssignmentViewColumn extends AuthAssignmentColumn
 	 */
 	protected function renderDataCellContent($row, $data)
 	{
-		$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
-			'type' => 'link',
-			'size' => 'mini',
-			'icon' => 'eye-open',
-			'url' => array('view', 'id' => $data->{$this->idColumn}),
-			'htmlOptions' => array('rel' => 'tooltip', 'title' => Yii::t('AuthModule.main', 'View')),
-		));
+		if (!Yii::app()->user->isAdmin)
+		{
+			$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
+				'type' => 'link',
+				'size' => 'mini',
+				'icon' => 'eye-open',
+				'url' => array('view', 'id' => $data->{$this->idColumn}),
+				'htmlOptions' => array('rel' => 'tooltip', 'title' => Yii::t('AuthModule.main', 'View')),
+			));
+		}
 	}
 }
