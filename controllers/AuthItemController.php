@@ -66,6 +66,7 @@ abstract class AuthItemController extends AuthController
 	/**
 	 * Displays a form for updating the item with the given name.
 	 * @param string $name name of the item.
+	 * @throws CHttpException if the authorization item is not found.
 	 */
 	public function actionUpdate($name)
 	{

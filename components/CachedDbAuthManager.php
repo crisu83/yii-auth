@@ -65,7 +65,7 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	/**
 	 * Flushes the access cache for the specified user.
 	 * @param string $itemName the name of the operation that need access check.
-	 * @param mixed $userId the user id.
+	 * @param integer $userId the user id.
 	 * @return boolean whether access was flushed.
 	 */
 	public function flushAccess($itemName, $userId)
