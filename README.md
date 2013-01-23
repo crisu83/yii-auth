@@ -35,8 +35,10 @@ return array(
     'authManager' => array(
       .....
       'behaviors' => array(
-        'class' => 'auth.components.AuthBehavior',
-        'admins'=>array('admin', 'foo', 'bar'), // users with full access
+        'auth' => array(
+          'class' => 'auth.components.AuthBehavior',
+          'admins'=>array('admin', 'foo', 'bar'), // users with full access
+        ),
       ),
     ),
     'user' => array(
