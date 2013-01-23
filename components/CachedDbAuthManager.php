@@ -81,7 +81,7 @@ class CachedDbAuthManager extends CDbAuthManager implements ICachedAuthManager
 	/**
 	 * Returns the key to use when caching.
 	 * @param string $itemName the name of the operation that need access check.
-	 * @param array $params name-value pairs that would be passed to biz rules associated
+	 * @param int $userId
 	 * with the tasks and roles assigned to the user.
 	 * @return string the key.
 	 */
