@@ -5,7 +5,7 @@
  * @copyright Copyright &copy; Christoffer Niska 2012-
  * @license http://www.opensource.org/licenses/bsd-license.php New BSD License
  * @package auth
- * @version 1.4.1
+ * @version 1.6.0
  */
 
 /**
@@ -18,10 +18,6 @@ class AuthModule extends CWebModule
 	 * When enabled items cannot be assigned children of the same type.
 	 */
 	public $strictMode = true;
-	/**
-	 * @var array a list of names for users that has access to this module.
-	 */
-	public $users = array('admin');
 	/**
 	 * @var string name of the user model class.
 	 * Change this if your user model name is different than the default value.
@@ -106,9 +102,8 @@ class AuthModule extends CWebModule
 	 * The pre-filter for controller actions.
 	 * @param CController $controller the controller.
 	 * @param CAction $action the action.
-	 * @throws CHttpException if user is denied access.
-	 * @throws CException
 	 * @return boolean whether the action should be executed.
+	 * @throws CException|CHttpException if user is denied access.
 	 */
 	public function beforeControllerAction($controller, $action)
 	{
@@ -150,6 +145,6 @@ class AuthModule extends CWebModule
 	 */
 	public function getVersion()
 	{
-		return '1.4.1';
+		return '1.6.0';
 	}
 }

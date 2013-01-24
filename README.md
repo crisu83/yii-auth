@@ -35,12 +35,14 @@ return array(
     'authManager' => array(
       .....
       'behaviors' => array(
-        'auth.components.AuthBehavior',
+        'auth' => array(
+          'class' => 'auth.components.AuthBehavior',
+          'admins'=>array('admin', 'foo', 'bar'), // users with full access
+        ),
       ),
     ),
     'user' => array(
       'class' => 'auth.components.AuthWebUser',
-      'admins'=>array('admin', 'foo', 'bar'), // users with full access
     ),
   ),
 );
@@ -100,7 +102,7 @@ You can also use a wildcard ***controllerId.**** instead of the actionId to cove
 public function filters()
 {
   return array(
-    array('auth.components.AuthFilter'),
+    array('auth.filters.AuthFilter'),
   ),
 }
 ```
