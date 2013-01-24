@@ -37,7 +37,6 @@ return array (
 	'Descendants' => 'Discendenti',
 	'Description' => 'Descrizione',
 	'Edit' => 'Modifica',
-	'Invalid request.' => 'Richiesta non valida.',
 	'Item does not exist.' => 'L\'elemento non esiste.',
 	'Items' => 'Elementi',
 	'Items assigned to this user' => 'Elementi associati a questo utente',

@@ -36,7 +36,6 @@ return array (
   'Descendants' => 'Untergeordnete',
   'Description' => 'Beschreibung',
   'Edit' => 'Bearbeiten',
-  'Invalid request.' => 'Ungültige Anfrage.',
   'Item does not exist.' => 'Eintrag existiert nicht.',
   'Items' => 'Einträge',
   'Items assigned to this user' => 'Diesem Benutzer zugeordnete Einträge',
