@@ -37,7 +37,7 @@ return array(
       'behaviors' => array(
         'auth' => array(
           'class' => 'auth.components.AuthBehavior',
-          'admins'=>array('admin', 'foo', 'bar'), // users with full access
+          'admins' => array('admin', 'foo', 'bar'), // users with full access
         ),
       ),
     ),
