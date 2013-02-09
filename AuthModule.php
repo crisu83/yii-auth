@@ -115,6 +115,8 @@ class AuthModule extends CWebModule
 			{
 				if ($user->isAdmin)
 					return true;
+				elseif ($user->isGuest)
+					$user->loginRequired();
 			}
 			else
 				throw new CException('WebUser component is not an instance of AuthWebUser.');
