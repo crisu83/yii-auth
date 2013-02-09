@@ -4,11 +4,11 @@
     "keywords": ["yii", "auth"],
     "homepage": "http://www.yiiframework.com/extension/auth/",
     "type": "yii-extension",
-    "license": "-",
+    "license": "BSD-3-Clause",
     "authors": [
         {
-            "name": "C. Niska",
-            "email": "-",
+            "name": "Christoffer Niska",
+            "email": "ChristofferNiska@gmail.com",
             "homepage": "http://cniska.net"
         }
     ],
