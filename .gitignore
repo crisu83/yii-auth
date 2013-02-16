@@ -3,3 +3,4 @@ demo/assets/*
 demo/protected/config/main.php
 demo/protected/runtime/*
 releases/*
+composer*
