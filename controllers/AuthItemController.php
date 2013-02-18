@@ -111,8 +111,6 @@ abstract class AuthItemController extends AuthController
 	 */
 	public function actionView($name)
 	{
-		Yii::app()->user->checkAccess('comment.*', Yii::app()->user->id);
-
 		$formModel = new AddAuthItemForm();
 
 		/* @var $am CAuthManager|AuthBehavior */
