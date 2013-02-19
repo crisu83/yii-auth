@@ -37,7 +37,6 @@ return array (
 	'Descendants' => '',
 	'Description' => '',
 	'Edit' => '',
-	'Invalid request.' => '',
 	'Item does not exist.' => '',
 	'Items' => '',
 	'Items assigned to this user' => '',

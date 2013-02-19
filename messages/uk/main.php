@@ -37,7 +37,6 @@ return array (
 	'Descendants' => 'Нащадки',
 	'Description' => 'Опис',
 	'Edit' => 'Редагувати',
-	'Invalid request.' => 'Некоректний запит.',
 	'Item does not exist.' => 'Елемент не існує.',
 	'Items' => 'Елементи',
 	'Items assigned to this user' => 'Елементи призначені цьому користувачу',

@@ -99,7 +99,7 @@ class AssignmentController extends AuthController
 				$this->redirect(array('view', 'id' => $userId));
 		}
 		else
-			throw new CHttpException(400, Yii::t('AuthModule.main', 'Invalid request.'));
+			$this->invalidActionParams($this->action);
 	}
 
 	/**

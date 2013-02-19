@@ -37,7 +37,6 @@ return array (
 	'Descendants' => 'Потомки',
 	'Description' => 'Описание',
 	'Edit' => 'Редактировать',
-	'Invalid request.' => 'Неверный запрос.',
 	'Item does not exist.' => 'Элемент не существует.',
 	'Items' => 'Элементы',
 	'Items assigned to this user' => 'Элемент назначен данному пользователю',

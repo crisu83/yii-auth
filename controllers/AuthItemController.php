@@ -183,7 +183,7 @@ abstract class AuthItemController extends AuthController
 				throw new CHttpException(404, Yii::t('AuthModule.main', 'Item does not exist.'));
 		}
 		else
-			throw new CHttpException(400, Yii::t('AuthModule.main', 'Invalid request.'));
+			$this->invalidActionParams($this->action);
 	}
 
 	/**
