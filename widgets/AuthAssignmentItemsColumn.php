@@ -33,7 +33,7 @@ class AuthAssignmentItemsColumn extends AuthAssignmentColumn
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
 
-		if (in_array($data->name, $am->admins))
+		if (in_array($data->{$this->nameColumn}, $am->admins))
 			echo Yii::t('AuthModule.main', 'Administrator');
 		else
 		{
