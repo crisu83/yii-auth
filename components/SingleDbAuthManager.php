@@ -39,7 +39,8 @@ class SingleDbAuthManager extends CachedDbAuthManager
 	 *                children => array of reference to _items
 	 *            )
 	 */
-	protected function loadItems() {
+	protected function loadItems()
+	{
 		if ($this->_items !== null)
 			return $this->_items;
 
@@ -48,17 +49,21 @@ class SingleDbAuthManager extends CachedDbAuthManager
 
 		$this->_items = array();
 
-		// first extract data avoiding slow @ operator
+		// first extract data avoiding slow @ operator on unserialize
+		// to supress a E_NOTICE issued when $item['data'] cannot be unserialized
 		$itemData = array();
 		$errorReporting = error_reporting();
 		error_reporting($errorReporting ^ E_NOTICE);
-		foreach($items as $item) {
-			if(($itemData[$item['name']]=unserialize($item['data']))===false)
+		foreach($items as $item)
+		{
+			// take extra caution not to generate any E_NOTICE, because it's suppressed
+			if (!isset($item['data']) || !isset($item['name']) || ($itemData[$item['name']]=unserialize($item['data']))===false)
 				$itemData[$item['name']]=null;
 		}
 		error_reporting($errorReporting);
 		// create auth items and index them by type
-		foreach($items as $item) {
+		foreach($items as $item)
+		{
 			$this->_items[$item['name']]=array(
 				'item'=>new CAuthItem($this,
 					$item['name'],$item['type'],$item['description'],
@@ -73,7 +78,8 @@ class SingleDbAuthManager extends CachedDbAuthManager
 		}
 
 		// create parent-children references
-		foreach($relations as $relation) {
+		foreach($relations as $relation)
+		{
 			$this->_items[$relation['parent']]['children'][$relation['child']] = &$this->_items[$relation['child']];
 			$this->_items[$relation['child']]['parents'][$relation['parent']] = &$this->_items[$relation['parent']];
 		}
@@ -84,7 +90,8 @@ class SingleDbAuthManager extends CachedDbAuthManager
 	 * Returns all user assignments in an indexed structure.
 	 * @return array build of: userId, itemName => array(item => reference to _items, assignment => CAuthAssignment)
 	 */
-	protected function loadUsers() {
+	protected function loadUsers()
+	{
 		if ($this->_assignments !== null)
 			return $this->_assignments;
 
@@ -94,20 +101,27 @@ class SingleDbAuthManager extends CachedDbAuthManager
 
 		$this->_assignments = array();
 
-		// first extract data avoiding slow @ operator
+		// first extract data avoiding slow @ operator on unserialize
+		// to supress a E_NOTICE issued when $item['data'] cannot be unserialized
 		$userData = array();
 		$errorReporting = error_reporting();
 		error_reporting($errorReporting ^ E_NOTICE);
-		foreach($users as $user) {
+		foreach($users as $user)
+		{
+			// take extra caution not to generate any E_NOTICE, because it's suppressed
 			if (!isset($userData[$user['userid']]))
 				$userData[$user['userid']] = array();
-			if(($userData[$user['userid']][$user['itemname']]=unserialize($user['data']))===false)
+			if(!isset($user['userid']) || !isset($user['itemname']) || !isset($user['data'])
+				|| ($userData[$user['userid']][$user['itemname']]=unserialize($user['data']))===false)
+			{
 				$userData[$user['userid']][$user['itemname']]=null;
+			}
 		}
 		error_reporting($errorReporting);
 
 		// index by user
-		foreach($users as $user) {
+		foreach($users as $user)
+		{
 			if (!isset($this->_assignments[$user['userid']]))
 				$this->_assignments[$user['userid']] = array();
 			$this->_assignments[$user['userid']][$user['itemname']] = array(
@@ -133,10 +147,13 @@ class SingleDbAuthManager extends CachedDbAuthManager
 	 */
 	protected function checkAccessRecursive($itemName,$userId,$params,$assignments)
 	{
-		if (is_array($itemName)) {
+		if (is_array($itemName))
+		{
 			$itemEx = $itemName;
 			$itemName = $itemEx['item']->name;
-		} else if($itemName===null || ($itemEx=$this->getAuthItemEx($itemName))===null) {
+		}
+		elseif($itemName===null || ($itemEx=$this->getAuthItemEx($itemName))===null)
+		{
 			return false;
 		}
 		$item = &$itemEx['item'];
@@ -239,13 +256,16 @@ class SingleDbAuthManager extends CachedDbAuthManager
 	{
 		$items = $this->loadItems();
 		$children = array();
-		if(is_string($names))
+		if(is_string($names)) {
 			$children = !isset($items[$names]) ? array() : $items[$names]['children'];
-		else if(is_array($names) && $names!==array())
+		}
+		elseif(is_array($names) && $names!==array())
 		{
 			$children = array();
-			foreach($names as &$name) {
-				if (isset($items[$name])) {
+			foreach($names as &$name)
+			{
+				if (isset($items[$name]))
+				{
 					$children = array_merge($children, $items[$name]['children']);
 				}
 			}
@@ -367,7 +387,7 @@ class SingleDbAuthManager extends CachedDbAuthManager
 		{
 			return array_map(function($i){return $i['item'];}, $items);
 		}
-		else if($userId===null)
+		elseif($userId===null)
 		{
 			if (!isset($this->_types[$type]))
 				return array();
@@ -376,14 +396,17 @@ class SingleDbAuthManager extends CachedDbAuthManager
 
 		if (!isset($users[$userId]))
 			return array();
-		if ($type !== null) {
+		if ($type !== null)
+		{
 			if (!isset($this->_types[$type]))
 				return array();
 			$userItems = array_filter($users[$userId], function($a)use($type){return $type==$a['item']['item']->type;});
-		} else {
+		}
+		else
+		{
 			$userItems = $users[$userId];
 		}
-		return array_map(function($a){
+		return array_map(function($a) {
 			$item = clone $a['item']['item'];
 			$item->setBizRule($a['assignment']->bizRule);
 			$item->setData($a['assignment']->data);
@@ -428,11 +451,13 @@ class SingleDbAuthManager extends CachedDbAuthManager
 	{
 		$items = $this->loadItems();
 		$users = $this->loadUsers();
-		if (isset($items[$name])) {
+		if (isset($items[$name]))
+		{
 			unset($this->_types[$items[$name]['item']->type][$name]);
 			unset($this->_items[$name]);
 		}
-		foreach($this->_assignments as $userId=>$item) {
+		foreach($this->_assignments as $userId=>$item)
+		{
 			if (isset($this->_assignments[$userId][$name]))
 				unset($this->_assignments[$userId][$name]);
 		}
@@ -469,29 +494,36 @@ class SingleDbAuthManager extends CachedDbAuthManager
 	{
 		$items = $this->loadItems();
 		$users = $this->loadUsers();
-		if ($oldName === null || $item->getName()===$oldName) {
+		if ($oldName === null || $item->getName()===$oldName)
+		{
 			// name has not changed
 			$this->_items[$name]->type = $item->type;
 			$this->_items[$name]->description = $item->description;
 			$this->_items[$name]->bizRule = $item->bizRule;
 			$this->_items[$name]->data = $item->data;
-		} else {
+		}
+		else
+		{
 			// name has changed
 			$oldItem = $this->_items[$oldName];
 			// remove old user associations and type index
 			unset($this->_types[$oldItem['item']->type][$oldItem['item']->name]);
 			$oldUsers = array();
-			foreach($this->_assignments as $userId=>$userItem) {
-				if (isset($this->_assignments[$userId][$oldName])) {
+			foreach($this->_assignments as $userId=>$userItem)
+			{
+				if (isset($this->_assignments[$userId][$oldName]))
+				{
 					$oldUsers[$userId] = $userItem;
 					unset($this->_assignments[$userId][$oldName]);
 				}
 			}
 			// remove old item, including references in parents and children
-			foreach($oldItem['parents'] as $parentName => $parentItem) {
+			foreach($oldItem['parents'] as $parentName => $parentItem)
+			{
 				unset($this->_items[$parentName]['children'][$oldName]);
 			}
-			foreach($oldItem['children'] as $childName => $childItem) {
+			foreach($oldItem['children'] as $childName => $childItem)
+			{
 				unset($this->_items[$childName]['parents'][$oldName]);
 			}
 			unset($this->_items[$oldName]);
@@ -501,15 +533,18 @@ class SingleDbAuthManager extends CachedDbAuthManager
 				'children'=>$oldItem['children'],
 				'parents'=>$oldItem['parents'],
 			);
-			foreach($oldItem['parents'] as $parentName => $parentItem) {
+			foreach($oldItem['parents'] as $parentName => $parentItem)
+			{
 				$this->_items[$parentName]['children'][$item->name] = &$this->_items[$item->name];
 			}
-			foreach($oldItem['children'] as $childName => $childItem) {
+			foreach($oldItem['children'] as $childName => $childItem)
+			{
 				$this->_items[$childName]['parents'][$item->name] = &$this->_items[$item->name];
 			}
 			// add new user associations and type index
 			$this->_types[$item->type][$item->name] = &$this->_items[$item->name];
-			foreach($oldUsers as $oldUserId => $oldUserItem) {
+			foreach($oldUsers as $oldUserId => $oldUserItem)
+			{
 				$oldUserItem['assignment']->
 				$this->_assignments[$oldUserId][$item->name] = array(
 					'item' => &$this->_items[$item->name],
@@ -570,7 +605,8 @@ class SingleDbAuthManager extends CachedDbAuthManager
 	{
 		if($item['item']->name===$child['item']->name)
 			return true;
-		foreach($child['children'] as $grandchild) {
+		foreach($child['children'] as $grandchild)
+		{
 			if($this->detectLoopEx($item,$grandchild))
 				return true;
 		}
