@@ -35,7 +35,8 @@ class AuthFilter extends CFilter
 		if ($user->isGuest)
 			$user->loginRequired();
 
-		if (($module = $controller->getModule()) !== null){
+		if (($module = $controller->getModule()) !== null)
+		{
 			$itemName .= $module->getId() . '.';
 			if ($user->checkAccess($itemName . '*'))
 				return true;
