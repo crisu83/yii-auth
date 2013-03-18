@@ -29,17 +29,20 @@ class AuthFilter extends CFilter
 		$itemName = '';
 		$controller = $filterChain->controller;
 
-		if (($module = $controller->getModule()) !== null)
-			$itemName .= $module->getId() . '.';
-
-		$itemName .= $controller->getId();
-
 		/* @var $user CWebUser */
 		$user = Yii::app()->getUser();
 
 		if ($user->isGuest)
 			$user->loginRequired();
 
+		if (($module = $controller->getModule()) !== null)
+		{
+			$itemName .= $module->getId() . '.';
+			if ($user->checkAccess($itemName . '*'))
+				return true;
+		}
+
+		$itemName .= $controller->getId();
 		if ($user->checkAccess($itemName . '.*'))
 			return true;
 
