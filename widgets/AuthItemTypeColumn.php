@@ -40,9 +40,8 @@ class AuthItemTypeColumn extends AuthItemColumn
 		/* @var $controller AuthItemController */
 		$controller = $this->grid->getController();
 
-		$controller->widget('bootstrap.widgets.TbLabel', array(
-			'type' => $labelType,
-			'label' => $controller->getItemTypeText($data['item']->type),
+		echo TbHtml::labelTb($controller->getItemTypeText($data['item']->type),array(
+			'style'=>$labelType,
 		));
 	}
 }

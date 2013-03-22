@@ -52,15 +52,14 @@ $this->breadcrumbs = array(
             <h4><?php echo Yii::t('AuthModule.main', 'Assign permission'); ?></h4>
 
             <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-                'type' => 'inline',
+                'type' => TbHtml::FORM_INLINE,
             )); ?>
 
             <?php echo $form->dropDownListRow($formModel, 'items', $assignmentOptions, array('label' => false)); ?>
 
-            <?php $this->widget('bootstrap.widgets.TbButton', array(
-              'buttonType' => 'submit',
-              'label' => Yii::t('AuthModule.main', 'Assign'),
-            )); ?>
+			<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Assign'),array(
+				'style'=>TbHtml::STYLE_PRIMARY,
+			)); ?>
 
             <?php $this->endWidget(); ?>
 

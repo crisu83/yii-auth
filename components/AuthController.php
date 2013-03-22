@@ -14,10 +14,6 @@
 abstract class AuthController extends CController
 {
 	/**
-	 * @var string the default layout for the controller view.
-	 */
-	public $layout = 'main';
-	/**
 	 * @var array context menu items. This property will be assigned to {@link CMenu::items}.
 	 */
 	public $menu = array();
@@ -25,6 +21,16 @@ abstract class AuthController extends CController
 	 * @var array the breadcrumbs of the current page.
 	 */
 	public $breadcrumbs = array();
+
+	/**
+	 * Initializes the controller.
+	 */
+	public function init()
+	{
+		parent::init();
+		$this->layout = $this->module->defaultLayout;
+		$this->menu = $this->getSubMenu();
+	}
 
 	/**
 	 * Returns the authorization item type as a string.
@@ -100,5 +106,35 @@ abstract class AuthController extends CController
 		$encoding = Yii::app()->charset;
 		$firstChar = mb_strtoupper(mb_substr($string, 0, 1, $encoding), $encoding);
 		return $firstChar . mb_substr($string, 1, mb_strlen($string, $encoding) - 1, $encoding);
+	}
+
+	/**
+	 * Returns the sub menu configuration.
+	 * @return array the configuration.
+	 */
+	protected function getSubMenu()
+	{
+		return array(
+			array(
+				'label' => Yii::t('AuthModule.main', 'Assignments'),
+				'url' => array('/auth/assignment/index'),
+				'active' => $this instanceof AssignmentController,
+			),
+			array(
+				'label' => $this->capitalize($this->getItemTypeText(CAuthItem::TYPE_ROLE, true)),
+				'url' => array('/auth/role/index'),
+				'active' => $this instanceof RoleController,
+			),
+			array(
+				'label' => $this->capitalize($this->getItemTypeText(CAuthItem::TYPE_TASK, true)),
+				'url' => array('/auth/task/index'),
+				'active' => $this instanceof TaskController,
+			),
+			array(
+				'label' => $this->capitalize($this->getItemTypeText(CAuthItem::TYPE_OPERATION, true)),
+				'url' => array('/auth/operation/index'),
+				'active' => $this instanceof OperationController,
+			),
+		);
 	}
 }

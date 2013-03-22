@@ -15,11 +15,6 @@
 class AuthBehavior extends CBehavior
 {
 	/**
-	 * @var string[] a list of names for the users that should be treated as administrators.
-	 */
-	public $admins = array('admin');
-
-	/**
 	 * Returns whether the given item has a specific parent.
 	 * @param string $itemName name of the item.
 	 * @param string $parentName name of the parent.

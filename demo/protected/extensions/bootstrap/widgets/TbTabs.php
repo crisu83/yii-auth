@@ -7,7 +7,7 @@
  * @package bootstrap.widgets
  */
 
-Yii::import('bootstrap.widgets.TbMenu');
+Yii::import('bootstrap.widgets.TbNav');
 
 /**
  * Bootstrap JavaScript tabs widget.
@@ -24,9 +24,9 @@ class TbTabs extends CWidget
 	/**
 	 * @var string the type of tabs to display. Defaults to 'tabs'. Valid values are 'tabs' and 'pills'.
 	 * Please not that Javascript pills are not fully supported in Bootstrap yet!
-	 * @see TbMenu::$type
+	 * @see TbNav::$type
 	 */
-	public $type = TbMenu::TYPE_TABS;
+	public $type = TbNav::TYPE_TABS;
 	/**
 	 * @var string the placement of the tabs.
 	 * Valid values are 'above', 'below', 'left' and 'right'.
@@ -84,7 +84,7 @@ class TbTabs extends CWidget
 		$items = $this->normalizeTabs($this->tabs, $content);
 
 		ob_start();
-		$this->controller->widget('bootstrap.widgets.TbMenu', array(
+		$this->controller->widget('bootstrap.widgets.TbNav', array(
 			'type'=>$this->type,
 			'encodeLabel'=>$this->encodeLabel,
 			'items'=>$items,

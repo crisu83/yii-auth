@@ -15,12 +15,17 @@
 class AuthWebUser extends CWebUser
 {
 	/**
+	 * @var string[] a list of names for the users that should be treated as administrators.
+	 */
+	public $admins = array('admin');
+
+	/**
 	 * Initializes the component.
 	 */
 	public function init()
 	{
 		parent::init();
-		$this->setIsAdmin(in_array($this->name, Yii::app()->authManager->admins));
+		$this->setIsAdmin(in_array($this->name, $this->admins));
 	}
 
 	/**

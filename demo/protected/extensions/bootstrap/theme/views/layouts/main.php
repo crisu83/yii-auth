@@ -17,7 +17,7 @@
 <?php $this->widget('bootstrap.widgets.TbNavbar',array(
     'items'=>array(
         array(
-            'class'=>'bootstrap.widgets.TbMenu',
+            'class'=>'bootstrap.widgets.TbNav',
             'items'=>array(
                 array('label'=>'Home', 'url'=>array('/site/index')),
                 array('label'=>'About', 'url'=>array('/site/page', 'view'=>'about')),

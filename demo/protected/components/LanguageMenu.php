@@ -1,8 +1,8 @@
 <?php
 
-Yii::import('bootstrap.widgets.TbMenu');
+Yii::import('bootstrap.widgets.TbNav');
 
-class LanguageMenu extends TbMenu
+class LanguageMenu extends TbNav
 {
 	/**
 	 * Initializes the widget.

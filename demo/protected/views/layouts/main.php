@@ -19,7 +19,7 @@
 	'type'=>'inverse',
 	'items'=>array(
 		array(
-			'class'=>'bootstrap.widgets.TbMenu',
+			'class'=>'bootstrap.widgets.TbNav',
 			'items'=>array(
 				array('label'=>'Download', 'url'=>'http://www.yiiframework.com/extension/auth/'),
 				array('label'=>'Fork on GitHub', 'url'=>'https://github.com/Crisu83/yii-auth/'),

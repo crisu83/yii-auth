@@ -20,22 +20,19 @@ $this->breadcrumbs = array(
 		<small><?php echo $this->getTypeText(); ?></small>
 	</h1>
 
-	<?php $this->widget('bootstrap.widgets.TbButtonGroup', array(
-		'htmlOptions'=>array('class'=>'pull-right'),
-		'buttons'=>array(
-			array(
-				'label'=>Yii::t('AuthModule.main', 'Edit'),
-				'url'=>array('update', 'name'=>$item->name),
-			),
-			array(
-				'icon'=>'trash',
-				'url'=>array('delete', 'name'=>$item->name),
-				'htmlOptions'=>array(
-					'confirm'=>Yii::t('AuthModule.main', 'Are you sure you want to delete this item?'),
-				),
+	<?php echo TbHtml::buttonGroup(array(
+		array(
+			'label'=>Yii::t('AuthModule.main', 'Edit'),
+			'url'=>array('update', 'name'=>$item->name),
+		),
+		array(
+			'icon'=>'trash',
+			'url'=>array('delete', 'name'=>$item->name),
+			'htmlOptions'=>array(
+				'confirm'=>Yii::t('AuthModule.main', 'Are you sure you want to delete this item?'),
 			),
 		),
-	)); ?>
+	),array('class'=>'pull-right')); ?>
 
 </div>
 
@@ -140,14 +137,13 @@ $this->breadcrumbs = array(
 			<h4><?php echo Yii::t('AuthModule.main', 'Add child'); ?></h4>
 
 			<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-				'type'=>'inline',
+				'type'=>TbHtml::FORM_INLINE,
 			)); ?>
 
 			<?php echo $form->dropDownListRow($formModel, 'items', $childOptions, array('label'=>false)); ?>
 
-			<?php $this->widget('bootstrap.widgets.TbButton', array(
-				'buttonType'=>'submit',
-				'label'=>Yii::t('AuthModule.main', 'Add'),
+			<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Add'),array(
+				'style'=>TbHtml::STYLE_PRIMARY,
 			)); ?>
 
 			<?php $this->endWidget(); ?>

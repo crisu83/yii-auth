@@ -35,22 +35,22 @@ class AuthItemRemoveColumn extends AuthItemColumn
 
 		if ($am->hasParent($this->itemName, $data['name']))
 		{
-			$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
-				'type' => 'link',
-				'size' => 'mini',
-				'icon' => 'remove',
+			echo TbHtml::linkButton(TbHtml::icon('remove'),array(
+				'style' => TbHtml::STYLE_LINK,
+				'size' => TbHtml::SIZE_MINI,
 				'url' => array('removeParent', 'itemName' => $this->itemName, 'parentName' => $data['name']),
-				'htmlOptions' => array('rel' => 'tooltip', 'title' => Yii::t('AuthModule.main', 'Remove')),
+				'rel' => 'tooltip',
+				'title' => Yii::t('AuthModule.main', 'Remove'),
 			));
 		}
 		else if ($am->hasChild($this->itemName, $data['name']))
 		{
-			$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
-				'type' => 'link',
-				'size' => 'mini',
-				'icon' => 'remove',
+			echo TbHtml::linkButton(TbHtml::icon('remove'),array(
+				'style' => TbHtml::STYLE_LINK,
+				'size' => TbHtml::SIZE_MINI,
 				'url' => array('removeChild', 'itemName' => $this->itemName, 'childName' => $data['name']),
-				'htmlOptions' => array('rel' => 'tooltip', 'title' => Yii::t('AuthModule.main', 'Remove')),
+				'rel' => 'tooltip',
+				'title' => Yii::t('AuthModule.main', 'Remove'),
 			));
 		}
 	}

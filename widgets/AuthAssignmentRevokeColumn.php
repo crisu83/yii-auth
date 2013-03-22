@@ -32,12 +32,12 @@ class AuthAssignmentRevokeColumn extends AuthAssignmentColumn
 	{
 		if ($this->userId !== null)
 		{
-			$this->grid->controller->widget('bootstrap.widgets.TbButton', array(
-				'type' => 'link',
-				'size' => 'mini',
-				'icon' => 'remove',
+			echo TbHtml::linkButton(TbHtml::icon('remove'),array(
+				'style' => TbHtml::STYLE_LINK,
+				'size' => TbHtml::SIZE_MINI,
 				'url' => array('revoke', 'itemName' => $data['name'], 'userId' => $this->userId),
-				'htmlOptions' => array('rel' => 'tooltip', 'title' => Yii::t('AuthModule.main', 'Revoke')),
+				'rel' => 'tooltip',
+				'title' => Yii::t('AuthModule.main', 'Revoke'),
 			));
 		}
 	}

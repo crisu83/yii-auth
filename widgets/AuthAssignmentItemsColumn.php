@@ -33,20 +33,15 @@ class AuthAssignmentItemsColumn extends AuthAssignmentColumn
 		/* @var $am CAuthManager|AuthBehavior */
 		$am = Yii::app()->getAuthManager();
 
-		if (in_array($data->{$this->nameColumn}, $am->admins))
-			echo Yii::t('AuthModule.main', 'Administrator');
-		else
-		{
-			/* @var $controller AssignmentController */
-			$controller = $this->grid->getController();
+		/* @var $controller AssignmentController */
+		$controller = $this->grid->getController();
 
-			$assignments = $am->getAuthAssignments($data->{$this->idColumn});
-			$permissions = $am->getItemsPermissions(array_keys($assignments));
-			foreach ($permissions as $itemPermission)
-			{
-				echo $itemPermission['item']->description;
-				echo ' <small>' . $controller->getItemTypeText($itemPermission['item']->type, false) . '</small><br />';
-			}
+		$assignments = $am->getAuthAssignments($data->{$this->idColumn});
+		$permissions = $am->getItemsPermissions(array_keys($assignments));
+		foreach ($permissions as $itemPermission)
+		{
+			echo $itemPermission['item']->description;
+			echo ' <small>' . $controller->getItemTypeText($itemPermission['item']->type, false) . '</small><br />';
 		}
 	}
 }
