@@ -37,12 +37,12 @@ return array(
       'behaviors' => array(
         'auth' => array(
           'class' => 'auth.components.AuthBehavior',
-          'admins' => array('admin', 'foo', 'bar'), // users with full access
         ),
       ),
     ),
     'user' => array(
       'class' => 'auth.components.AuthWebUser',
+      'admins' => array('admin', 'foo', 'bar'), // users with full access
     ),
   ),
 );
@@ -96,7 +96,7 @@ For more information on Yii's authorization manager refer to the framework docum
 
 You can also use a filter to automatically check access before controller actions are called.
 Operations used with this filter has to be named as follows ***(moduleId.)controllerId.actionId***, where ***moduleId*** is optional. 
-You can also use a wildcard ***controllerId.**** instead of the actionId to cover all actions in the controller. 
+You can also use a wildcard ***controllerId.**** instead of the actionId to cover all actions in the controller or ***module.**** instead of the controllerId to cover all controllers in the module. 
 
 ```php
 public function filters()
