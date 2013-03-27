@@ -45,7 +45,7 @@ return array (
   'No {type} found.' => '{type} nicht gefunden.',
   'Page not found.' => 'Seite nicht gefunden.',
   'Permissions' => 'Berechtigungen',
-  'Permissions granted by this item' => 'Durch diesen Element gewährte Berechtigungen',
+  'Permissions granted by this item' => 'Durch dieses Element gewährte Berechtigungen',
   'Permissions that inherit this item' => 'Berechtigungen, die diesen Element erben',
   'Remove' => 'Entfernen',
   'Revoke' => 'Zurückziehen',
