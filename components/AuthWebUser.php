@@ -59,8 +59,9 @@ class AuthWebUser extends CWebUser
 		if ($this->getIsAdmin())
 			return true;
 
-		// Wildcard Check
-		if (parent::checkAccess(preg_replace('/'.preg_quote(end(explode(".", $operation)), '/').'$/', '*', $operation), $params, $allowCaching))
+		// Wildcard 
+		$operation_arr = explode(".", $operation);
+		if (parent::checkAccess(preg_replace('/'.preg_quote(end($operation_arr), '/').'$/', '*', $operation), $params, $allowCaching))
 			return true;
 
 		return parent::checkAccess($operation, $params, $allowCaching);
