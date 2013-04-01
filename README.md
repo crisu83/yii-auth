@@ -61,7 +61,7 @@ Configure the module to suit your needs. Here's a list of the available configur
   'userClass' => 'User', // the name of the user model class.
   'userIdColumn' => 'id', // the name of the user id column.
   'userNameColumn' => 'name', // the name of the user name column.
-  'appLayout' => 'application.views.layouts.main', // the layout used by the module.
+  'defaultLayout' => 'application.views.layouts.main', // the layout used by the module.
   'viewDir' => null, // the path to view files to use with this module.
 ),
 ```
