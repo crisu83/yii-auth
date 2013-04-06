@@ -497,10 +497,10 @@ class SingleDbAuthManager extends CachedDbAuthManager
 		if ($oldName === null || $item->getName()===$oldName)
 		{
 			// name has not changed
-			$this->_items[$name]->type = $item->type;
-			$this->_items[$name]->description = $item->description;
-			$this->_items[$name]->bizRule = $item->bizRule;
-			$this->_items[$name]->data = $item->data;
+			$this->_items[$item->name]->type = $item->type;
+			$this->_items[$item->name]->description = $item->description;
+			$this->_items[$item->name]->bizRule = $item->bizRule;
+			$this->_items[$item->name]->data = $item->data;
 		}
 		else
 		{
