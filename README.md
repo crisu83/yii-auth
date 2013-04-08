@@ -114,6 +114,6 @@ For more information on how filters work refer to the framework documentation on
 Do you wish to provide a translation for Auth? If so, please do a pull request for it. 
 Translations should be placed in the messages folder under a folder named according to its locale (e.g. en_us).
 
-### Internationalization
+### Note
 
 Note: Version 1.0.6-wip use and require yiistrap!! yiistrap is next generation yii-bootsrap
