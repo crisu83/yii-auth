@@ -50,6 +50,6 @@ class AuthFilter extends CFilter
 		if ($user->isGuest)
 			$user->loginRequired();
 
-		throw new CHttpException(401, 'Access denied.');
+		throw new CHttpException(401, Yii::t('yii', 'You are not authorized to perform this action.'));
 	}
 }
