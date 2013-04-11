@@ -61,7 +61,7 @@ Configure the module to suit your needs. Here's a list of the available configur
   'userClass' => 'User', // the name of the user model class.
   'userIdColumn' => 'id', // the name of the user id column.
   'userNameColumn' => 'name', // the name of the user name column.
-  'appLayout' => 'application.views.layouts.main', // the layout used by the module.
+  'defaultLayout' => 'application.views.layouts.main', // the layout used by the module.
   'viewDir' => null, // the path to view files to use with this module.
 ),
 ```
@@ -113,3 +113,7 @@ For more information on how filters work refer to the framework documentation on
 
 Do you wish to provide a translation for Auth? If so, please do a pull request for it. 
 Translations should be placed in the messages folder under a folder named according to its locale (e.g. en_us).
+
+### Note
+
+Note: Version 1.0.6-wip use and require yiistrap!! yiistrap is next generation yii-bootsrap
