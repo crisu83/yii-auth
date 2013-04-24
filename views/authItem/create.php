@@ -20,7 +20,7 @@ $this->breadcrumbs = array(
 <div class="form-actions">
 	<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Create'),array(
 		'style'=>TbHtml::STYLE_PRIMARY,
-	)); ?>`
+	)); ?>
 	<?php echo TbHtml::linkButton(Yii::t('AuthModule.main', 'Cancel'),array(
 		'style'=>TbHtml::STYLE_LINK,
 		'url' => array('index'),
