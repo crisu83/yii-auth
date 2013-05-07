@@ -14,6 +14,9 @@
  */
 class AuthBehavior extends CBehavior
 {
+
+	public $admins;
+
 	/**
 	 * Returns whether the given item has a specific parent.
 	 * @param string $itemName name of the item.
