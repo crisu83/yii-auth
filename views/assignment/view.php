@@ -26,7 +26,7 @@ $this->breadcrumbs = array(
         </h3>
 
         <?php $this->widget('bootstrap.widgets.TbGridView', array(
-              'type' => 'striped condensed hover',
+              'style' => 'striped condensed hover',
               'dataProvider' => $authItemDp,
               'emptyText' => Yii::t('AuthModule.main', 'This user does not have any assignments.'),
               'hideHeader' => true,

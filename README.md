@@ -5,7 +5,7 @@ Auth is a module for the [Yii PHP framework](http://www.yiiframework.com) that p
 You can read more about Yii's authorization manager in the framework documentation under [Authentication and Authorization](http://www.yiiframework.com/doc/guide/1.1/en/topics.auth#role-based-access-control).
 
 Auth was developed to provide a modern and responsive user interface for managing user permissions in Yii projects.
-To achieve its goals it was built using my popular [Twitter Bootstrap extension](http://www.yiiframework.com/extension/bootstrap).
+To achieve its goals it was built using my popular [Twitter extension](http://www.getyiistrap.com/).
 
 Auth is written according to Yii's conventions and it follows the [separation of concerns](http://en.wikipedia.org/wiki/Separation_of_concerns) priciple and therefore it doesn't require you to extend from its classes.
 Instead it provides additional functionality for the authorization manager through a single behavior.
@@ -16,7 +16,7 @@ You can try out the live demo [here](http://www.cniska.net/yii-auth/).
 
 ### Requirements
 
-* [Twitter Bootstrap extension for Yii](http://www.yiiframework.com/extension/bootstrap) version 2.0.0 or above
+* [yiistrap](http://www.getyiistrap.com/) version 0.0.0 or above
 
 ## Usage
 
