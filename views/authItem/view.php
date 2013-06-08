@@ -72,7 +72,7 @@ $this->breadcrumbs = array(
 		</h3>
 
 		<?php $this->widget('bootstrap.widgets.TbGridView', array(
-			'type' => 'striped condensed hover',
+			'style' => 'striped condensed hover',
 			'dataProvider'=>$ancestorDp,
 			'emptyText'=>Yii::t('AuthModule.main', 'This item does not have any ancestors.'),
 			'template'=>"{items}",
@@ -103,7 +103,7 @@ $this->breadcrumbs = array(
 		</h3>
 
 		<?php $this->widget('bootstrap.widgets.TbGridView', array(
-			'type' => 'striped condensed hover',
+			'style' => 'striped condensed hover',
 			'dataProvider'=>$descendantDp,
 			'emptyText'=>Yii::t('AuthModule.main', 'This item does not have any descendants.'),
 			'hideHeader'=>true,
