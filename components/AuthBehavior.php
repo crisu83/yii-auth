@@ -15,6 +15,11 @@
 class AuthBehavior extends CBehavior
 {
 	/**
+	 * @var array cached relations between the auth items.
+	 */
+	private $_itemsGraph = array();
+
+	/**
 	 * Returns whether the given item has a specific parent.
 	 * @param string $itemName name of the item.
 	 * @param string $parentName name of the parent.
@@ -22,8 +27,11 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasParent($itemName, $parentName)
 	{
-		$permissions = $this->getItemPermissions($parentName);
-		return isset($permissions[$itemName]);
+		if(isset($this->_itemsGraph[$itemName]['parents'])
+			&& in_array($parentName,$this->_itemsGraph[$itemName]['parents'])) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -34,8 +42,11 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasChild($itemName, $childName)
 	{
-		$permissions = $this->getItemPermissions($itemName);
-		return isset($permissions[$childName]);
+		if(isset($this->_itemsGraph[$itemName]['children'])
+			&& in_array($childName,$this->_itemsGraph[$itemName]['children'])) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -63,38 +74,93 @@ class AuthBehavior extends CBehavior
 	}
 
 	/**
-	 * Returns all ancestors for the given item recursively.
+	 * Returns flat array of all ancestors.
 	 * @param string $itemName name of the item.
-	 * @param array|null $permissions permissions to process.
 	 * @return array the ancestors.
 	 */
-	public function getAncestors($itemName, $permissions = null)
+	public function getAncestors($itemName)
+	{
+		$ancestors = $this->getAncestor($itemName);
+		return $this->flattenPermissions($ancestors);
+	}
+
+	/**
+	 * Returns all ancestors for the given item recursively.
+	 * @param string $itemName name of the item.
+	 * @param integer $depth current depth.
+	 * @return array the ancestors.
+	 */
+	public function getAncestor($itemName, $depth = 0)
 	{
 		$ancestors = array();
+		if(!isset($this->_itemsGraph[$itemName]['parents'])){
+			$this->_itemsGraph[$itemName]['parents'] = array();
 
-		if ($permissions === null)
-			$permissions = $this->getPermissions();
-
-		foreach ($permissions as $childName => $child)
-		{
-			if ($this->hasDescendant($childName, $itemName))
-				$ancestors[$childName] = $child;
-
-			$ancestors = array_merge($ancestors, $this->getAncestors($itemName, $child['children']));
+			$rows = $this->owner->db->createCommand()
+				->select()
+				->from($this->owner->itemChildTable)
+				->where('child=:child', array(':child'=>$itemName))
+				->queryAll();
+			foreach($rows as $row){
+				$this->_itemsGraph[$itemName]['parents'][] = $row['parent'];
+			}
 		}
 
+		foreach($this->_itemsGraph[$itemName]['parents'] as $parent){
+
+			$ancestors[] = array(
+				'name' => $parent,
+				'item' => $this->owner->getAuthItem($parent),
+				'parents' => $this->getAncestor($parent, $depth + 1),
+				'depth' => $depth
+			);
+		}
 		return $ancestors;
 	}
 
 	/**
-	 * Returns all the descendants for the given item recursively.
+	 * Returns flat array of all the descendants.
 	 * @param string $itemName name of the item.
 	 * @return array the descendants.
 	 */
 	public function getDescendants($itemName)
 	{
-		$itemPermissions = $this->getItemPermissions($itemName);
-		return $this->flattenPermissions($itemPermissions);
+		$descendants = $this->getDescendant($itemName);
+		return $this->flattenPermissions($descendants);
+	}
+
+	/**
+	 * Returns all the descendants for the given item recursively.
+	 * @param string $itemName name of the item.
+	 * @param integer $depth current depth.
+	 * @return array the descendants.
+	 */
+	public function getDescendant($itemName, $depth = 0)
+	{
+		$descendants = array();
+		if(!isset($this->_itemsGraph[$itemName]['children'])){
+			$this->_itemsGraph[$itemName]['children'] = array();
+
+			$rows = $this->owner->db->createCommand()
+				->select()
+				->from($this->owner->itemChildTable)
+				->where('parent=:parent', array(':parent'=>$itemName))
+				->queryAll();
+			foreach($rows as $row){
+				$this->_itemsGraph[$itemName]['children'][] = $row['child'];
+			}
+		}
+
+		foreach($this->_itemsGraph[$itemName]['children'] as $child){
+
+			$descendants[$child] = array(
+				'name' => $child,
+				'item' => $this->owner->getAuthItem($child),
+				'children' => $this->getDescendant($child, $depth + 1),
+				'depth' => $depth,
+			);
+		}
+		return $descendants;
 	}
 
 	/**
@@ -115,7 +181,7 @@ class AuthBehavior extends CBehavior
 			$permissions[$itemName] = array(
 				'name' => $itemName,
 				'item' => $item,
-				'children' => $this->getPermissions($item->getChildren(), $depth + 1),
+				'children' => $this->getPermissions($item, $depth + 1),
 				'depth' => $depth,
 			);
 		}
@@ -165,12 +231,20 @@ class AuthBehavior extends CBehavior
 		$flattened = array();
 		foreach ($permissions as $itemName => $itemPermissions)
 		{
-			$children = $itemPermissions['children'];
-			unset($itemPermissions['children']); // not needed in a flat tree
 			$flattened[$itemName] = $itemPermissions;
-			$flattened = array_merge($flattened, $this->flattenPermissions($children));
-		}
 
+			if(isset($itemPermissions['children'])) {
+				$children = $itemPermissions['children'];
+				unset($itemPermissions['children']); // not needed in a flat tree
+				$flattened = array_merge($flattened, $this->flattenPermissions($children));
+			}
+
+			if(isset($itemPermissions['parents'])) {
+				$parents = $itemPermissions['parents'];
+				unset($itemPermissions['parents']);
+				$flattened = array_merge($flattened, $this->flattenPermissions($parents));
+			}
+		}
 		return $flattened;
 	}
 }
