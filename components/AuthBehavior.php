@@ -20,7 +20,9 @@ class AuthBehavior extends CBehavior
 	private $_items = array();
 
 	/**
-	 * @return array of all items with their parents and children
+	 * Return thee parents and children of specific item or all items
+	 * @param string $itemName name of the item.
+	 * @return array
 	 */
 	public function getItems($itemName=null)
 	{
@@ -32,8 +34,8 @@ class AuthBehavior extends CBehavior
 
 	/**
 	 * Sets the parents of specific item
-	 *
-	 * @return array
+	 * @param string $itemName name of the item.
+	 * @param array $parents
 	 */
 	public function setItemParents($itemName, $parents)
 	{
@@ -42,8 +44,8 @@ class AuthBehavior extends CBehavior
 
 	/**
 	 * Sets the children of specific item
-	 *
-	 * @return array
+	 * @param string $itemName name of the item.
+	 * @param array $children
 	 */
 	public function setItemChildren($itemName, $children)
 	{
@@ -52,7 +54,7 @@ class AuthBehavior extends CBehavior
 
 	/**
 	 * Gets the parents of specific item if exists
-	 *
+	 * @param string $itemName name of the item.
 	 * @return array
 	 */
 	public function getParents($itemName)
@@ -66,7 +68,7 @@ class AuthBehavior extends CBehavior
 
 	/**
 	 * Gets the children of specific item if exists
-	 *
+	 * @param string $itemName name of the item.
 	 * @return array
 	 */
 	public function getChildren($itemName)
