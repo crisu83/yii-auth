@@ -17,7 +17,66 @@ class AuthBehavior extends CBehavior
 	/**
 	 * @var array cached relations between the auth items.
 	 */
-	private $_itemsGraph = array();
+	private $_items = array();
+
+	/**
+	 * @return array of all items with their parents and children
+	 */
+	public function getItems($itemName=null)
+	{
+		if($itemName && isset($this->_items[$itemName]))
+			return $this->_items[$itemName];
+
+		return $this->_items;
+	}
+
+	/**
+	 * Sets the parents of specific item
+	 *
+	 * @return array
+	 */
+	public function setItemParents($itemName, $parents)
+	{
+		$this->_items[$itemName]['parents'] = $parents;
+	}
+
+	/**
+	 * Sets the children of specific item
+	 *
+	 * @return array
+	 */
+	public function setItemChildren($itemName, $children)
+	{
+		$this->_items[$itemName]['children'] = $children;
+	}
+
+	/**
+	 * Gets the parents of specific item if exists
+	 *
+	 * @return array
+	 */
+	public function getParents($itemName)
+	{
+		$items = $this->getItems($itemName);
+		if(isset($items['parents']))
+			return $items['parents'];
+
+		return array();
+	}
+
+	/**
+	 * Gets the children of specific item if exists
+	 *
+	 * @return array
+	 */
+	public function getChildren($itemName)
+	{
+		$items = $this->getItems($itemName);
+		if(isset($items['children']))
+			return $items['children'];
+
+		return array();
+	}
 
 	/**
 	 * Returns whether the given item has a specific parent.
@@ -27,8 +86,8 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasParent($itemName, $parentName)
 	{
-		if(isset($this->_itemsGraph[$itemName]['parents'])
-			&& in_array($parentName,$this->_itemsGraph[$itemName]['parents'])) {
+		$parents = $this->getParents($itemName);
+		if(in_array($parentName, $parents)) {
 			return true;
 		}
 		return false;
@@ -42,8 +101,8 @@ class AuthBehavior extends CBehavior
 	 */
 	public function hasChild($itemName, $childName)
 	{
-		if(isset($this->_itemsGraph[$itemName]['children'])
-			&& in_array($childName,$this->_itemsGraph[$itemName]['children'])) {
+		$children = $this->getChildren($itemName);
+		if(in_array($childName, $children)) {
 			return true;
 		}
 		return false;
@@ -93,21 +152,17 @@ class AuthBehavior extends CBehavior
 	public function getAncestor($itemName, $depth = 0)
 	{
 		$ancestors = array();
-		if(!isset($this->_itemsGraph[$itemName]['parents'])){
-			$this->_itemsGraph[$itemName]['parents'] = array();
-
-			$rows = $this->owner->db->createCommand()
-				->select()
+		$parents = $this->getParents($itemName);
+		if(empty($parents)){
+			$parents = $this->owner->db->createCommand()
+				->select('parent')
 				->from($this->owner->itemChildTable)
 				->where('child=:child', array(':child'=>$itemName))
-				->queryAll();
-			foreach($rows as $row){
-				$this->_itemsGraph[$itemName]['parents'][] = $row['parent'];
-			}
+				->queryColumn();
+			$this->setItemParents($itemName, $parents);
 		}
 
-		foreach($this->_itemsGraph[$itemName]['parents'] as $parent){
-
+		foreach($parents as $parent){
 			$ancestors[] = array(
 				'name' => $parent,
 				'item' => $this->owner->getAuthItem($parent),
@@ -138,21 +193,17 @@ class AuthBehavior extends CBehavior
 	public function getDescendant($itemName, $depth = 0)
 	{
 		$descendants = array();
-		if(!isset($this->_itemsGraph[$itemName]['children'])){
-			$this->_itemsGraph[$itemName]['children'] = array();
-
-			$rows = $this->owner->db->createCommand()
-				->select()
+		$children = $this->getChildren($itemName);
+		if(empty($children)){
+			$children = $this->owner->db->createCommand()
+				->select('child')
 				->from($this->owner->itemChildTable)
 				->where('parent=:parent', array(':parent'=>$itemName))
-				->queryAll();
-			foreach($rows as $row){
-				$this->_itemsGraph[$itemName]['children'][] = $row['child'];
-			}
+				->queryColumn();
+			$this->setItemChildren($itemName, $children);
 		}
 
-		foreach($this->_itemsGraph[$itemName]['children'] as $child){
-
+		foreach($children as $child){
 			$descendants[$child] = array(
 				'name' => $child,
 				'item' => $this->owner->getAuthItem($child),
