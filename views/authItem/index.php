@@ -15,7 +15,7 @@ $this->breadcrumbs = array(
 )); ?>
 
 <?php $this->widget('bootstrap.widgets.TbGridView', array(
-    'type' => 'striped hover',
+    'style' => 'striped hover',
     'dataProvider' => $dataProvider,
     'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', array('{type}'=>$this->getTypeText(true))),
 	'template'=>"{items}\n{pager}",

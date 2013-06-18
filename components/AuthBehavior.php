@@ -14,6 +14,9 @@
  */
 class AuthBehavior extends CBehavior
 {
+
+	public $admins;
+
 	/**
 	 * @var array cached relations between the auth items.
 	 */

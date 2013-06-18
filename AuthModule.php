@@ -37,7 +37,7 @@ class AuthModule extends CWebModule
 	 * @var string the application layout.
 	 * Change this if you wish to use a different layout with the module.
 	 */
-	public $defaultLayout = 'application.views.layouts.main';
+	public $appLayout = 'application.views.layouts.main';
 	/**
 	 * @var array map of flash message keys to use for the module.
 	 */

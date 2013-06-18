@@ -28,7 +28,7 @@ abstract class AuthController extends CController
 	public function init()
 	{
 		parent::init();
-		$this->layout = $this->module->defaultLayout;
+		$this->layout = 'main';
 		$this->menu = $this->getSubMenu();
 	}
 
