@@ -17,10 +17,13 @@ class AssignmentController extends AuthController
 	 */
 	public function actionIndex()
 	{
-		$dataProvider = new CActiveDataProvider($this->module->userClass);
+		$model = new $this->module->userClass('search');
+		$model->unsetAttributes();  // clear any default values
+		if(isset($_GET[$this->module->userClass]))
+			$model->attributes=$_GET[$this->module->userClass];
 
 		$this->render('index', array(
-			'dataProvider' => $dataProvider
+			'model' => $model
 		));
 	}
 
