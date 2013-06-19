@@ -20,7 +20,7 @@ class AuthBehavior extends CBehavior
 	private $_items = array();
 
 	/**
-	 * Return thee parents and children of specific item or all items
+	 * Return the parents and children of specific item or all items
 	 * @param string $itemName name of the item.
 	 * @return array
 	 */

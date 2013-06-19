@@ -36,11 +36,14 @@ $this->breadcrumbs = array(
 
 </div>
 
-<?php $this->widget('bootstrap.widgets.TbDetailView', array(
-    'data' => $item,
-    'attributes' => array(
-        array(
-            'name' => 'name',
+<?php $this->widget('zii.widgets.CDetailView', array(
+	'htmlOptions' => array(
+		'class' => 'table table-striped table-condensed',
+	),
+	'data' => $item,
+	'attributes' => array(
+		array(
+			'name' => 'name',
 			'label' => Yii::t('AuthModule.main', 'System name'),
 		),
 		array(
@@ -48,7 +51,7 @@ $this->breadcrumbs = array(
 			'label' => Yii::t('AuthModule.main', 'Description'),
 		),
 		/*
-        array(
+		array(
 			'name' => 'bizrule',
 			'label' => Yii::t('AuthModule.main', 'Business rule'),
 		),
@@ -57,7 +60,7 @@ $this->breadcrumbs = array(
 			'label' => Yii::t('AuthModule.main', 'Data'),
 		),
 		*/
-    ),
+	),
 )); ?>
 
 <hr />
@@ -137,13 +140,13 @@ $this->breadcrumbs = array(
 			<h4><?php echo Yii::t('AuthModule.main', 'Add child'); ?></h4>
 
 			<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-				'type'=>TbHtml::FORM_INLINE,
+				'layout'=>TbHtml::FORM_LAYOUT_INLINE,
 			)); ?>
 
-			<?php echo $form->dropDownListRow($formModel, 'items', $childOptions, array('label'=>false)); ?>
+			<?php echo $form->dropDownListControlGroup($formModel, 'items', $childOptions, array('label'=>false)); ?>
 
 			<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Add'),array(
-				'style'=>TbHtml::STYLE_PRIMARY,
+				'color'=>TbHtml::BUTTON_COLOR_PRIMARY,
 			)); ?>
 
 			<?php $this->endWidget(); ?>

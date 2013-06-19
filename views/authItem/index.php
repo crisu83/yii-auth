@@ -10,16 +10,16 @@ $this->breadcrumbs = array(
 <h1><?php echo $this->capitalize($this->getTypeText(true)); ?></h1>
 
 <?php echo TbHtml::linkButton(Yii::t('AuthModule.main', 'Add {type}', array('{type}' => $this->getTypeText())),array(
-	'style'=>TbHtml::STYLE_PRIMARY,
+	'color'=>TbHtml::BUTTON_COLOR_PRIMARY,
 	'url' => array('create'),
 )); ?>
 
 <?php $this->widget('bootstrap.widgets.TbGridView', array(
-    'type' => 'striped hover',
-    'dataProvider' => $dataProvider,
-    'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', array('{type}'=>$this->getTypeText(true))),
+	'type' => 'striped hover',
+	'dataProvider' => $dataProvider,
+	'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', array('{type}'=>$this->getTypeText(true))),
 	'template'=>"{items}\n{pager}",
-    'columns' => array(
+	'columns' => array(
 		array(
 			'name' => 'name',
 			'type'=>'raw',
@@ -42,5 +42,5 @@ $this->breadcrumbs = array(
 			'deleteButtonUrl' => "Yii::app()->controller->createUrl('delete', array('name'=>\$data->name))",
 			'deleteConfirmation' => Yii::t('AuthModule.main', 'Are you sure you want to delete this item?'),
 		),
-    ),
+	),
 )); ?>

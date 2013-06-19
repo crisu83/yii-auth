@@ -34,14 +34,14 @@ class AuthItemTypeColumn extends AuthItemColumn
 		$am = Yii::app()->getAuthManager();
 
 		$labelType = $this->active || $am->hasParent($this->itemName, $data['name']) || $am->hasChild($this->itemName, $data['name'])
-			? 'info'
-			: '';
+			? TbHtml::LABEL_COLOR_INFO
+			: TbHtml::LABEL_COLOR_DEFAULT;
 
 		/* @var $controller AuthItemController */
 		$controller = $this->grid->getController();
 
 		echo TbHtml::labelTb($controller->getItemTypeText($data['item']->type),array(
-			'style'=>$labelType,
+			'color'=>$labelType,
 		));
 	}
 }

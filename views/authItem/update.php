@@ -19,18 +19,18 @@ $this->breadcrumbs = array(
 <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm'); ?>
 
 <?php echo $form->hiddenField($model, 'type'); ?>
-<?php echo $form->textFieldRow($model, 'name', array(
+<?php echo $form->textFieldControlGroup($model, 'name', array(
 	'disabled'=>true,
 	'title'=>Yii::t('AuthModule.main', 'System name cannot be changed after creation.'),
 )); ?>
-<?php echo $form->textFieldRow($model, 'description'); ?>
+<?php echo $form->textFieldControlGroup($model, 'description'); ?>
 
 <div class="form-actions">
 	<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Save'),array(
-		'style'=>TbHtml::STYLE_PRIMARY,
+		'color'=>TbHtml::BUTTON_COLOR_PRIMARY,
 	)); ?>`
 	<?php echo TbHtml::linkButton(Yii::t('AuthModule.main', 'Cancel'),array(
-		'style'=>TbHtml::STYLE_LINK,
+		'color'=>TbHtml::BUTTON_COLOR_LINK,
 		'url' => array('view', 'name' => $item->name),
 	)); ?>
 </div>
