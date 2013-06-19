@@ -33,11 +33,11 @@ class AuthAssignmentNameColumn extends AuthAssignmentColumn
 		echo CHtml::link(CHtml::value($data, $this->nameColumn), array('view', 'id'=>$data->{$this->idColumn}));
 	}
 
-        /**
-         * Renders the filter cell content.
-         */
-        protected function renderFilterCellContent()
-        {
-                echo CHtml::activeTextField($this->grid->filter, $this->getNameColumn(), array('id'=>false));
-        }
+	/**
+	 * Renders the filter cell content.
+	 */
+	protected function renderFilterCellContent()
+	{
+		echo CHtml::activeTextField($this->grid->filter, $this->getNameColumn(), array('id'=>false));
+	}
 }
