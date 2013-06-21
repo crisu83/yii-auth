@@ -12,8 +12,8 @@ $this->breadcrumbs = array(
 <?php $this->widget('bootstrap.widgets.TbGridView', array(
     'type' => 'striped hover',
     'dataProvider' => $dataProvider,
-	'emptyText' => Yii::t('AuthModule.main', 'No assignments found.'),
-	'template'=>"{items}\n{pager}",
+    'emptyText' => Yii::t('AuthModule.main', 'No assignments found.'),
+    'template'=>"{items}\n{pager}",
     'columns' => array(
         array(
             'header' => Yii::t('AuthModule.main', 'User'),
@@ -24,6 +24,7 @@ $this->breadcrumbs = array(
             'class' => 'AuthAssignmentItemsColumn',
         ),
         array(
+            'header' => Yii::t('AuthModule.main', 'View'),
             'class' => 'AuthAssignmentViewColumn',
         ),
     ),

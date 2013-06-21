@@ -26,25 +26,25 @@ $this->breadcrumbs = array(
         </h3>
 
         <?php $this->widget('bootstrap.widgets.TbGridView', array(
-              'type' => 'striped condensed hover',
-              'dataProvider' => $authItemDp,
-              'emptyText' => Yii::t('AuthModule.main', 'This user does not have any assignments.'),
-              'hideHeader' => true,
-              'template' => "{items}",
-              'columns' => array(
-                  array(
-                      'class' => 'AuthItemDescriptionColumn',
-                      'active' => true,
-                  ),
-                  array(
-                      'class' => 'AuthItemTypeColumn',
-                      'active' => true,
-                  ),
-                  array(
-                      'class' => 'AuthAssignmentRevokeColumn',
-                      'userId' => $model->{$this->module->userIdColumn},
-                  ),
-              ),
+            'type' => 'striped condensed hover',
+            'dataProvider' => $authItemDp,
+            'emptyText' => Yii::t('AuthModule.main', 'This user does not have any assignments.'),
+            'hideHeader' => true,
+            'template' => "{items}",
+            'columns' => array(
+                array(
+                    'class' => 'AuthItemDescriptionColumn',
+                    'active' => true,
+                ),
+                array(
+                    'class' => 'AuthItemTypeColumn',
+                    'active' => true,
+                ),
+                array(
+                    'class' => 'AuthAssignmentRevokeColumn',
+                    'userId' => $model->{$this->module->userIdColumn},
+                ),
+            ),
         )); ?>
 
         <?php if (!empty($assignmentOptions)): ?>
@@ -52,14 +52,14 @@ $this->breadcrumbs = array(
             <h4><?php echo Yii::t('AuthModule.main', 'Assign permission'); ?></h4>
 
             <?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-                'type' => TbHtml::FORM_INLINE,
+                'layout' => TbHtml::FORM_LAYOUT_INLINE,
             )); ?>
 
-            <?php echo $form->dropDownListRow($formModel, 'items', $assignmentOptions, array('label' => false)); ?>
+            <?php echo $form->dropDownListControlGroup($formModel, 'items', $assignmentOptions, array('label' => false)); ?>
 
-			<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Assign'),array(
-				'style'=>TbHtml::STYLE_PRIMARY,
-			)); ?>
+            <?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Assign'),array(
+                'color'=>TbHtml::BUTTON_COLOR_PRIMARY,
+            )); ?>
 
             <?php $this->endWidget(); ?>
 
