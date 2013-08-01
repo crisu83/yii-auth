@@ -32,5 +32,3 @@
 	<?php echo $content; ?>
 
 </div>
-
-kdsjfskjf
