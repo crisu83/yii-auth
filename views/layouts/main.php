@@ -1,11 +1,10 @@
 <?php /* @var $this AuthController */ ?>
 
-<?php $this->beginContent($this->module->appLayout); ?>
 
 <div class="auth-module">
 
 	<?php $this->widget('bootstrap.widgets.TbNav', array(
-		'style' => TbHtml::NAV_TABS,
+		'type' => TbHtml::NAV_TYPE_TABS,
 		'items' => array(
 			array(
 				'label' => Yii::t('AuthModule.main', 'Assignments'),
@@ -34,4 +33,4 @@
 
 </div>
 
-<?php $this->endContent(); ?>
+kdsjfskjf

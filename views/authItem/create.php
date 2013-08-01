@@ -11,18 +11,20 @@ $this->breadcrumbs = array(
 
 <h1><?php echo Yii::t('AuthModule.main', 'New {type}', array('{type}' => $this->getTypeText())); ?></h1>
 
-<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm'); ?>
+<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
+    'layout' => TbHtml::FORM_LAYOUT_HORIZONTAL,
+)); ?>
 
 <?php echo $form->hiddenField($model, 'type'); ?>
-<?php echo $form->textFieldRow($model, 'name'); ?>
-<?php echo $form->textFieldRow($model, 'description'); ?>
+<?php echo $form->textFieldControlGroup($model, 'name'); ?>
+<?php echo $form->textFieldControlGroup($model, 'description'); ?>
 
 <div class="form-actions">
 	<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Create'),array(
-		'style'=>TbHtml::STYLE_PRIMARY,
+		'type'=>TbHtml::BUTTON_COLOR_PRIMARY,
 	)); ?>
 	<?php echo TbHtml::linkButton(Yii::t('AuthModule.main', 'Cancel'),array(
-		'style'=>TbHtml::STYLE_LINK,
+		'type'=>TbHtml::BUTTON_TYPE_LINK,
 		'url' => array('index'),
 	)); ?>
 </div>

@@ -36,7 +36,8 @@ $this->breadcrumbs = array(
 
 </div>
 
-<?php $this->widget('bootstrap.widgets.TbDetailView', array(
+<?php //$this->widget('bootstrap.widgets.TbDetailView', array(
+$this->widget('zii.widgets.CDetailView', array(
     'data' => $item,
     'attributes' => array(
         array(
@@ -137,13 +138,13 @@ $this->breadcrumbs = array(
 			<h4><?php echo Yii::t('AuthModule.main', 'Add child'); ?></h4>
 
 			<?php $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
-				'type'=>TbHtml::FORM_INLINE,
+				'layout'=>TbHtml::FORM_LAYOUT_INLINE,
 			)); ?>
 
-			<?php echo $form->dropDownListRow($formModel, 'items', $childOptions, array('label'=>false)); ?>
+			<?php echo $form->dropDownListControlGroup($formModel, 'items', $childOptions, array('label'=>false)); ?>
 
 			<?php echo TbHtml::submitButton(Yii::t('AuthModule.main', 'Add'),array(
-				'style'=>TbHtml::STYLE_PRIMARY,
+				'type'=>TbHtml::BUTTON_COLOR_PRIMARY,
 			)); ?>
 
 			<?php $this->endWidget(); ?>

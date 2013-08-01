@@ -28,17 +28,36 @@ class AuthAssignmentRevokeColumn extends AuthAssignmentColumn
 	 * @param integer $row the row number (zero-based).
 	 * @param mixed $data the data associated with the row.
 	 */
-	protected function renderDataCellContent($row, $data)
-	{
-		if ($this->userId !== null)
-		{
-			echo TbHtml::linkButton(TbHtml::icon('remove'),array(
-				'type' => TbHtml::BUTTON_COLOR_PRIMARY,
-				'size' => TbHtml::BUTTON_SIZE_MINI,
-				'url' => array('revoke', 'itemName' => $data['name'], 'userId' => $this->userId),
-				'rel' => 'tooltip',
-				'title' => Yii::t('AuthModule.main', 'Revoke'),
-			));
-		}
-	}
+//	protected function renderDataCellContent($row, $data)
+//	{
+//		if ($this->userId !== null)
+//		{
+//			echo TbHtml::button(TbHtml::icon(TbHtml::ICON_REMOVE),array(
+//				'type' => 'link',
+//				'size' => TbHtml::BUTTON_SIZE_MINI,
+//				'url' => array('revoke', 'itemName' => $data['name'], 'userId' => $this->userId),
+//				'rel' => 'tooltip',
+//				'title' => Yii::t('AuthModule.main', 'Revoke'),
+//			));
+//		}
+//	}
+
+    /**
+     * Renders the data cell content.
+     * @param integer $row the row number (zero-based).
+     * @param mixed $data the data associated with the row.
+     */
+    protected function renderDataCellContent($row, $data)
+    {
+        if ($this->userId !== null)
+        {
+            echo TbHtml::linkButton(TbHtml::icon(TbHtml::ICON_REMOVE),array(
+                'size' => TbHtml::BUTTON_SIZE_MINI,
+                'color' => TbHtml::BUTTON_COLOR_LINK,
+                'url' => array('revoke', 'itemName' => $data['name'], 'userId' => $this->userId),
+                'rel' => 'tooltip',
+                'title' => Yii::t('AuthModule.main', 'Revoke'),
+            ));
+        }
+    }
 }
