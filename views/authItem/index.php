@@ -10,7 +10,7 @@ $this->breadcrumbs = array(
 <h1><?php echo $this->capitalize($this->getTypeText(true)); ?></h1>
 
 <?php echo TbHtml::linkButton(Yii::t('AuthModule.main', 'Add {type}', array('{type}' => $this->getTypeText())),array(
-	'style'=>TbHtml::STYLE_PRIMARY,
+	'type'=>TbHtml::BUTTON_COLOR_PRIMARY,
 	'url' => array('create'),
 )); ?>
 
