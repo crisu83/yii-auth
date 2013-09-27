@@ -14,12 +14,12 @@ Yii::import('zii.widgets.grid.CGridColumn');
  */
 class AuthItemColumn extends CGridColumn
 {
-	/**
-	 * @var string name of the item.
-	 */
-	public $itemName;
-	/**
-	 * @var boolean whether the row should appear activated.
-	 */
-	public $active = false;
+    /**
+     * @var string name of the item.
+     */
+    public $itemName;
+    /**
+     * @var boolean whether the row should appear activated.
+     */
+    public $active = false;
 }

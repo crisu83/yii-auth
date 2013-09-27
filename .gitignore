@@ -1,6 +1,4 @@
 .idea/*
-demo/assets/*
-demo/protected/config/main.php
-demo/protected/runtime/*
+composer.phar
+vendor/*
 releases/*
-composer*

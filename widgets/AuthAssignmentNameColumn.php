@@ -12,24 +12,25 @@
  */
 class AuthAssignmentNameColumn extends AuthAssignmentColumn
 {
-	/**
-	 * Initializes the column.
-	 */
-	public function init()
-	{
-		if (isset($this->htmlOptions['class']))
-			$this->htmlOptions['class'] .= ' name-column';
-		else
-			$this->htmlOptions['class'] = 'name-column';
-	}
+    /**
+     * Initializes the column.
+     */
+    public function init()
+    {
+        if (isset($this->htmlOptions['class'])) {
+            $this->htmlOptions['class'] .= ' name-column';
+        } else {
+            $this->htmlOptions['class'] = 'name-column';
+        }
+    }
 
-	/**
-	 * Renders the data cell content.
-	 * @param integer $row the row number (zero-based).
-	 * @param mixed $data the data associated with the row.
-	 */
-	protected function renderDataCellContent($row, $data)
-	{
-		echo CHtml::link(CHtml::value($data, $this->nameColumn), array('view', 'id'=>$data->{$this->idColumn}));
-	}
+    /**
+     * Renders the data cell content.
+     * @param integer $row the row number (zero-based).
+     * @param mixed $data the data associated with the row.
+     */
+    protected function renderDataCellContent($row, $data)
+    {
+        echo CHtml::link(CHtml::value($data, $this->nameColumn), array('view', 'id' => $data->{$this->idColumn}));
+    }
 }

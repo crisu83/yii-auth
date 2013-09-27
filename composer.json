@@ -1,8 +1,8 @@
 {
     "name": "crisu83/yii-auth",
     "description": "Web UI for the authorization manager of Yii PHP framework.",
-    "keywords": ["rbac", "ui"],
-    "type": "yii-extension",
+    "keywords": ["yii", "authentication", "rbac"],
+    "type": "library",
     "license": "BSD-3-Clause",
     "authors": [
         {
@@ -10,5 +10,11 @@
             "email": "christoffer.niska@gmail.com",
             "homepage": "http://www.cniska.net/"
         }
-    ]
+    ],
+    "require": {
+        "crisu83/yiistrap": ">=1.0.0"
+    },
+    "require-dev": {
+        "yiisoft/yii": ">=1.1.0"
+    }
 }

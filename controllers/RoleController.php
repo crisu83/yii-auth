@@ -12,8 +12,8 @@
  */
 class RoleController extends AuthItemController
 {
-	/**
-	 * @var integer the item type (0=operation, 1=task, 2=role).
-	 */
-	public $type = CAuthItem::TYPE_ROLE;
+    /**
+     * @var integer the item type (0=operation, 1=task, 2=role).
+     */
+    public $type = CAuthItem::TYPE_ROLE;
 }
