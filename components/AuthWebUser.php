@@ -14,51 +14,52 @@
  */
 class AuthWebUser extends CWebUser
 {
-	/**
-	 * @var string[] a list of names for the users that should be treated as administrators.
-	 */
-	public $admins = array('admin');
+    /**
+     * @var string[] a list of names for the users that should be treated as administrators.
+     */
+    public $admins = array('admin');
 
-	/**
-	 * Initializes the component.
-	 */
-	public function init()
-	{
-		parent::init();
-		$this->setIsAdmin(in_array($this->name, $this->admins));
-	}
+    /**
+     * Initializes the component.
+     */
+    public function init()
+    {
+        parent::init();
+        $this->setIsAdmin(in_array($this->name, $this->admins));
+    }
 
-	/**
-	 * Returns whether the logged in user is an administrator.
-	 * @return boolean the result.
-	 */
-	public function getIsAdmin()
-	{
-		return $this->getState('__isAdmin', false);
-	}
+    /**
+     * Returns whether the logged in user is an administrator.
+     * @return boolean the result.
+     */
+    public function getIsAdmin()
+    {
+        return $this->getState('__isAdmin', false);
+    }
 
-	/**
-	 * Sets the logged in user as an administrator.
-	 * @param boolean $value whether the user is an administrator.
-	 */
-	public function setIsAdmin($value)
-	{
-		$this->setState('__isAdmin', $value);
-	}
+    /**
+     * Sets the logged in user as an administrator.
+     * @param boolean $value whether the user is an administrator.
+     */
+    public function setIsAdmin($value)
+    {
+        $this->setState('__isAdmin', $value);
+    }
 
-	/**
-	 * Performs access check for this user.
-	 * @param string $operation the name of the operation that need access check.
-	 * @param array $params name-value pairs that would be passed to business rules associated
-	 * with the tasks and roles assigned to the user.
-	 * @param boolean $allowCaching whether to allow caching the result of access check.
-	 * @return boolean whether the operations can be performed by this user.
-	 */
-	public function checkAccess($operation, $params = array(), $allowCaching = true)
-	{
-		if ($this->getIsAdmin())
-			return true;
+    /**
+     * Performs access check for this user.
+     * @param string $operation the name of the operation that need access check.
+     * @param array $params name-value pairs that would be passed to business rules associated
+     * with the tasks and roles assigned to the user.
+     * @param boolean $allowCaching whether to allow caching the result of access check.
+     * @return boolean whether the operations can be performed by this user.
+     */
+    public function checkAccess($operation, $params = array(), $allowCaching = true)
+    {
+        if ($this->getIsAdmin()) {
+            return true;
+        }
 
-		return parent::checkAccess($operation, $params, $allowCaching);
-	}
+        return parent::checkAccess($operation, $params, $allowCaching);
+    }
 }

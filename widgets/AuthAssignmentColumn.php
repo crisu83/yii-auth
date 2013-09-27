@@ -17,26 +17,26 @@ Yii::import('zii.widgets.grid.CGridColumn');
  */
 class AuthAssignmentColumn extends CGridColumn
 {
-	/**
-	 * @var integer the user id.
-	 */
-	public $userId;
+    /**
+     * @var integer the user id.
+     */
+    public $userId;
 
-	/**
-	 * Returns the name of the user id column.
-	 * @return string the column name.
-	 */
-	protected function getIdColumn()
-	{
-		return $this->grid->controller->module->userIdColumn;
-	}
+    /**
+     * Returns the name of the user id column.
+     * @return string the column name.
+     */
+    protected function getIdColumn()
+    {
+        return $this->grid->controller->module->userIdColumn;
+    }
 
-	/**
-	 * Returns the name of the user name column.
-	 * @return string the column name.
-	 */
-	protected function getNameColumn()
-	{
-		return $this->grid->controller->module->userNameColumn;
-	}
+    /**
+     * Returns the name of the user name column.
+     * @return string the column name.
+     */
+    protected function getNameColumn()
+    {
+        return $this->grid->controller->module->userNameColumn;
+    }
 }
