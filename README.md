@@ -16,7 +16,7 @@ You can try out the live demo [here](http://www.cniska.net/yii-auth/).
 
 ### Requirements
 
-* [Twitter Bootstrap extension for Yii](http://www.yiiframework.com/extension/bootstrap) version 2.0.0 or above
+* [Yiistrap extension](http://www.yiiframework.com/extension/yiistrap) version 1.0.0
 
 ## Usage
 
