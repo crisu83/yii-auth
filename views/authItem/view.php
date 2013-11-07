@@ -16,8 +16,9 @@ $this->breadcrumbs = array(
 <div class="title-row clearfix">
 
     <h1 class="pull-left">
-        <?php echo CHtml::encode($item->description); ?>
-        <small><?php echo $this->getTypeText(); ?></small>
+        <?php echo CHtml::encode($item->name); ?>
+        <small><?php echo CHtml::encode($item->description); ?></small>
+        <em><small><?php echo $this->getTypeText(); ?></small></em>
     </h1>
 
     <?php echo TbHtml::buttonGroup(
@@ -86,6 +87,10 @@ $this->breadcrumbs = array(
                 'template' => "{items}",
                 'hideHeader' => true,
                 'columns' => array(
+                     array(
+                        'name' => 'name',
+                        'header' => Yii::t('AuthModule.main', 'System name'),
+                    ),
                     array(
                         'class' => 'AuthItemDescriptionColumn',
                         'itemName' => $item->name,
@@ -117,9 +122,13 @@ $this->breadcrumbs = array(
                 'type' => 'striped condensed hover',
                 'dataProvider' => $descendantDp,
                 'emptyText' => Yii::t('AuthModule.main', 'This item does not have any descendants.'),
-                'hideHeader' => true,
                 'template' => "{items}",
+                'hideHeader' => true,
                 'columns' => array(
+                    array(
+                        'name' => 'name',
+                        'header' => Yii::t('AuthModule.main', 'System name'),
+                    ),
                     array(
                         'class' => 'AuthItemDescriptionColumn',
                         'itemName' => $item->name,
@@ -141,13 +150,8 @@ $this->breadcrumbs = array(
 </div>
 
 <div class="row">
-
     <div class="span6 offset6">
-
-        <?php if (!empty($childOptions)): ?>
-
-            <h4><?php echo Yii::t('AuthModule.main', 'Add child'); ?></h4>
-
+         <?php if (!empty($childOptions)): ?>
             <?php $form = $this->beginWidget(
                 'bootstrap.widgets.TbActiveForm',
                 array(
@@ -155,7 +159,14 @@ $this->breadcrumbs = array(
                 )
             ); ?>
 
-            <?php echo $form->dropDownListControlGroup($formModel, 'items', $childOptions, array('label' => false)); ?>
+            <?php
+                $this->widget('MultiSelect', array(
+                        'propertyName' => 'items',
+                        'modelName' => 'AddAuthItemForm',
+                        'label' => '<h4>' . Yii::t('AuthModule.main', 'Add child') . '</h4>',
+                        'elements' => $childOptions
+                ));
+            ?>
 
             <?php echo TbHtml::submitButton(
                 Yii::t('AuthModule.main', 'Add'),
@@ -165,7 +176,6 @@ $this->breadcrumbs = array(
             ); ?>
 
             <?php $this->endWidget(); ?>
-
         <?php endif; ?>
 
     </div>
