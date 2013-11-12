@@ -16,11 +16,19 @@ $this->breadcrumbs = array(
         'dataProvider' => $dataProvider,
         'emptyText' => Yii::t('AuthModule.main', 'No assignments found.'),
         'template' => "{items}\n{pager}",
+        'filter' => $model,
         'columns' => array(
-            array(
-                'header' => Yii::t('AuthModule.main', 'User'),
-                'class' => 'AuthAssignmentNameColumn',
-            ),
+        	array(
+        		'name' => 'username',
+        		'header' => Yii::t('AuthModule.main', 'User'),
+        		'type' => 'raw',
+        		'value' => function($data, $row) {
+        			return TbHtml::link(
+        				$data->username,
+        				'/auth/assignment/view/id/' . $data->id
+        			);
+        		},
+        	),
             array(
                 'header' => Yii::t('AuthModule.main', 'Assigned items'),
                 'class' => 'AuthAssignmentItemsColumn',
