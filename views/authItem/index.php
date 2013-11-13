@@ -50,3 +50,17 @@ $this->breadcrumbs = array(
         ),
     )
 ); ?>
+
+<?php
+	$cs = Yii::app()->getClientScript();
+
+    $assetsUrl = realpath(__DIR__ . '/../../assets');
+    $js = Yii::app()->getAssetManager()->publish($assetsUrl . '/js/table-filter.min.js');
+    $cs->registerScriptFile($js);
+
+    $cs->registerScript('authJs', "
+        $(document).ready(function(){
+            $('table').addTableFilter();
+        })
+    ");
+?>
