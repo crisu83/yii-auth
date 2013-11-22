@@ -40,8 +40,9 @@ class AuthAssignmentItemsColumn extends AuthAssignmentColumn
         $assignments = $am->getAuthAssignments($data->{$this->idColumn});
         $permissions = $am->getItemsPermissions(array_keys($assignments));
         foreach ($permissions as $itemPermission) {
-            echo $itemPermission['item']->description;
-            echo ' <small>' . $controller->getItemTypeText($itemPermission['item']->type, false) . '</small><br />';
+            echo $itemPermission['item']->name;
+            echo ' <small>' . $itemPermission['item']->description . '</small>';
+            echo ' <small><em>' . $controller->getItemTypeText($itemPermission['item']->type, false) . '</em></small><br />';
         }
     }
 }
