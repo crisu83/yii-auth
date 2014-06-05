@@ -124,12 +124,14 @@ abstract class AuthItemController extends AuthController
         $am = Yii::app()->getAuthManager();
 
         if (isset($_POST['AddAuthItemForm'])) {
-            $formModel->attributes = $_POST['AddAuthItemForm'];
-            if ($formModel->validate()) {
-                if (!$am->hasItemChild($name, $formModel->items)) {
-                    $am->addItemChild($name, $formModel->items);
-                    if ($am instanceof CPhpAuthManager) {
-                        $am->save();
+            foreach($_POST['AddAuthItemForm']['items'] as $item) {
+                $formModel->attributes = array('items' => $item);
+                if ($formModel->validate()) {
+                    if (!$am->hasItemChild($name, $formModel->items)) {
+                        $am->addItemChild($name, $formModel->items);
+                        if ($am instanceof CPhpAuthManager) {
+                            $am->save();
+                        }
                     }
                 }
             }
@@ -139,8 +141,15 @@ abstract class AuthItemController extends AuthController
 
         $dpConfig = array(
             'pagination' => false,
-            'sort' => array('defaultOrder' => 'depth asc'),
+            'sort' => array(
+                'defaultOrder' => 'depth asc',
+                'attributes' => array('name', 'type'),
+            ),
         );
+
+        $sort = new CSort;
+        $sort->defaultOrder = 'depth asc';
+        $sort->attributes = array('name', 'description');
 
         $ancestors = $am->getAncestors($name);
         $ancestorDp = new PermissionDataProvider(array_values($ancestors), $dpConfig);
@@ -149,9 +158,6 @@ abstract class AuthItemController extends AuthController
         $descendantDp = new PermissionDataProvider(array_values($descendants), $dpConfig);
 
         $childOptions = $this->getItemChildOptions($item->name);
-        if (!empty($childOptions)) {
-            $childOptions = array_merge(array('' => Yii::t('AuthModule.main', 'Select item') . ' ...'), $childOptions);
-        }
 
         $this->render(
             'view',

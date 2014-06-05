@@ -17,12 +17,19 @@ class AssignmentController extends AuthController
      */
     public function actionIndex()
     {
-        $dataProvider = new CActiveDataProvider($this->module->userClass);
+        $className = $this->module->userClass;
+        $model = new $className('search');
+        $model->unsetAttributes();
+        if (isset($_GET[$className]))
+            $model->attributes = $_GET[$className];
+
+        $dataProvider = $model->search();
 
         $this->render(
             'index',
             array(
-                'dataProvider' => $dataProvider
+                'dataProvider' => $dataProvider,
+                'model' => $model,
             )
         );
     }
@@ -39,16 +46,18 @@ class AssignmentController extends AuthController
         $am = Yii::app()->getAuthManager();
 
         if (isset($_POST['AddAuthItemForm'])) {
-            $formModel->attributes = $_POST['AddAuthItemForm'];
-            if ($formModel->validate()) {
-                if (!$am->isAssigned($formModel->items, $id)) {
-                    $am->assign($formModel->items, $id);
-                    if ($am instanceof CPhpAuthManager) {
-                        $am->save();
-                    }
+            foreach($_POST['AddAuthItemForm']['items'] as $item) {
+                $formModel->attributes = array('items' => $item);
+                if ($formModel->validate()) {
+                    if (!$am->isAssigned($formModel->items, $id)) {
+                        $am->assign($formModel->items, $id);
+                        if ($am instanceof CPhpAuthManager) {
+                            $am->save();
+                        }
 
-                    if ($am instanceof ICachedAuthManager) {
-                        $am->flushAccess($formModel->items, $id);
+                        if ($am instanceof ICachedAuthManager) {
+                            $am->flushAccess($formModel->items, $id);
+                        }
                     }
                 }
             }

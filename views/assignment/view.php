@@ -34,6 +34,10 @@ $this->breadcrumbs = array(
                 'hideHeader' => true,
                 'template' => "{items}",
                 'columns' => array(
+                	array(
+                        'name' => 'name',
+                        'header' => Yii::t('AuthModule.main', 'System name'),
+                    ),
                     array(
                         'class' => 'AuthItemDescriptionColumn',
                         'active' => true,
@@ -61,8 +65,13 @@ $this->breadcrumbs = array(
                 )
             ); ?>
 
-            <?php echo $form->dropDownList($formModel, 'items', $assignmentOptions, array('label' => false)); ?>
-
+			<?php $this->widget('MultiSelect', array(
+                        'propertyName' => 'items',
+                        'modelName' => 'AddAuthItemForm',
+                        'label' => '',
+                        'elements' => $assignmentOptions
+                ));
+            ?>
             <?php echo TbHtml::submitButton(
                 Yii::t('AuthModule.main', 'Assign'),
                 array(
