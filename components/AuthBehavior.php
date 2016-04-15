@@ -291,13 +291,13 @@ class AuthBehavior extends CBehavior
             if (isset($itemPermissions['children'])) {
                 $children = $itemPermissions['children'];
                 unset($itemPermissions['children']); // not needed in a flat tree
-                $flattened = array_merge($flattened, $this->flattenPermissions($children));
+                $flattened = $flattened + $this->flattenPermissions($children);
             }
 
             if (isset($itemPermissions['parents'])) {
                 $parents = $itemPermissions['parents'];
                 unset($itemPermissions['parents']);
-                $flattened = array_merge($flattened, $this->flattenPermissions($parents));
+                $flattened = $flattened + $this->flattenPermissions($parents);
             }
         }
         return $flattened;
