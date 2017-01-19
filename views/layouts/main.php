@@ -1,6 +1,7 @@
 <?php
 /* @var $this AuthController */
 ?>
+<?php $this->beginContent('//layouts/main'); ?>
 
 <div class="auth-module">
 
@@ -36,3 +37,5 @@
     <?php echo $content; ?>
 
 </div>
+
+<?php $this->endContent(); ?> 
