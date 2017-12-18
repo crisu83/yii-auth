@@ -1,6 +1,6 @@
 {
-    "name": "crisu83/yii-auth",
-    "description": "Web UI for the authorization manager of Yii PHP framework.",
+    "name": "boox/ws-fork/crisu83/yii-auth",
+    "description": " Fork of crisu83/yii-aut, Web UI for the authorization manager of Yii PHP framework.",
     "keywords": ["yii", "authentication", "rbac"],
     "type": "library",
     "license": "BSD-3-Clause",
