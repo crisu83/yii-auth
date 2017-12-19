@@ -44,7 +44,7 @@ class AuthItemDescriptionColumn extends AuthItemColumn
 
         echo CHtml::link(
             $data['item']->description,
-            array('/auth/' . $controller->getItemControllerId($data['item']->type) . '/view', 'name' => $data['name']),
+            array($controller->getItemControllerId($data['item']->type) . '/view', 'name' => $data['name']),
             array('class' => $linkCssClass)
         );
     }
