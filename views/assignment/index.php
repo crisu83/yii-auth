@@ -2,32 +2,46 @@
 /* @var $this AssignmentController */
 /* @var $dataProvider CActiveDataProvider */
 
-$this->breadcrumbs = array(
+$this->breadcrumbs = [
     Yii::t('AuthModule.main', 'Assignments'),
-);
-?>
+];
 
-<h1><?php echo Yii::t('AuthModule.main', 'Assignments'); ?></h1>
+$this->pageTitle = Yii::t('AuthModule.main', 'Assignments');
+?>
 
 <?php $this->widget(
     'bootstrap.widgets.TbGridView',
-    array(
-        'type' => 'striped hover',
+    [
+        'id' => 'auth-grid',
+        'type' => [TbHtml::GRID_TYPE_BORDERED, TbHtml::GRID_TYPE_STRIPED],
         'dataProvider' => $dataProvider,
         'emptyText' => Yii::t('AuthModule.main', 'No assignments found.'),
-        'template' => "{items}\n{pager}",
-        'columns' => array(
-            array(
+        'template' => "{items}",
+        'columns' => [
+            [
                 'header' => Yii::t('AuthModule.main', 'User'),
                 'class' => 'AuthAssignmentNameColumn',
-            ),
-            array(
+            ],
+            [
                 'header' => Yii::t('AuthModule.main', 'Assigned items'),
                 'class' => 'AuthAssignmentItemsColumn',
-            ),
-            array(
+            ],
+            [
                 'class' => 'AuthAssignmentViewColumn',
-            ),
-        ),
-    )
-); ?>
+            ],
+        ],
+    ]
+);
+
+Yii::app()->clientScript->registerScript('authComponents', "
+        $(function () {   
+            // initialize dataTable
+            $('#auth-grid table').DataTable({
+              'paging'      : true,
+              'lengthChange': true,
+              'searching'   : true,
+              'ordering'    : true,
+              'info'        : true,
+              'autoWidth'   : false
+            });
+        })", CClientScript::POS_END);

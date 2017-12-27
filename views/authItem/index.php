@@ -7,7 +7,7 @@ $this->breadcrumbs = array(
 );
 ?>
 
-<h1><?php echo $this->capitalize($this->getTypeText(true)); ?></h1>
+    <h1><?php echo $this->capitalize($this->getTypeText(true)); ?></h1>
 
 <?php echo TbHtml::linkButton(
     Yii::t('AuthModule.main', 'Add {type}', array('{type}' => $this->getTypeText())),
@@ -16,37 +16,65 @@ $this->breadcrumbs = array(
         'url' => array('create'),
     )
 ); ?>
-
+    <hr>
 <?php $this->widget(
     'bootstrap.widgets.TbGridView',
-    array(
-        'type' => 'striped hover',
+    [
+        'type' => [TbHtml::GRID_TYPE_BORDERED, TbHtml::GRID_TYPE_STRIPED],
+        'id' => 'task-grid',
         'dataProvider' => $dataProvider,
-        'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', array('{type}' => $this->getTypeText(true))),
-        'template' => "{items}\n{pager}",
-        'columns' => array(
-            array(
+        'emptyText' => Yii::t('AuthModule.main', 'No {type} found.', ['{type}' => $this->getTypeText(true)]),
+        'template' => "{items}",
+        'columns' => [
+            [
                 'name' => 'name',
                 'type' => 'raw',
                 'header' => Yii::t('AuthModule.main', 'System name'),
-                'htmlOptions' => array('class' => 'item-name-column'),
+                'htmlOptions' => ['class' => 'item-name-column'],
                 'value' => "CHtml::link(\$data->name, array('view', 'name'=>\$data->name))",
-            ),
-            array(
+            ],
+            [
                 'name' => 'description',
                 'header' => Yii::t('AuthModule.main', 'Description'),
-                'htmlOptions' => array('class' => 'item-description-column'),
-            ),
-            array(
-                'class' => 'bootstrap.widgets.TbButtonColumn',
-                'viewButtonLabel' => Yii::t('AuthModule.main', 'View'),
+                'htmlOptions' => ['class' => 'item-description-column'],
+            ],
+            [
+                'class' => 'TbButtonColumn',
+                'template' => '{view} {update} {delete}',
+                'viewButtonOptions' => ['title' => 'View'],
+                'viewButtonIcon' => false,
+                'viewButtonImageUrl' => false,
+                'viewButtonLabel' => '<button class="btn btn-xs btn-primary"><i class="fa fa-info-circle"></i></button>',
                 'viewButtonUrl' => "Yii::app()->controller->createUrl('view', array('name'=>\$data->name))",
-                'updateButtonLabel' => Yii::t('AuthModule.main', 'Edit'),
+
+                'updateButtonOptions' => ['title' => 'Update'],
+                'updateButtonIcon' => false,
+                'updateButtonImageUrl' => false,
+                'updateButtonLabel' => Yii::t('AuthModule.main', '<button class="btn btn-xs btn-primary"><i class="fa fa-pencil"></i></button>'),
                 'updateButtonUrl' => "Yii::app()->controller->createUrl('update', array('name'=>\$data->name))",
-                'deleteButtonLabel' => Yii::t('AuthModule.main', 'Delete'),
+
+                'deleteButtonOptions' => ['title' => 'Delete'],
+                'deleteButtonIcon' => false,
+                'deleteButtonImageUrl' => false,
+                'deleteButtonLabel' => Yii::t('AuthModule.main', '<button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>'),
                 'deleteButtonUrl' => "Yii::app()->controller->createUrl('delete', array('name'=>\$data->name))",
                 'deleteConfirmation' => Yii::t('AuthModule.main', 'Are you sure you want to delete this item?'),
-            ),
-        ),
-    )
-); ?>
+            ],
+        ],
+    ]
+);
+
+Yii::app()->clientScript->registerScript('streamProfileComponents', "
+        $(function () {
+                 
+            // initialize dataTable
+            $('#task-grid table').DataTable({
+              'paging'      : true,
+              'lengthChange': true,
+              'searching'   : true,
+              'ordering'    : true,
+              'info'        : true,
+              'autoWidth'   : false
+            });
+                 
+        })", CClientScript::POS_END);

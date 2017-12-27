@@ -33,7 +33,7 @@ class AuthAssignmentRevokeColumn extends AuthAssignmentColumn
     {
         if ($this->userId !== null) {
             echo TbHtml::linkButton(
-                TbHtml::icon(TbHtml::ICON_REMOVE),
+                '<button class="btn btn-xs btn-danger"><i class="fa fa-trash"></i></button>',
                 array(
                     'color' => TbHtml::BUTTON_COLOR_LINK,
                     'size' => TbHtml::BUTTON_SIZE_MINI,
